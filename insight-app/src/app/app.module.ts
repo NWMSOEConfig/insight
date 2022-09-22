@@ -10,11 +10,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingEditorComponent } from './setting-editor/setting-editor.component';
+import { ParameterComponent } from './parameter/parameter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SettingEditorComponent
+    SettingEditorComponent,
+    ParameterComponent
   ],
   imports: [
     BrowserModule,

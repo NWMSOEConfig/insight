@@ -1,20 +1,8 @@
 <p>setting-editor works!</p>
 
 <form>
-  <mat-slide-toggle checked="checked">Enabled</mat-slide-toggle>
-  <br />
-  <mat-form-field>
-    <mat-label>Foo *</mat-label>
-    <input matInput type="number" value="123" />
-  </mat-form-field>
-  <br />
-  <mat-form-field>
-    <mat-label>Bar</mat-label>
-    <input matInput type="text" value="Text" />
-  </mat-form-field>
-  <br />
-  <mat-form-field>
-    <mat-label>Baz *</mat-label>
-    <input matInput type="email" value="a@b.com" />
-  </mat-form-field>
+  <app-parameter [parameterId]="0"></app-parameter>
+  <app-parameter [parameterId]="1"></app-parameter>
+  <app-parameter [parameterId]="2"></app-parameter>
+  <app-parameter [parameterId]="3"></app-parameter>
 </form>
