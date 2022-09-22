@@ -23,7 +23,11 @@
   }
 
   .spacer {
-    flex: 1;
+    flex: 1 1 auto;
+  }
+
+  .toolbar #dropdown-menu {
+    align-items: center;
   }
 
   .toolbar {
@@ -43,28 +47,25 @@
     margin: 0 16px;
   }
 
-  .toolbar #twitter-logo {
-    height: 40px;
-    margin: 0 8px;
-  }
-
-  .toolbar #youtube-logo {
-    height: 40px;
-    margin: 0 16px;
-  }
-
   .toolbar #twitter-logo:hover,
   .toolbar #youtube-logo:hover {
     opacity: 0.8;
   }
 
+  .welcome {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .icon {
+    padding: 0 14px;
+  }
+
   .content {
-    display: flex;
-    margin: 82px auto 32px;
-    padding: 0 16px;
-    max-width: 960px;
+    margin: 20px;
+    padding-left: 20px;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
   }
 
   svg.material-icons {
@@ -72,9 +73,6 @@
     width: auto;
   }
 
-  svg.material-icons:not(:last-child) {
-    margin-right: 8px;
-  }
 
   .card svg.material-icons path {
     fill: #888;
@@ -111,6 +109,8 @@
   .card.card-small {
     height: 16px;
     width: 168px;
+    display: flex;
+    width: auto;
   }
 
   .card-container .card:not(.highlight-card) {
@@ -138,21 +138,6 @@
 
   .card.card.highlight-card span {
     margin-left: 60px;
-  }
-
-  svg#rocket {
-    width: 80px;
-    position: absolute;
-    left: -10px;
-    top: -24px;
-  }
-
-  svg#rocket-smoke {
-    height: calc(100vh - 95px);
-    position: absolute;
-    top: 10px;
-    right: 180px;
-    z-index: -10;
   }
 
   a,
@@ -192,13 +177,6 @@
     text-indent: 4px;
   }
 
-  .terminal pre {
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-    color: white;
-    padding: 0 1rem 1rem;
-    margin: 0;
-  }
-
   .circle-link {
     height: 40px;
     width: 40px;
@@ -214,11 +192,6 @@
     transition: 1s ease-out;
   }
 
-  .circle-link:hover {
-    transform: translateY(-0.25rem);
-    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-  }
-
   footer {
     margin-top: 8px;
     display: flex;
@@ -231,87 +204,94 @@
     align-items: center;
   }
 
-  .github-star-badge {
-    color: #24292e;
-    display: flex;
+  .table {
+    margin: auto;
+    width: 90%;
     align-items: center;
-    font-size: 12px;
-    padding: 3px 10px;
-    border: 1px solid rgba(27,31,35,.2);
-    border-radius: 3px;
-    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-    margin-left: 4px;
-    font-weight: 600;
+    border-top: 1px solid lightgray;
   }
 
-  .github-star-badge:hover {
-    background-image: linear-gradient(-180deg,#f0f3f6,#e6ebf1 90%);
-    border-color: rgba(27,31,35,.35);
-    background-position: -.5em;
+  .mat-column-position {
+    width: 10px;
+    border-right: 1px solid lightgray;
+    padding-right: 24px;
+    border-left: 1px solid lightgray;
+    text-align: center;
   }
 
-  .github-star-badge .material-icons {
+  .mat-column-name {
+    border-right: 1px solid lightgray;
+    padding-right: 24px;
+    padding-left: 24px;
+    text-align: center;
+    width: 200px;
+  }
+
+  .mat-column-action {
+    margin: auto;
+    text-align: center;
+    width: 32px;
+    border-right: 1px solid lightgray;
+  }
+
+  .menu-selection {
+    padding-top: 16px;
+  }
+
+  mat-sidenav {
+    margin: 16px;
+    width: 200px;
+    border-right: none;
+    background: #002b5c;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  mat-sidenav-container {
+    height: calc(100vh - 65px);
+  }
+
+  .card:not(.highlight-card) {
     height: 16px;
-    width: 16px;
-    margin-right: 4px;
+    margin: 8px 0;
   }
 
-  svg#clouds {
-    position: fixed;
-    bottom: -160px;
-    left: -230px;
-    z-index: -10;
-    width: 1920px;
+  .card.highlight-card span {
+    margin-left: 72px;
   }
 
-  /* Responsive Styles */
-  @media screen and (max-width: 767px) {
-    .card-container > *:not(.circle-link) ,
-    .terminal {
-      width: 100%;
-    }
-
-    .card:not(.highlight-card) {
-      height: 16px;
-      margin: 8px 0;
-    }
-
-    .card.highlight-card span {
-      margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-      right: 120px;
-      transform: rotate(-5deg);
-    }
+  .button {
+    text-align: center;
   }
 
-  @media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-      display: none;
-      visibility: hidden;
-    }
-  }
+
 </style>
 
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <span>Welcome</span>
-    <div class="spacer"></div>
-</div>
+<mat-toolbar color="primary">
+  <span class="welcome">New World</span>
+  <div class="spacer"></div>
+  <mat-form-field class="menu-selection">
+    <mat-label>Pick the Website</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let state of states" [value]="state">
+        {{state}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="spacer"></div>
+  <mat-icon class="icon" aria-hidden="false" aria-label="Example settings icon" fontIcon="settings"></mat-icon>
+  <mat-icon class="icon" aria-hidden="false" aria-label="Profile icon" fontIcon="person"></mat-icon>
+</mat-toolbar>
 
-<div class="content" role="main">
-  <h2>Home Page</h2>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
+  <mat-sidenav-content class="content">
+    Main Content
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-  <input type="hidden" #selection>
 
-  <div class="card-container">
-    <mat-form-field appearance="standard">
-      <mat-label>Search For features</mat-label>
-      <input matInput placeholder="Scholarships">
-    </mat-form-field>
-    <button class="card card-small" mat-raised-button color="primary">Click me</button>
-    <p ng-repeat="sites">{{sites}}</p>
-
-</div>
 <router-outlet></router-outlet>
