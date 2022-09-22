@@ -5,7 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingEditorComponent } from './setting-editor/setting-editor.component';
@@ -20,6 +21,7 @@ import { SettingEditorComponent } from './setting-editor/setting-editor.componen
     AppRoutingModule,
     MatButtonModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
     BrowserAnimationsModule
