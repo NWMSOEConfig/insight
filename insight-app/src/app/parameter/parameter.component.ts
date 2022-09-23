@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 // TODO: fetch parameter schemas and current values from somewhere
 const temp_data = [
@@ -31,7 +31,8 @@ const temp_data = [
 })
 export class ParameterComponent implements OnInit {
   @Input() parameterId = -1;
-  param: any;
+  @Output() dataChange = new EventEmitter<{name: string, type: string, value: any}>();
+  param!: {name: string, type: string, value: any};
   value: any;
   initialValue: any;
   modified = false;
@@ -43,9 +44,19 @@ export class ParameterComponent implements OnInit {
     this.param = temp_data[this.parameterId];
     this.value = this.param.value;
     this.initialValue = this.param.value;
+    this.dataChange.emit({
+      name: this.param.name,
+      type: this.param.type,
+      value: this.value,
+    });
   }
 
   change(): void {
     this.modified = this.value !== this.initialValue;
+    this.dataChange.emit({
+      name: this.param.name,
+      type: this.param.type,
+      value: this.value,
+    });
   }
 }
