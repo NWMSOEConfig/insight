@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./setting-editor.component.css']
 })
 export class SettingEditorComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  queue(): void {
+    console.log('queue pressed');
+  }
 }
