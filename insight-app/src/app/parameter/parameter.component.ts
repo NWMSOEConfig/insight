@@ -10,7 +10,7 @@ const temp_data = [
   {
     name: 'Foo',
     type: 'number',
-    value: 123,
+    value: '123',
   },
   {
     name: 'Bar',
@@ -32,12 +32,21 @@ const temp_data = [
 export class ParameterComponent implements OnInit {
   @Input() parameterId = -1;
   param: any;
+  value: any;
+  initialValue: any;
+  modified = false;
 
   constructor() {
   }
 
   ngOnInit(): void {
     this.param = temp_data[this.parameterId];
+    this.value = this.param.value;
+    this.initialValue = this.param.value;
   }
 
+  change(): void {
+    console.log(`${this.value}, ${this.initialValue}`);
+    this.modified = this.value !== this.initialValue;
+  }
 }

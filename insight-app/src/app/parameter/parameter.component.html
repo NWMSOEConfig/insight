@@ -1,9 +1,9 @@
 <p *ngIf="param.type === 'boolean'">
-  <mat-slide-toggle checked="param.value">{{param.name}}</mat-slide-toggle>
+  <mat-slide-toggle (change)="change()" [(ngModel)]="value">{{param.name}}{{this.modified ? '*' : ''}}</mat-slide-toggle>
 </p>
 <p *ngIf="param.type !== 'boolean'">
   <mat-form-field>
-    <mat-label>{{param.name}}</mat-label>
-    <input matInput [type]="param.type" value="{{param.value}}" />
+    <mat-label>{{param.name}}{{this.modified ? '*' : ''}}</mat-label>
+    <input matInput [type]="param.type" (change)="change()" [(ngModel)]="value" />
   </mat-form-field>
 </p>
