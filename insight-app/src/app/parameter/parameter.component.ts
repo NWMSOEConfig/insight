@@ -46,7 +46,6 @@ export class ParameterComponent implements OnInit {
   }
 
   change(): void {
-    console.log(`${this.value}, ${this.initialValue}`);
     this.modified = this.value !== this.initialValue;
   }
 }
