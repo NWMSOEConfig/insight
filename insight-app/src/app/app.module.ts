@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,6 +37,7 @@ import { ParameterComponent } from './parameter/parameter.component';
     MatInputModule,
     BrowserAnimationsModule,
     MatTableModule,
+    MatListModule,
     MatMenuModule,
     MatToolbarModule,
     MatIconModule,
