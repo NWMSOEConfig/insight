@@ -318,3 +318,12 @@ button,
 .sidebar a:hover {
   background: hsla(209, 42.9%, 12.4%, 0.9);
 }
+
+.sidebar img {
+  width: 20px;
+  filter: invert(100%);
+}
+
+.sidebar span {
+  padding-left: 15px;
+}
