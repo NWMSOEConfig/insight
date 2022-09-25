@@ -51,9 +51,9 @@
       id="toggle-sidebar"
       title="Open sidebar"
       mat-raised-button
-      (click)="drawer.toggle()"
+      (click)="toggle_sidebar(this.drawer)"
     >
-      <span> > </span>
+      <span> {{toggle_direction}} </span>
     </button>
     <mat-sidenav-container>
       <mat-sidenav-content class="content">
