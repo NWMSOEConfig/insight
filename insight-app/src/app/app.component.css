@@ -274,6 +274,14 @@ button,
 
   background: #172b4d;
   color: #fff;
+
+  overflow: hidden;
+}
+
+.sidebar div {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
 
 .sidebar a {
