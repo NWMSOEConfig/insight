@@ -1,7 +1,3 @@
-
-<style>
-</style>
-
 <!-- Toolbar -->
 <mat-toolbar color="primary">
   <span class="welcome">New World</span>
@@ -10,16 +6,26 @@
     <mat-label>Pick the Website</mat-label>
     <mat-select>
       <mat-option *ngFor="let state of states" [value]="state">
-        {{state}}
+        {{ state }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <div class="spacer"></div>
-  <mat-icon class="icon" aria-hidden="false" aria-label="Example settings icon" fontIcon="settings"></mat-icon>
-  <mat-icon class="icon" aria-hidden="false" aria-label="Profile icon" fontIcon="person"></mat-icon>
+  <mat-icon
+    class="icon"
+    aria-hidden="false"
+    aria-label="Example settings icon"
+    fontIcon="settings"
+  ></mat-icon>
+  <mat-icon
+    class="icon"
+    aria-hidden="false"
+    aria-label="Profile icon"
+    fontIcon="person"
+  ></mat-icon>
 </mat-toolbar>
 
-<mat-sidenav-container>
+<!-- <mat-sidenav-container>
   <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
   <mat-sidenav-content class="content">
     Main Content
@@ -27,6 +33,29 @@
     <h3>Temporary place for setting editor</h3>
     <app-setting-editor></app-setting-editor>
   </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container> -->
 
-<router-outlet></router-outlet>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="side" class="sidebar">
+    <a>Configuration</a>
+    <a>Publish</a>
+    <a>History</a>
+    <a>Logout</a>
+    <!-- <h3>Publish</h3>
+    <h3>History</h3>
+    <h3>Logout</h3> -->
+  </mat-drawer>
+  <mat-drawer-content>
+    <button mat-raised-button (click)="drawer.toggle()">Toggle sidebar</button>
+    <mat-sidenav-container>
+      <mat-sidenav-content class="content">
+        Main Content
+        <app-category-list></app-category-list>
+        <h3>Temporary place for setting editor</h3>
+        <app-setting-editor></app-setting-editor>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </mat-drawer-content>
+
+  <router-outlet></router-outlet>
+</mat-drawer-container>
