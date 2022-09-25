@@ -37,28 +37,32 @@
 
 <mat-drawer-container>
   <mat-drawer #drawer mode="side" class="sidebar">
-    <a>
+    <a href="\">
       <img src="assets\settings.svg" />
       <span>Configuration</span>
     </a>
-    <a>
+    <a href="\publish">
       <img src="assets\file-edit.svg" />
       <span>Publish</span>
     </a>
-    <a>
+    <a href="\history">
       <img src="assets\clock-rewind.svg" />
       <span>History</span>
     </a>
-    <a>
+    <a href="#logout">
       <img src="assets\exit.svg" />
       <span>Logout</span>
     </a>
-    <!-- <h3>Publish</h3>
-    <h3>History</h3>
-    <h3>Logout</h3> -->
   </mat-drawer>
   <mat-drawer-content>
-    <button mat-raised-button (click)="drawer.toggle()">Toggle sidebar</button>
+    <button
+      id="toggle-sidebar"
+      title="Open sidebar"
+      mat-raised-button
+      (click)="drawer.toggle()"
+    >
+      <span> > </span>
+    </button>
     <mat-sidenav-container>
       <mat-sidenav-content class="content">
         Main Content
