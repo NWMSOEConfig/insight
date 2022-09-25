@@ -81,8 +81,7 @@
   .card-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 16px;
+    margin: 16px;
   }
 
   .card {
@@ -264,8 +263,9 @@
 
   .button {
     text-align: center;
+    width: 100%;
+    padding: 5px;
   }
-
 
 </style>
 
@@ -275,21 +275,45 @@
   <div class="spacer"></div>
   <mat-form-field class="menu-selection">
     <mat-label>Pick the Website</mat-label>
-    <mat-select>
+    <mat-select [(value)]="selected">
       <mat-option *ngFor="let state of states" [value]="state">
         {{state}}
+        {{changeSite(selected)}}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <div class="spacer"></div>
-  <mat-icon class="icon" aria-hidden="false" aria-label="Example settings icon" fontIcon="settings"></mat-icon>
-  <mat-icon class="icon" aria-hidden="false" aria-label="Profile icon" fontIcon="person"></mat-icon>
+  <button mat-icon-button aria-hidden="false" aria-label="Example settings icon" mat-tooltip="Click to access settings">
+    <mat-icon fontIcon="settings"></mat-icon>
+  </button>
+  <button mat-icon-button aria-hidden="false" aria-label="Profile icon" mat-tooltip="Click to access profile">
+    <mat-icon fontIcon="person"></mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
+  <mat-sidenav mode="side" opened>
+    <button mat-raised-button class="button" color="primary" mat-tooltip="View and confirm selected changes">Publish</button>
+    &nbsp;
+    <button mat-raised-button class="button" color="primary" mat-tooltip="View previous changes">History</button>
+  </mat-sidenav>
   <mat-sidenav-content class="content">
-    Main Content
+    
+    <mat-tab-group class="card-container">
+      <mat-tab label="Categories">
+        <div class="card-container">
+          <mat-form-field class="card-container">
+            <mat-label>Search For features</mat-label>
+            <input matInput placeholder="input...">
+          </mat-form-field>
+          <button class="card card-small" mat-button color="primary">Search</button>
+        </div>
+      </mat-tab>
+      <mat-tab label="Settings">
+        <h1>Settings</h1>
+      </mat-tab>
+    
+    </mat-tab-group>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

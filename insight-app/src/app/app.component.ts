@@ -9,4 +9,11 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'insight-app';
   states: string[] = ['WIsconsin', 'Minnesota', 'Indiana', 'Ohio', 'Michigan'];
+  selected = "";
+
+  changeSite(state: any) {
+    
+  }
 }
+
+
