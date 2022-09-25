@@ -19,12 +19,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { SettingEditorComponent } from './setting-editor/setting-editor.component';
 import { ParameterComponent } from './parameter/parameter.component';
+import { CategoryListComponent } from './category-list/category-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SettingEditorComponent,
-    ParameterComponent
+    ParameterComponent,
+    CategoryListComponent
   ],
   imports: [
     BrowserModule,
