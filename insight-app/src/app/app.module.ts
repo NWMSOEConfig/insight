@@ -20,13 +20,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { SettingEditorComponent } from './setting-editor/setting-editor.component';
 import { ParameterComponent } from './parameter/parameter.component';
 import { CategoryListComponent } from './category-list/category-list.component';
+import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SettingEditorComponent,
     ParameterComponent,
-    CategoryListComponent
+    CategoryListComponent,
+    ConfigurationPageComponent
   ],
   imports: [
     BrowserModule,
