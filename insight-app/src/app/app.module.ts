@@ -21,6 +21,8 @@ import { SettingEditorComponent } from './setting-editor/setting-editor.componen
 import { ParameterComponent } from './parameter/parameter.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
+import { PublishPageComponent } from './publish-page/publish-page.component';
+import { HistoryPageComponent } from './history-page/history-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { ConfigurationPageComponent } from './configuration-page/configuration-p
     SettingEditorComponent,
     ParameterComponent,
     CategoryListComponent,
-    ConfigurationPageComponent
+    ConfigurationPageComponent,
+    PublishPageComponent,
+    HistoryPageComponent
   ],
   imports: [
     BrowserModule,
