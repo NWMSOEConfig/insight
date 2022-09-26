@@ -8,4 +8,4 @@
   <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
   <mat-divider></mat-divider>
 </mat-action-list>
-<app-setting-editor *ngIf="settingClicked" [settingId]="settingId"></app-setting-editor>
+<app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>

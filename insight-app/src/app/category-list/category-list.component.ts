@@ -31,6 +31,18 @@ export class CategoryListComponent implements OnInit {
     }
   }
 
+  cancel(): void {
+    this.breadcrumbs.pop();
+
+    // settings are only ever the final element of the breadcrumbs,
+    // and there is always at least one category in the breadcrumbs (the root),
+    // so this is guaranteed to be a child-category
+    const previous = this.breadcrumbs[this.breadcrumbs.length - 1];
+    this.categoryId = previous.id;
+    this.category = getCategory(previous.id);
+    this.settingClicked = false;
+  }
+
   getPath(): string {
     return this.breadcrumbs.map(child =>
       child.type === 'category'

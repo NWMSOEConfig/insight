@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { getSetting } from '../data-service';
 
 @Component({
@@ -8,6 +8,7 @@ import { getSetting } from '../data-service';
 })
 export class SettingEditorComponent implements OnInit {
   @Input() settingId = 0;
+  @Output() cancel = new EventEmitter();
   data: any = {};
   parameterIds: number[] = [];
 
@@ -15,6 +16,10 @@ export class SettingEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.parameterIds = getSetting(this.settingId).parameters;
+  }
+
+  clickCancel(): void {
+    this.cancel.emit();
   }
 
   queue(): void {
