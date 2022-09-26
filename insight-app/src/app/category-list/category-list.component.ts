@@ -10,7 +10,7 @@ import { getCategory, getSetting } from '../data-service';
 export class CategoryListComponent implements OnInit {
   categoryId = 0;
   category = getCategory(this.categoryId);
-  breadcrumbs = [0];
+  breadcrumbs = [{type: 'category', id: 0}];
   settingClicked = false;
   settingId = 0;
 
@@ -20,10 +20,11 @@ export class CategoryListComponent implements OnInit {
   }
 
   click(child: {type: string, id: number}) {
+    this.breadcrumbs.push(child);
+
     if (child.type === 'category') {
       this.categoryId = child.id;
       this.category = getCategory(this.categoryId);
-      this.breadcrumbs.push(child.id);
     } else {
       this.settingClicked = true;
       this.settingId = child.id;
@@ -31,7 +32,11 @@ export class CategoryListComponent implements OnInit {
   }
 
   getPath(): string {
-    return this.breadcrumbs.map(id => getCategory(id).name).join(' > ');
+    return this.breadcrumbs.map(child =>
+      child.type === 'category'
+        ? getCategory(child.id).name
+        : getSetting(child.id).name)
+      .join(' > ');
   }
 
   getName(child: {type: string, id: number}): string {
