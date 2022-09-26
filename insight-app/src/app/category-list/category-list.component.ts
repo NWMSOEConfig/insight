@@ -91,4 +91,11 @@ export class CategoryListComponent implements OnInit {
   getCategory(id: number) {
     return tempData[id];
   }
+
+  click(child: {type: string, id: number}) {
+    if (child.type === 'category') {
+      this.categoryId = child.id;
+      this.category = tempData[this.categoryId];
+    }
+  }
 }
