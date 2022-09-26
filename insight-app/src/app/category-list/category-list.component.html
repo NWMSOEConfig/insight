@@ -1,4 +1,6 @@
-<h1>{{getPath()}}</h1>
+<span *ngFor="let child of breadcrumbs">
+  &gt; <button mat-button>{{getName(child)}}</button>
+</span>
 <form *ngIf="!settingClicked">
   <mat-form-field>
     <input matInput type="text" placeholder="Search for settings..." />
