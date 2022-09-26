@@ -1,4 +1,9 @@
 <h1>{{getPath()}}</h1>
+<form *ngIf="!settingClicked">
+  <mat-form-field>
+    <input matInput type="text" placeholder="Search for settings..." />
+  </mat-form-field>
+</form>
 <mat-action-list *ngIf="!settingClicked">
   <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
   <mat-divider></mat-divider>
