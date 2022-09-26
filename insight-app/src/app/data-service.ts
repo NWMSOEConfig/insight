@@ -90,11 +90,11 @@ const settings = [
   },
   {
     name: 'Baz',
-    paramters: [3],
+    parameters: [3],
   },
 ];
 
-const paramters = [
+const parameters = [
   {
     name: 'Enabled',
     type: 'boolean',
@@ -126,5 +126,5 @@ export function getSetting(id: number) {
 }
 
 export function getParameter(id: number) {
-  return paramters[id];
+  return parameters[id];
 }
