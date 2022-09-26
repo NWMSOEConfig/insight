@@ -1,28 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-// TODO: fetch parameter schemas and current values from somewhere
-const temp_data = [
-  {
-    name: 'Enabled',
-    type: 'boolean',
-    value: true,
-  },
-  {
-    name: 'Foo',
-    type: 'number',
-    value: '123',
-  },
-  {
-    name: 'Bar',
-    type: 'text',
-    value: 'Text',
-  },
-  {
-    name: 'Baz',
-    type: 'email',
-    value: 'a@b.com',
-  },
-];
+import { getParameter } from '../data-service';
 
 @Component({
   selector: 'app-parameter',
@@ -41,7 +19,7 @@ export class ParameterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.param = temp_data[this.parameterId];
+    this.param = getParameter(this.parameterId);
     this.value = this.param.value;
     this.initialValue = this.param.value;
     this.dataChange.emit({

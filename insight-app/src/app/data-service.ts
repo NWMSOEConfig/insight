@@ -79,6 +79,33 @@ const categories = [
   },
 ]
 
+const paramters = [
+  {
+    name: 'Enabled',
+    type: 'boolean',
+    value: true,
+  },
+  {
+    name: 'Foo',
+    type: 'number',
+    value: '123',
+  },
+  {
+    name: 'Bar',
+    type: 'text',
+    value: 'Text',
+  },
+  {
+    name: 'Baz',
+    type: 'email',
+    value: 'a@b.com',
+  },
+];
+
 export function getCategory(id: number) {
   return categories[id];
+}
+
+export function getParameter(id: number) {
+  return paramters[id];
 }
