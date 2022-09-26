@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { getCategory } from '../data-service';
+import { getCategory, getSetting } from '../data-service';
 
 @Component({
   selector: 'app-category-list',
@@ -29,7 +29,11 @@ export class CategoryListComponent implements OnInit {
     return this.breadcrumbs.map(id => getCategory(id).name).join(' > ');
   }
 
-  getName(id: number): string {
-    return getCategory(id).name;
+  getName(child: {type: string, id: number}): string {
+    if (child.type === 'category') {
+      return getCategory(child.id).name;
+    } else {
+      return getSetting(child.id).name;
+    }
   }
 }

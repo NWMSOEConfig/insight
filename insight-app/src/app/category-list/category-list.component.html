@@ -1,5 +1,5 @@
 <h1>{{getPath()}}</h1>
 <mat-action-list>
-  <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child.id)}}</button>
+  <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
   <mat-divider></mat-divider>
 </mat-action-list>
