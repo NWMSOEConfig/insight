@@ -77,7 +77,22 @@ const categories = [
       },
     ],
   },
-]
+];
+
+const settings = [
+  {
+    name: 'Foo',
+    parameters: [0, 1],
+  },
+  {
+    name: 'Bar',
+    parameters: [2],
+  },
+  {
+    name: 'Baz',
+    paramters: [3],
+  },
+];
 
 const paramters = [
   {
@@ -104,6 +119,10 @@ const paramters = [
 
 export function getCategory(id: number) {
   return categories[id];
+}
+
+export function getSetting(id: number) {
+  return settings[id];
 }
 
 export function getParameter(id: number) {
