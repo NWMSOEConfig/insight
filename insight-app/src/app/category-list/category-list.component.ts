@@ -60,14 +60,6 @@ export class CategoryListComponent implements OnInit {
     }
   }
 
-  getPath(): string {
-    return this.breadcrumbs.map(child =>
-      child.type === 'category'
-        ? getCategory(child.id).name
-        : getSetting(child.id).name)
-      .join(' > ');
-  }
-
   getName(child: {type: string, id: number}): string {
     if (child.type === 'category') {
       return getCategory(child.id).name;
