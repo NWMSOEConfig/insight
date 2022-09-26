@@ -291,7 +291,7 @@
   </button>
 </mat-toolbar>
 
-<mat-sidenav-container>
+<!-- <mat-sidenav-container>
   <mat-sidenav mode="side" opened>
     <button mat-raised-button class="button" color="primary" mat-tooltip="View and confirm selected changes">Publish</button>
     &nbsp;
@@ -303,6 +303,44 @@
     <h3>Temporary place for setting editor</h3>
     <app-setting-editor></app-setting-editor>
   </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container> -->
 
 <router-outlet></router-outlet>
+
+<mat-drawer-container>
+  <mat-drawer #drawer mode="side" class="sidebar">
+    <a routerLink="configuration">
+      <img src="assets\settings.svg" />
+      <span>Configuration</span>
+    </a>
+    <a routerLink="publish">
+      <img src="assets\file-edit.svg" />
+      <span>Publish</span>
+    </a>
+    <a routerLink="history">
+      <img src="assets\clock-rewind.svg" />
+      <span>History</span>
+    </a>
+    <div>
+      <a>
+        <img src="assets\exit.svg" />
+        <span>Logout</span>
+      </a>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <button
+      id="toggle-sidebar"
+      title="Open sidebar"
+      mat-raised-button
+      (click)="toggle_sidebar(this.drawer)"
+    >
+      <span> {{toggle_direction}} </span>
+    </button>
+    <mat-sidenav-container>
+      <mat-sidenav-content class="content">
+        <router-outlet> </router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -21,13 +21,19 @@ import { ParameterComponent } from './parameter/parameter.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
+import { PublishPageComponent } from './publish-page/publish-page.component';
+import { HistoryPageComponent } from './history-page/history-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SettingEditorComponent,
     ParameterComponent,
-    CategoryListComponent
+    CategoryListComponent,
+    ConfigurationPageComponent,
+    PublishPageComponent,
+    HistoryPageComponent
   ],
   imports: [
     BrowserModule,
