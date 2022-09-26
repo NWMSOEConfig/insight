@@ -11,6 +11,8 @@ export class CategoryListComponent implements OnInit {
   categoryId = 0;
   category = getCategory(this.categoryId);
   breadcrumbs = [0];
+  settingClicked = false;
+  settingId = 0;
 
   constructor() { }
 
@@ -22,6 +24,9 @@ export class CategoryListComponent implements OnInit {
       this.categoryId = child.id;
       this.category = getCategory(this.categoryId);
       this.breadcrumbs.push(child.id);
+    } else {
+      this.settingClicked = true;
+      this.settingId = child.id;
     }
   }
 

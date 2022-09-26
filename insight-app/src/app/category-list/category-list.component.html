@@ -1,5 +1,6 @@
 <h1>{{getPath()}}</h1>
-<mat-action-list>
+<mat-action-list *ngIf="!settingClicked">
   <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
   <mat-divider></mat-divider>
 </mat-action-list>
+<app-setting-editor *ngIf="settingClicked" [settingId]="settingId"></app-setting-editor>
