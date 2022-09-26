@@ -82,6 +82,7 @@ const tempData = [
 export class CategoryListComponent implements OnInit {
   categoryId = 0;
   category = tempData[this.categoryId];
+  breadcrumbs = [0];
 
   constructor() { }
 
@@ -96,6 +97,11 @@ export class CategoryListComponent implements OnInit {
     if (child.type === 'category') {
       this.categoryId = child.id;
       this.category = tempData[this.categoryId];
+      this.breadcrumbs.push(child.id);
     }
+  }
+
+  getPath(): string {
+    return this.breadcrumbs.map(id => this.getCategory(id).name).join(' > ');
   }
 }
