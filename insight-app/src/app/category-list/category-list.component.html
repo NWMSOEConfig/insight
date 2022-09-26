@@ -1,0 +1,6 @@
+<h1>{{category.name}}</h1>
+<mat-action-list>
+  <!-- TODO: change on click -->
+  <button mat-list-item *ngFor="let child of category.children">{{getCategory(child.id).name}}</button>
+  <mat-divider></mat-divider>
+</mat-action-list>

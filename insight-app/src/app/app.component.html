@@ -298,24 +298,11 @@
     <button mat-raised-button class="button" color="primary" mat-tooltip="View previous changes">History</button>
   </mat-sidenav>
   <mat-sidenav-content class="content">
-    
-    <mat-tab-group class="card-container">
-      <mat-tab label="Categories">
-        <div class="card-container">
-          <mat-form-field class="card-container">
-            <mat-label>Search For features</mat-label>
-            <input matInput placeholder="input...">
-          </mat-form-field>
-          <button class="card card-small" mat-button color="primary">Search</button>
-        </div>
-      </mat-tab>
-      <mat-tab label="Settings">
-        <h1>Settings</h1>
-      </mat-tab>
-    
-    </mat-tab-group>
+    Main Content
+    <app-category-list></app-category-list>
+    <h3>Temporary place for setting editor</h3>
+    <app-setting-editor></app-setting-editor>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
 
 <router-outlet></router-outlet>
