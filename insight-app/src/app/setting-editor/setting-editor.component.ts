@@ -8,14 +8,13 @@ import { getSetting } from '../data-service';
 })
 export class SettingEditorComponent implements OnInit {
   @Input() settingId = 0;
-  data: any[] = [];
+  data: any = {};
   parameterIds: number[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
     this.parameterIds = getSetting(this.settingId).parameters;
-    this.data = new Array(this.parameterIds.length).fill({});
   }
 
   queue(): void {
@@ -24,6 +23,6 @@ export class SettingEditorComponent implements OnInit {
   }
 
   dataChange(parameterId: number, newData: {name: string, type: string, value: any}): void {
-    this.data[parameterId] = {...this.data, ...newData};
+    this.data[parameterId] = newData;
   }
 }
