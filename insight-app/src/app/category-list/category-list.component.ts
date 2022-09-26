@@ -43,6 +43,23 @@ export class CategoryListComponent implements OnInit {
     this.settingClicked = false;
   }
 
+  clickBreadcrumb(child: {type: string, id: number}): void {
+    const index = this.breadcrumbs.indexOf(child);
+
+    this.breadcrumbs.length = index + 1;
+
+    const last = this.breadcrumbs[this.breadcrumbs.length - 1];
+
+    if (last.type === 'category') {
+      this.categoryId = last.id;
+      this.category = getCategory(last.id);
+      this.settingClicked = false;
+    } else {
+      this.settingClicked = true;
+      this.settingId = last.id;
+    }
+  }
+
   getPath(): string {
     return this.breadcrumbs.map(child =>
       child.type === 'category'

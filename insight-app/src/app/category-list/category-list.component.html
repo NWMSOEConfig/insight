@@ -1,5 +1,5 @@
 <span *ngFor="let child of breadcrumbs">
-  &gt; <button mat-button>{{getName(child)}}</button>
+  &gt; <button mat-button (click)="clickBreadcrumb(child)">{{getName(child)}}</button>
 </span>
 <form *ngIf="!settingClicked">
   <mat-form-field>
