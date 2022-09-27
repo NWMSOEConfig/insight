@@ -1,13 +1,15 @@
-<span *ngFor="let child of breadcrumbs">
-  &gt; <button mat-button (click)="clickBreadcrumb(child)">{{getName(child)}}</button>
-</span>
-<form *ngIf="!settingClicked">
-  <mat-form-field>
-    <input matInput type="text" placeholder="Search for settings..." />
-  </mat-form-field>
-</form>
-<mat-action-list *ngIf="!settingClicked">
-  <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
-  <mat-divider></mat-divider>
-</mat-action-list>
-<app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>
+<div class="category-list">
+  <span *ngFor="let child of breadcrumbs">
+    &gt; <button mat-button (click)="clickBreadcrumb(child)">{{getName(child)}}</button>
+  </span>
+  <form *ngIf="!settingClicked">
+    <mat-form-field>
+      <input matInput type="text" placeholder="Search for settings..." />
+    </mat-form-field>
+  </form>
+  <mat-action-list *ngIf="!settingClicked">
+    <button mat-list-item *ngFor="let child of category.children" (click)="click(child)">{{getName(child)}}</button>
+    <mat-divider></mat-divider>
+  </mat-action-list>
+  <app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>
+</div>

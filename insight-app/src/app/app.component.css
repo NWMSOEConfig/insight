@@ -316,22 +316,20 @@ button,
   top: 0px;
   left: 0px;
 
-  min-width: 25px;
-  height: 25px;
+  min-width: 32px;
+  height: 100%;
   padding: 0;
 
-  margin-top: 5px;
-  margin-left: 5px;
-
-  box-shadow: none;
-  border-radius: 100%;
+  border-radius: 0%;
 
   background-color: #172b4d;
   color: #fff;
+  font-size: x-large;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 
 #toggle-sidebar:hover {
