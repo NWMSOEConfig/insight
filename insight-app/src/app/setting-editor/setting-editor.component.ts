@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { getSetting } from '../data-service';
 
 @Component({
   selector: 'app-setting-editor',
@@ -6,11 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./setting-editor.component.css']
 })
 export class SettingEditorComponent implements OnInit {
-  data = [{}, {}, {}, {}]
+  @Input() settingId = 0;
+  @Output() cancel = new EventEmitter();
+  data: any = {};
+  parameterIds: number[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
+    this.parameterIds = getSetting(this.settingId).parameters;
+  }
+
+  clickCancel(): void {
+    this.cancel.emit();
   }
 
   queue(): void {
@@ -19,6 +28,6 @@ export class SettingEditorComponent implements OnInit {
   }
 
   dataChange(parameterId: number, newData: {name: string, type: string, value: any}): void {
-    this.data[parameterId] = {...this.data, ...newData};
+    this.data[parameterId] = newData;
   }
 }
