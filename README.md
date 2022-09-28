@@ -31,7 +31,7 @@ Through npm install angular and angular material:
 npm install -g @angular/cli
 
 Install angular material by opening an integrated terminal by right clicking on the project folder in VS Code:
-
+npm install inside project folder (insight\insight-app)
 ng add @angular/material
 
 Run the app on your local machine:
