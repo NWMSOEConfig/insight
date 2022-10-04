@@ -1,5 +1,18 @@
 # Insight
 
+1st Terminal:
+
+cd InsightApi
+
+dotnet watch
+
+2nd Terminal:
+
+cd insight-app
+
+npm i
+
+ng serve
 
 
 ## Getting started
