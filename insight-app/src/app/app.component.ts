@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ export class AppComponent {
   states: string[] = ['Wisconsin', 'Minnesota', 'Indiana', 'Ohio', 'Michigan'];
   toggle_direction: string = '>';
   selected = "";
+
+  constructor(private http: HttpClient) {}
 
   toggle_sidebar(sidebar: any): void {
     sidebar.toggle();
