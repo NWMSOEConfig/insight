@@ -24,7 +24,6 @@ namespace InsightApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            print("GET")
             if (_context.TodoItems == null)
             {
                 return NotFound();

@@ -9,11 +9,7 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   public getCountry() {
-    console.log('GET');
     let headers = new HttpHeaders();
-    headers = headers.set('Access-Control-Allow-Origin', '*');
-    // headers = headers.set('content-type', 'application/json');
-
     return this.httpClient.get(this.apiURL + 'todoitems', { headers: headers });
   }
 }

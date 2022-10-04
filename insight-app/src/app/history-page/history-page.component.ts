@@ -9,15 +9,13 @@ import { ApiService } from '../api.service';
 
 
 export class HistoryPageComponent implements OnInit {
-  countryList: any;
+  todoitems: any;
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     this.apiService.getCountry().subscribe((data) => {
-      // console.log(data);
-      console.log("XD")
-      this.countryList = data;
+      this.todoitems = data;
     });
   }
 }
