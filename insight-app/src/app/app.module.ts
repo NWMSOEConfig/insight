@@ -24,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
 import { PublishPageComponent } from './publish-page/publish-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
+import {HttpClientModule} from '@angular/common/http'; 
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { HistoryPageComponent } from './history-page/history-page.component';
     MatSidenavModule,
     MatSelectModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
