@@ -24,15 +24,15 @@ public class DataController : ControllerBase
 
     [HttpGet]
     [Route("parameter")]
-    public Parameter GetParameter(int id)
+    public IActionResult GetParameter(int id)
     {
-        return _parameters[id];
+        return id < 0 || id >= _parameters.Count ? BadRequest() : Ok(_parameters[id]);
     }
 
     [HttpGet]
     [Route("setting")]
-    public Setting GetSetting(int id)
+    public IActionResult GetSetting(int id)
     {
-        return _settings[id];
+        return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
     }
 }
