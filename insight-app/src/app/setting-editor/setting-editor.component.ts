@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { getSetting } from '../data-service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-setting-editor',
@@ -12,10 +12,13 @@ export class SettingEditorComponent implements OnInit {
   data: any = {};
   parameterIds: number[] = [];
 
-  constructor() { }
+  constructor(private apiService: ApiService) {
+  }
 
   ngOnInit(): void {
-    this.parameterIds = getSetting(this.settingId).parameters;
+    this.apiService.getSetting(this.settingId).subscribe((data: any) => {
+      this.parameterIds = data;
+    });
   }
 
   clickCancel(): void {

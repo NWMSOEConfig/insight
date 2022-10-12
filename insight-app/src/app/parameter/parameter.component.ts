@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-import { getParameter } from '../data-service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-parameter',
@@ -15,17 +14,19 @@ export class ParameterComponent implements OnInit {
   initialValue: any;
   modified = false;
 
-  constructor() {
+  constructor(private apiService: ApiService) {
   }
 
   ngOnInit(): void {
-    this.param = getParameter(this.parameterId);
-    this.value = this.param.value;
-    this.initialValue = this.param.value;
-    this.dataChange.emit({
-      name: this.param.name,
-      type: this.param.type,
-      value: this.value,
+    this.apiService.getParameter(this.parameterId).subscribe((data: any) => {
+      this.param = data;
+      this.value = this.param.value;
+      this.initialValue = this.param.value;
+      this.dataChange.emit({
+        name: this.param.name,
+        type: this.param.type,
+        value: this.value,
+      });
     });
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-import { getCategory, getSetting } from '../data-service';
+import { ApiService } from '../api.service';
+import { getCategory } from '../data-service';
 
 @Component({
   selector: 'app-category-list',
@@ -10,13 +10,17 @@ import { getCategory, getSetting } from '../data-service';
 export class CategoryListComponent implements OnInit {
   categoryId = 0;
   category = getCategory(this.categoryId);
+  categoryNames: any = {0: 'Root'};
   breadcrumbs = [{type: 'category', id: 0}];
   settingClicked = false;
   settingId = 0;
+  settingNames: any = {};
 
-  constructor() { }
+  constructor(private apiService: ApiService) {
+  }
 
   ngOnInit(): void {
+    this.refreshNames();
   }
 
   click(child: {type: string, id: number}) {
@@ -25,9 +29,24 @@ export class CategoryListComponent implements OnInit {
     if (child.type === 'category') {
       this.categoryId = child.id;
       this.category = getCategory(this.categoryId);
+      this.refreshNames();
     } else {
       this.settingClicked = true;
       this.settingId = child.id;
+    }
+  }
+
+  refreshNames(): void {
+    for (const child of this.category.children) {
+      if (child.type === 'setting') {
+        this.settingNames[child.id] = 'Loading...';
+        this.apiService.getSetting(child.id).subscribe((data: any) => {
+          this.settingNames[child.id] = data.name;
+        });
+      } else {
+        this.categoryNames[child.id] = 'Loading...';
+        this.categoryNames[child.id] = getCategory(child.id).name;
+      }
     }
   }
 
@@ -57,14 +76,6 @@ export class CategoryListComponent implements OnInit {
     } else {
       this.settingClicked = true;
       this.settingId = last.id;
-    }
-  }
-
-  getName(child: {type: string, id: number}): string {
-    if (child.type === 'category') {
-      return getCategory(child.id).name;
-    } else {
-      return getSetting(child.id).name;
     }
   }
 }
