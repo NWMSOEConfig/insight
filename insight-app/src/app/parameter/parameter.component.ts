@@ -14,6 +14,7 @@ export class ParameterComponent implements OnInit {
   value: any;
   initialValue: any;
   modified = false;
+  loaded = false;
 
   constructor(private apiService: ApiService) {
   }
@@ -23,6 +24,7 @@ export class ParameterComponent implements OnInit {
       this.param = parameter;
       this.value = this.param.value;
       this.initialValue = this.param.value;
+      this.loaded = true;
       this.dataChange.emit({
         id: this.param.id,
         name: this.param.name,
