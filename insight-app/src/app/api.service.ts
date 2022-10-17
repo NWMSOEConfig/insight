@@ -23,4 +23,8 @@ export class ApiService {
   public getParameter(id: number) {
     return this.httpClient.get<Parameter>(`${this.apiURL}/data/parameter?id=${id}`);
   }
+
+  public postQueue(parameters: Parameter[]) {
+    return this.httpClient.post(`${this.apiURL}/data/queue`, parameters, { responseType: 'text' });
+  }
 }

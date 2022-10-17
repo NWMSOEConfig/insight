@@ -22,6 +22,8 @@ public class DataController : ControllerBase
         new(2, "Baz", new List<int> { 3 }),
     };
 
+    private static readonly List<Parameter> _queue = new();
+
     [HttpGet]
     [Route("parameter")]
     public IActionResult GetParameter(int id)
@@ -34,5 +36,14 @@ public class DataController : ControllerBase
     public IActionResult GetSetting(int id)
     {
         return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
+    }
+
+    [HttpPost]
+    [Route("queue")]
+    public IActionResult PostQueue([FromBody] IList<Parameter> parameters)
+    {
+        _queue.AddRange(parameters);
+
+        return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
     }
 }

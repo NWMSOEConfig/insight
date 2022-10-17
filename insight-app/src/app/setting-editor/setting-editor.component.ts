@@ -27,8 +27,9 @@ export class SettingEditorComponent implements OnInit {
   }
 
   queue(): void {
-    console.log('queue pressed');
-    console.log(this.data);
+    this.apiService.postQueue(Object.values(this.data)).subscribe(message => {
+      alert(message);
+    });
   }
 
   dataChange(parameterId: number, newData: Parameter): void {
