@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Parameter } from '../models/parameter';
 
 @Component({
   selector: 'app-parameter',
@@ -8,8 +9,8 @@ import { ApiService } from '../api.service';
 })
 export class ParameterComponent implements OnInit {
   @Input() parameterId = -1;
-  @Output() dataChange = new EventEmitter<{name: string, type: string, value: any}>();
-  param!: {name: string, type: string, value: any};
+  @Output() dataChange = new EventEmitter<Parameter>();
+  param!: Parameter;
   value: any;
   initialValue: any;
   modified = false;
@@ -18,11 +19,12 @@ export class ParameterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getParameter(this.parameterId).subscribe((data: any) => {
-      this.param = data;
+    this.apiService.getParameter(this.parameterId).subscribe(parameter => {
+      this.param = parameter;
       this.value = this.param.value;
       this.initialValue = this.param.value;
       this.dataChange.emit({
+        id: this.param.id,
         name: this.param.name,
         type: this.param.type,
         value: this.value,
@@ -33,6 +35,7 @@ export class ParameterComponent implements OnInit {
   change(): void {
     this.modified = this.value !== this.initialValue;
     this.dataChange.emit({
+      id: this.param.id,
       name: this.param.name,
       type: this.param.type,
       value: this.value,

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Parameter } from '../models/parameter';
 
 @Component({
   selector: 'app-setting-editor',
@@ -16,8 +17,8 @@ export class SettingEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getSetting(this.settingId).subscribe((data: any) => {
-      this.parameterIds = data.parameters;
+    this.apiService.getSetting(this.settingId).subscribe(setting => {
+      this.parameterIds = setting.parameterIds;
     });
   }
 
@@ -30,7 +31,7 @@ export class SettingEditorComponent implements OnInit {
     console.log(this.data);
   }
 
-  dataChange(parameterId: number, newData: {name: string, type: string, value: any}): void {
+  dataChange(parameterId: number, newData: Parameter): void {
     this.data[parameterId] = newData;
   }
 }
