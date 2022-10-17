@@ -22,6 +22,20 @@ public class DataController : ControllerBase
         new(2, "Baz", new List<int> { 3 }),
     };
 
+    private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
+    {
+        new(0, "Subcategory 1"),
+        new(1, "Subcategory 2"),
+        new(2, "Subcategory 3")
+    };
+
+    private static readonly IList<Category> _categories = new List<Category>
+    {
+        new(0, "Category A", new List<int> { 0}),
+        new(1, "Category B", new List<int> { 1 }),
+        new(2, "Category C",  new List<int> { 2 })
+    };
+
     private static readonly List<Parameter> _queue = new();
 
     [HttpGet]
@@ -36,6 +50,20 @@ public class DataController : ControllerBase
     public IActionResult GetSetting(int id)
     {
         return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
+    }
+
+    [HttpGet]
+    [Route("subcategory")]
+    public IActionResult GetSubcategory(int id)
+    {
+        return id < 0 || id >= _subcategories.Count ? BadRequest() : Ok(_subcategories[id]);
+    }
+
+    [HttpGet]
+    [Route("category")]
+    public IActionResult GetCategory(int id)
+    {
+        return id < 0 || id >= _categories.Count ? BadRequest() : Ok(_categories[id]);
     }
 
     [HttpPost]
