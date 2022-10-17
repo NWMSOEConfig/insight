@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Setting } from './models/setting';
-import { Parameter } from './models/parameter';
-import { Category } from './models/category';
-import { Subcategory } from './models/subcategory';
+import { Setting } from '../models/setting';
+import { Parameter } from '../models/parameter';
+import { Category } from '../models/category';
+import { Subcategory } from '../models/subcategory';
 
 @Injectable({
   providedIn: 'root',
