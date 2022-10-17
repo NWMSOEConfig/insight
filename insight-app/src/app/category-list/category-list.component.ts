@@ -5,25 +5,29 @@ import { getCategory } from '../data-service';
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.css']
+  styleUrls: ['./category-list.component.css'],
 })
 export class CategoryListComponent implements OnInit {
   categoryId = 0;
   category = getCategory(this.categoryId);
-  categoryNames: any = {0: 'Root'};
-  breadcrumbs = [{type: 'category', id: 0}];
+  categoryNames: any = { 0: 'Root' };
+  breadcrumbs = [{ type: 'category', id: 0 }];
   settingClicked = false;
   settingId = 0;
   settingNames: any = {};
 
-  constructor(private apiService: ApiService) {
-  }
+  categories: any;
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.refreshNames();
+    this.apiService.getCategory(1).subscribe((data: any) => {
+      this.categories = data;
+    });
   }
 
-  click(child: {type: string, id: number}) {
+  click(child: { type: string; id: number }) {
     this.breadcrumbs.push(child);
 
     if (child.type === 'category') {
@@ -62,7 +66,7 @@ export class CategoryListComponent implements OnInit {
     this.settingClicked = false;
   }
 
-  clickBreadcrumb(child: {type: string, id: number}): void {
+  clickBreadcrumb(child: { type: string; id: number }): void {
     const index = this.breadcrumbs.indexOf(child);
 
     this.breadcrumbs.length = index + 1;

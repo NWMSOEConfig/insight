@@ -31,9 +31,14 @@ public class DataController : ControllerBase
 
     private static readonly IList<Category> _categories = new List<Category>
     {
-        new(0, "Category A", new List<int> { 0}),
+        new(0, "Category A", new List<int> { 0 }),
         new(1, "Category B", new List<int> { 1 }),
         new(2, "Category C",  new List<int> { 2 })
+    };
+
+    private static readonly IList<Tenant> _tenants = new List<Tenant>
+    {
+        new(0, "State", new List<int> { 0, 1, 2}),
     };
 
     private static readonly List<Parameter> _queue = new();
@@ -64,6 +69,13 @@ public class DataController : ControllerBase
     public IActionResult GetCategory(int id)
     {
         return id < 0 || id >= _categories.Count ? BadRequest() : Ok(_categories[id]);
+    }
+
+    [HttpGet]
+    [Route("tenant")]
+    public IActionResult GetTenant(int id)
+    {
+        return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
     }
 
     [HttpPost]
