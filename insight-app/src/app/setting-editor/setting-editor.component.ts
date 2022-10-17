@@ -17,7 +17,7 @@ export class SettingEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiService.getSetting(this.settingId).subscribe((data: any) => {
-      this.parameterIds = data;
+      this.parameterIds = data.parameters;
     });
   }
 
