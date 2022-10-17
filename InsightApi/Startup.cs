@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using InsightApi.Models;
 using Microsoft.EntityFrameworkCore;
+using InsightApi.Helpers;
 
 public class Startup
 {
@@ -19,17 +20,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<AppProfile>();
-            cfg.CreateMap<Source, Dest>();
-        });
-
-        var mapper = config.CreateMapper();
-        // or
-        IMapper mapper = new Mapper(config);
-        var dest = mapper.Map<Source, Dest>(new Source());
+        
         services.AddCors();
+        services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         services.AddControllers();
         services.AddDbContext<CategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
         services.AddDbContext<SubcategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
