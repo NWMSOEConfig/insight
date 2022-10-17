@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Setting } from './models/setting';
 import { Parameter } from './models/parameter';
+import { Category } from './models/category';
+import { Subcategory } from './models/subcategory';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,18 @@ export class ApiService {
   public getParameter(id: number) {
     return this.httpClient.get<Parameter>(
       `${this.apiURL}/data/parameter?id=${id}`
+    );
+  }
+
+  public getCategory(id: number) {
+    return this.httpClient.get<Category>(
+      `${this.apiURL}/data/category?id=${id}`
+    );
+  }
+
+  public getSubcategory(id: number) {
+    return this.httpClient.get<Subcategory>(
+      `${this.apiURL}/data/subcategory?id=${id}`
     );
   }
 

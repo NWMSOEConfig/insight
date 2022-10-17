@@ -1,4 +1,4 @@
-export interface Setting {
+export interface Category {
     id: number,
     name: string,
     subcategoryIds: number[],
