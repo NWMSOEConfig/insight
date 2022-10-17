@@ -6,7 +6,7 @@ namespace InsightApi.Models
     {
         public long Id { get; set; }
         public string? Name { get; set; }
-        public List<Subcategory> SubCategories { get; set; } = new List<Subcategory>();
+        public List<Subcategory> Subcategories { get; set; } = new List<Subcategory>();
     }
     public class CategoryContext : DbContext
     {

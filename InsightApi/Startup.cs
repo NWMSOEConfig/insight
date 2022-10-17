@@ -19,10 +19,20 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AppProfile>();
+            cfg.CreateMap<Source, Dest>();
+        });
+
+        var mapper = config.CreateMapper();
+        // or
+        IMapper mapper = new Mapper(config);
+        var dest = mapper.Map<Source, Dest>(new Source());
         services.AddCors();
         services.AddControllers();
-        services.AddDbContext<CategoryContext>(opt => opt.UseInMemoryDatabase("Category"));
-        services.AddDbContext<SubcategoryContext>(opt => opt.UseInMemoryDatabase("Subcategory"));
+        services.AddDbContext<CategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
+        services.AddDbContext<SubcategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

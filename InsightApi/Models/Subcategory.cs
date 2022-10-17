@@ -7,6 +7,7 @@ namespace InsightApi.Models
         public long Id { get; set; }
         public string? Name { get; set; }
     }
+
     public class SubcategoryContext : DbContext
     {
         public SubcategoryContext(DbContextOptions<SubcategoryContext> options)

@@ -35,6 +35,7 @@ namespace InsightApi.Controllers
                 return Problem("Entity set 'TodoContext.TodoItems'  is null.");
             }
             _context.Categories.Add(category);
+            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTodoItem", new { id = category.Id }, category);
