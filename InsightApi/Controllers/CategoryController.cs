@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsightApi.Models;
+using AutoMapper;
 
 namespace InsightApi.Controllers
 {
@@ -23,7 +24,15 @@ namespace InsightApi.Controllers
             {
                 return NotFound();
             }
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
+            var subcategories = from c in categories
+                                select new Subcategory()
+                                {
+                                    Id = c.Id,
+                                    Name = c.Name
+                                };
+
+            return Ok(categories);
         }
 
         // POST: api/category
@@ -35,7 +44,7 @@ namespace InsightApi.Controllers
                 return Problem("Entity set 'TodoContext.TodoItems'  is null.");
             }
             _context.Categories.Add(category);
-            
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTodoItem", new { id = category.Id }, category);
