@@ -4,6 +4,7 @@ import { Setting } from '../models/setting';
 import { Parameter } from '../models/parameter';
 import { Category } from '../models/category';
 import { Subcategory } from '../models/subcategory';
+import { Tenant } from '../models/tenant';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,10 @@ export class ApiService {
     return this.httpClient.get<Subcategory>(
       `${this.apiURL}/data/subcategory?id=${id}`
     );
+  }
+
+  public getTenant(id: number) {
+    return this.httpClient.get<Tenant>(`${this.apiURL}/data/tenant?id=${id}`);
   }
 
   public postQueue(parameters: Parameter[]) {
