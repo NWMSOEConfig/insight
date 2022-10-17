@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TodoApi.Models;
+using InsightApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class Startup
@@ -21,7 +21,8 @@ public class Startup
     {
         services.AddCors();
         services.AddControllers();
-        services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+        services.AddDbContext<CategoryContext>(opt => opt.UseInMemoryDatabase("Category"));
+        services.AddDbContext<SubcategoryContext>(opt => opt.UseInMemoryDatabase("Subcategory"));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
