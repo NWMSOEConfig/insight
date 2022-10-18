@@ -24,9 +24,9 @@ public class DataController : ControllerBase
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
-        new(0, "Subcategory 1"),
-        new(1, "Subcategory 2"),
-        new(2, "Subcategory 3")
+        new(0, "Subcategory 1", new List<int> { 0 }),
+        new(1, "Subcategory 2", new List<int> { 1 }),
+        new(2, "Subcategory 3", new List<int> { 2 })
     };
 
     private static readonly IList<Category> _categories = new List<Category>
