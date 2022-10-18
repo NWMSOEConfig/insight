@@ -1,6 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DebugElement, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { getCategory } from '../data-service';
+
+/**
+ * TODO: Temporary location
+ */
+enum DbObjects {
+  Tenant,
+  Category,
+  Subcategory,
+  Setting,
+  Parameter,
+}
 
 @Component({
   selector: 'app-category-list',
@@ -17,21 +28,56 @@ export class CategoryListComponent implements OnInit {
   settingNames: any = {};
 
   parent: any;
-  categories: any = [];
-  subcategories: any = [{}];
+  children: any = [];
+  level = DbObjects.Tenant;
 
   constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {
-    this.refreshNames();
-    this.apiService.getTenant(0).subscribe((data) => {
-      this.parent = data;
-      this.parent.categoryIds.forEach((id: number) => {
-        this.apiService.getCategory(id).subscribe((data) => {
-          this.categories.push(data);
+  /** API request call to parent and its children
+   * TODO: Make API requests less redundant
+   * TODO: Rename this?
+   * @param target Parent we want to request (Tenant, Category, Subcategory, Setting)
+   */
+  requestDbTarget(target: DbObjects) {
+    this.children = []; // Clear out children
+    this.level = target; // Update our current level
+
+    if (target == DbObjects.Tenant) {
+      this.apiService.getTenant(0).subscribe((data) => {
+        this.parent = data;
+        this.parent.categoryIds.forEach((id: number) => {
+          this.apiService.getCategory(id).subscribe((data) => {
+            this.children.push(data);
+          });
         });
       });
-    });
+    } else if (target == DbObjects.Category) {
+      this.apiService.getCategory(this.parent.id).subscribe((data) => {
+        this.parent = data;
+        this.parent.subcategoryIds.forEach((id: number) => {
+          this.apiService.getSubcategory(id).subscribe((data) => {
+            this.children.push(data);
+          });
+        });
+      });
+    } else if (target == DbObjects.Subcategory) {
+      this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
+        this.parent = data;
+        this.parent.settingIds.forEach((id: number) => {
+          this.apiService.getSetting(id).subscribe((data) => {
+            this.children.push(data);
+          });
+        });
+      });
+    } else { // we've gone too far!!! 😲😲😲
+      this.settingClicked = true;
+      this.settingId = this.parent.id;
+    }
+  }
+
+  ngOnInit(): void {
+    this.refreshNames();
+    this.requestDbTarget(DbObjects.Tenant);
   }
 
   clickCategory(child: any) {
@@ -39,16 +85,11 @@ export class CategoryListComponent implements OnInit {
     // TODO: In backend, hook subcategory to setting
     // TODO: Consider changing subcategoryIds to "children" to be more universal
     // TODO: Consider adding typing to each model item?
-    console.log(child);
-    this.categories = [];
-    this.apiService.getCategory(child.id).subscribe((data) => {
-      this.parent = data;
-      this.parent.subcategoryIds.forEach((id: number) => {
-        this.apiService.getSubcategory(id).subscribe((data) => {
-          this.categories.push(data);
-        });
-      });
-    });
+    // console.log(this.level);
+    this.parent = child;
+    this.level++;
+    this.requestDbTarget(this.level);
+    // this.requestDbTarget(DbObjects.Category);
 
     // this.breadcrumbs.push(child);
     // if (this.level == "category") {
