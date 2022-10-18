@@ -10,12 +10,14 @@
     </mat-form-field>
   </form>
   <mat-action-list *ngIf="!settingClicked">
-    <button mat-list-item
+    <!-- <button mat-list-item
             [disabled]="(child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]) === 'Loading...'"
             *ngFor="let child of category.children"
             (click)="click(child)">
       {{child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]}}
-    </button>
+    </button> -->
+    <!-- <button mat-list-item *ngFor="let categoryId of tenant.categoryIds">{{categoryId}}</button> -->
+    <button mat-list-item *ngFor="let category of categories" (click)="clickCategory(category)">{{category.name}}</button>
     <mat-divider></mat-divider>
   </mat-action-list>
   <app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>

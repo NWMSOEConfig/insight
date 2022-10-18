@@ -16,42 +16,64 @@ export class CategoryListComponent implements OnInit {
   settingId = 0;
   settingNames: any = {};
 
-  categories: any;
+  parent: any;
+  categories: any = [];
+  subcategories: any = [{}];
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.refreshNames();
-    this.apiService.getCategory(1).subscribe((data: any) => {
-      this.categories = data;
+    this.apiService.getTenant(0).subscribe((data) => {
+      this.parent = data;
+      this.parent.categoryIds.forEach((id: number) => {
+        this.apiService.getCategory(id).subscribe((data) => {
+          this.categories.push(data);
+        });
+      });
     });
   }
 
-  click(child: { type: string; id: number }) {
-    this.breadcrumbs.push(child);
+  clickCategory(child: any) {
+    // TODO: Fix breadcrumb
+    // TODO: In backend, hook subcategory to setting
+    // TODO: Consider changing subcategoryIds to "children" to be more universal
+    // TODO: Consider adding typing to each model item?
+    console.log(child);
+    this.categories = [];
+    this.apiService.getCategory(child.id).subscribe((data) => {
+      this.parent = data;
+      this.parent.subcategoryIds.forEach((id: number) => {
+        this.apiService.getSubcategory(id).subscribe((data) => {
+          this.categories.push(data);
+        });
+      });
+    });
 
-    if (child.type === 'category') {
-      this.categoryId = child.id;
-      this.category = getCategory(this.categoryId);
-      this.refreshNames();
-    } else {
-      this.settingClicked = true;
-      this.settingId = child.id;
-    }
+    // this.breadcrumbs.push(child);
+    // if (this.level == "category") {
+    //   console.log("X")
+    //   this.refreshNames();
+    // } else {
+    //   this.settingClicked = true;
+    //   this.settingId = child.id;
+    // }
   }
 
   refreshNames(): void {
-    for (const child of this.category.children) {
-      if (child.type === 'setting') {
-        this.settingNames[child.id] = 'Loading...';
-        this.apiService.getSetting(child.id).subscribe((data: any) => {
-          this.settingNames[child.id] = data.name;
-        });
-      } else {
-        this.categoryNames[child.id] = 'Loading...';
-        this.categoryNames[child.id] = getCategory(child.id).name;
-      }
-    }
+    // for (const child of this.categories) {
+    // }
+    // for (const child of this.category.children) {
+    //   if (child.type === 'setting') {
+    //     this.settingNames[child.id] = 'Loading...';
+    //     this.apiService.getSetting(child.id).subscribe((data: any) => {
+    //       this.settingNames[child.id] = data.name;
+    //     });
+    //   } else {
+    //     this.categoryNames[child.id] = 'Loading...';
+    //     this.categoryNames[child.id] = getCategory(child.id).name;
+    //   }
+    // }
   }
 
   cancel(): void {
