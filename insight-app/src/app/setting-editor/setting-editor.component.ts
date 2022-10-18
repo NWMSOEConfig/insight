@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { getSetting } from '../data-service';
+import { ApiService } from '../api.service';
+import { Parameter } from '../models/parameter';
 
 @Component({
   selector: 'app-setting-editor',
@@ -12,10 +13,13 @@ export class SettingEditorComponent implements OnInit {
   data: any = {};
   parameterIds: number[] = [];
 
-  constructor() { }
+  constructor(private apiService: ApiService) {
+  }
 
   ngOnInit(): void {
-    this.parameterIds = getSetting(this.settingId).parameters;
+    this.apiService.getSetting(this.settingId).subscribe(setting => {
+      this.parameterIds = setting.parameterIds;
+    });
   }
 
   clickCancel(): void {
@@ -23,11 +27,12 @@ export class SettingEditorComponent implements OnInit {
   }
 
   queue(): void {
-    console.log('queue pressed');
-    console.log(this.data);
+    this.apiService.postQueue(Object.values(this.data)).subscribe(message => {
+      alert(message);
+    });
   }
 
-  dataChange(parameterId: number, newData: {name: string, type: string, value: any}): void {
+  dataChange(parameterId: number, newData: Parameter): void {
     this.data[parameterId] = newData;
   }
 }
