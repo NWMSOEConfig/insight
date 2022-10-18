@@ -1,8 +1,6 @@
 <div class="category-list">
-  <span *ngFor="let child of breadcrumbs">
-    &gt; <button mat-button (click)="clickBreadcrumb(child)">
-      {{child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]}}
-    </button>
+  <span *ngFor="let breadcrumb of breadcrumbs">
+    &gt; <button mat-button (click)="clickBreadcrumb(breadcrumb)">{{breadcrumb.name}}</button>
   </span>
   <form *ngIf="!settingClicked">
     <mat-form-field>

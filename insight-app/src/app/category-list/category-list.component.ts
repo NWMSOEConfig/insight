@@ -19,17 +19,12 @@ enum DbObjects {
   styleUrls: ['./category-list.component.css'],
 })
 export class CategoryListComponent implements OnInit {
-  categoryId = 0;
-  category = getCategory(this.categoryId);
-  categoryNames: any = { 0: 'Root' };
-  breadcrumbs = [{ type: 'category', id: 0 }];
   settingClicked = false;
   settingId = 0;
-  settingNames: any = {};
-
-  parent: any;
   children: any = [];
   level = DbObjects.Tenant;
+  parent: any;
+  breadcrumbs: any = [{ name: 'Root', level: this.level }];
 
   constructor(private apiService: ApiService) {}
 
@@ -69,80 +64,35 @@ export class CategoryListComponent implements OnInit {
           });
         });
       });
-    } else { // we've gone too far!!! 😲😲😲
+    } else {
+      // we've gone too far!!! 😲😲😲
       this.settingClicked = true;
       this.settingId = this.parent.id;
     }
   }
 
   ngOnInit(): void {
-    this.refreshNames();
     this.requestDbTarget(DbObjects.Tenant);
   }
 
   clickChild(child: any) {
-    // TODO: Fix breadcrumb
-    // TODO: In backend, hook subcategory to setting
-    // TODO: Consider changing subcategoryIds to "children" to be more universal
-    // TODO: Consider adding typing to each model item?
-    // console.log(this.level);
     this.parent = child;
     this.level++;
+    this.breadcrumbs.push({ name: this.parent.name, level: this.level });
+    console.log(this.breadcrumbs);
     this.requestDbTarget(this.level);
-    // this.requestDbTarget(DbObjects.Category);
-
-    // this.breadcrumbs.push(child);
-    // if (this.level == "category") {
-    //   console.log("X")
-    //   this.refreshNames();
-    // } else {
-    //   this.settingClicked = true;
-    //   this.settingId = child.id;
-    // }
-  }
-
-  refreshNames(): void {
-    // for (const child of this.categories) {
-    // }
-    // for (const child of this.category.children) {
-    //   if (child.type === 'setting') {
-    //     this.settingNames[child.id] = 'Loading...';
-    //     this.apiService.getSetting(child.id).subscribe((data: any) => {
-    //       this.settingNames[child.id] = data.name;
-    //     });
-    //   } else {
-    //     this.categoryNames[child.id] = 'Loading...';
-    //     this.categoryNames[child.id] = getCategory(child.id).name;
-    //   }
-    // }
   }
 
   cancel(): void {
     this.breadcrumbs.pop();
-
-    // settings are only ever the final element of the breadcrumbs,
-    // and there is always at least one category in the breadcrumbs (the root),
-    // so this is guaranteed to be a child-category
-    const previous = this.breadcrumbs[this.breadcrumbs.length - 1];
-    this.categoryId = previous.id;
-    this.category = getCategory(previous.id);
     this.settingClicked = false;
+    this.requestDbTarget(this.breadcrumbs.length - 1);
   }
 
-  clickBreadcrumb(child: { type: string; id: number }): void {
-    const index = this.breadcrumbs.indexOf(child);
-
+  clickBreadcrumb(breadcrumb: any): void {
+    const index = this.breadcrumbs.indexOf(breadcrumb);
     this.breadcrumbs.length = index + 1;
-
-    const last = this.breadcrumbs[this.breadcrumbs.length - 1];
-
-    if (last.type === 'category') {
-      this.categoryId = last.id;
-      this.category = getCategory(last.id);
-      this.settingClicked = false;
-    } else {
-      this.settingClicked = true;
-      this.settingId = last.id;
-    }
+    this.settingClicked = false;
+    this.requestDbTarget(breadcrumb.level);
   }
 }
