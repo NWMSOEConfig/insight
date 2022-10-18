@@ -14,6 +14,9 @@
             (click)="click(child)">
       {{child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]}}
     </button> -->
+    <div *ngIf="children.length==0">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
     <button mat-list-item *ngFor="let child of children" (click)="clickChild(child)">{{child.name}}</button>
     <mat-divider></mat-divider>
   </mat-action-list>
