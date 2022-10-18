@@ -16,8 +16,7 @@
             (click)="click(child)">
       {{child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]}}
     </button> -->
-    <!-- <button mat-list-item *ngFor="let categoryId of tenant.categoryIds">{{categoryId}}</button> -->
-    <button mat-list-item *ngFor="let child of children" (click)="clickCategory(child)">{{child.name}}</button>
+    <button mat-list-item *ngFor="let child of children" (click)="clickChild(child)">{{child.name}}</button>
     <mat-divider></mat-divider>
   </mat-action-list>
   <app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>

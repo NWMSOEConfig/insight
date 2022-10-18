@@ -80,7 +80,7 @@ export class CategoryListComponent implements OnInit {
     this.requestDbTarget(DbObjects.Tenant);
   }
 
-  clickCategory(child: any) {
+  clickChild(child: any) {
     // TODO: Fix breadcrumb
     // TODO: In backend, hook subcategory to setting
     // TODO: Consider changing subcategoryIds to "children" to be more universal
