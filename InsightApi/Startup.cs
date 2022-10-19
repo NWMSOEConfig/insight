@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using InsightApi.Models;
 using Microsoft.EntityFrameworkCore;
-using InsightApi.Helpers;
 
 public class Startup
 {
@@ -20,12 +19,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        
         services.AddCors();
-        services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         services.AddControllers();
-        services.AddDbContext<CategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
-        services.AddDbContext<SubcategoryContext>(opt => opt.UseInMemoryDatabase("Db"));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
