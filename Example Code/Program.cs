@@ -8,7 +8,9 @@ Console.WriteLine("Hello, World!");
 
 HttpClient client = new HttpClient();
 
- HttpResponseMessage response = await client.GetAsync(
+HttpResponseMessage response = await client.GetAsync(
                 "https://pauat.newworldnow.com/api/applicationsettings");
 
- response.EnsureSuccessStatusCode();
+response.EnsureSuccessStatusCode();
+
+Console.WriteLine(await response.Content.ReadAsStringAsync());
