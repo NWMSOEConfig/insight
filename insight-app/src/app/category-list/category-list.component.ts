@@ -1,81 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DebugElement, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { getCategory } from '../data-service';
+
+/**
+ * TODO: Temporary location
+ */
+enum DbObjects {
+  Tenant,
+  Category,
+  Subcategory,
+  Setting,
+  Parameter,
+}
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.css']
+  styleUrls: ['./category-list.component.css'],
 })
 export class CategoryListComponent implements OnInit {
-  categoryId = 0;
-  category = getCategory(this.categoryId);
-  categoryNames: any = {0: 'Root'};
-  breadcrumbs = [{type: 'category', id: 0}];
   settingClicked = false;
   settingId = 0;
-  settingNames: any = {};
+  children: any = [];
+  level = DbObjects.Tenant;
+  parent: any;
+  breadcrumbs: any = [{ name: 'Root', level: this.level }];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService) {}
+
+  /** API request call to parent and its children
+   * TODO: Make API requests less redundant
+   * TODO: Rename this?
+   * @param target Parent we want to request (Tenant, Category, Subcategory, Setting)
+   */
+  requestDbTarget(target: DbObjects) {
+    this.children = []; // Clear out children
+    this.level = target; // Update our current level
+
+    if (target == DbObjects.Tenant) {
+      this.apiService.getTenant(0).subscribe((data) => {
+        this.parent = data;
+        this.parent.categoryIds.forEach((id: number) => {
+          this.apiService.getCategory(id).subscribe((data) => {
+            this.children.push(data);
+          });
+        });
+      });
+    } else if (target == DbObjects.Category) {
+      this.apiService.getCategory(this.parent.id).subscribe((data) => {
+        this.parent = data;
+        this.parent.subcategoryIds.forEach((id: number) => {
+          this.apiService.getSubcategory(id).subscribe((data) => {
+            this.children.push(data);
+          });
+        });
+      });
+    } else if (target == DbObjects.Subcategory) {
+      this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
+        this.parent = data;
+        this.parent.settingIds.forEach((id: number) => {
+          this.apiService.getSetting(id).subscribe((data) => {
+            this.children.push(data);
+          });
+        });
+      });
+    } else {
+      // we've gone too far!!! 😲😲😲
+      this.settingClicked = true;
+      this.settingId = this.parent.id;
+    }
   }
 
   ngOnInit(): void {
-    this.refreshNames();
+    this.requestDbTarget(DbObjects.Tenant);
   }
 
-  click(child: {type: string, id: number}) {
-    this.breadcrumbs.push(child);
-
-    if (child.type === 'category') {
-      this.categoryId = child.id;
-      this.category = getCategory(this.categoryId);
-      this.refreshNames();
-    } else {
-      this.settingClicked = true;
-      this.settingId = child.id;
-    }
-  }
-
-  refreshNames(): void {
-    for (const child of this.category.children) {
-      if (child.type === 'setting') {
-        this.settingNames[child.id] = 'Loading...';
-        this.apiService.getSetting(child.id).subscribe((data: any) => {
-          this.settingNames[child.id] = data.name;
-        });
-      } else {
-        this.categoryNames[child.id] = 'Loading...';
-        this.categoryNames[child.id] = getCategory(child.id).name;
-      }
-    }
+  clickChild(child: any) {
+    this.parent = child;
+    this.level++;
+    this.breadcrumbs.push({ name: this.parent.name, level: this.level });
+    this.requestDbTarget(this.level);
   }
 
   cancel(): void {
     this.breadcrumbs.pop();
-
-    // settings are only ever the final element of the breadcrumbs,
-    // and there is always at least one category in the breadcrumbs (the root),
-    // so this is guaranteed to be a child-category
-    const previous = this.breadcrumbs[this.breadcrumbs.length - 1];
-    this.categoryId = previous.id;
-    this.category = getCategory(previous.id);
     this.settingClicked = false;
+    this.requestDbTarget(this.breadcrumbs.length - 1);
   }
 
-  clickBreadcrumb(child: {type: string, id: number}): void {
-    const index = this.breadcrumbs.indexOf(child);
-
+  clickBreadcrumb(breadcrumb: any): void {
+    const index = this.breadcrumbs.indexOf(breadcrumb);
     this.breadcrumbs.length = index + 1;
-
-    const last = this.breadcrumbs[this.breadcrumbs.length - 1];
-
-    if (last.type === 'category') {
-      this.categoryId = last.id;
-      this.category = getCategory(last.id);
-      this.settingClicked = false;
-    } else {
-      this.settingClicked = true;
-      this.settingId = last.id;
-    }
+    this.settingClicked = false;
+    this.requestDbTarget(breadcrumb.level);
   }
 }

@@ -6,16 +6,8 @@ import { ApiService } from '../api.service';
   templateUrl: './history-page.component.html',
   styleUrls: ['./history-page.component.css'],
 })
-
-
 export class HistoryPageComponent implements OnInit {
-  todoitems: any;
-
   constructor(private apiService: ApiService) {}
 
-  ngOnInit() {
-    this.apiService.getCountry().subscribe((data) => {
-      this.todoitems = data;
-    });
-  }
+  ngOnInit() {}
 }

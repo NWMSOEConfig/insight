@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api.service';
-import { Parameter } from '../models/parameter';
+import { Parameter } from '../../models/parameter';
 
 @Component({
   selector: 'app-parameter',
