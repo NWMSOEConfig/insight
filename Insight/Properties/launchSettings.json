@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "InsightApi": {
+    "Insight": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
