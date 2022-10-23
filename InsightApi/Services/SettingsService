@@ -4,12 +4,12 @@ using MongoDB.Driver;
 
 namespace InsightApi.Services;
 
-public class DatabaseService
+public class DatabaseSettingsService
 {
     private readonly IMongoCollection<Setting> settingsCollection;
 
-    public DatabaseService(
-        IOptions<DBConnection> bookStoreDatabaseSettings)
+    public DatabaseSettingsService(
+        IOptions<DBSettingConnection> bookStoreDatabaseSettings)
     {
         var mongoClient = new MongoClient(
             bookStoreDatabaseSettings.Value.ConnectionString);
