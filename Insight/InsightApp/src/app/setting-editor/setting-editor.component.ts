@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ApiService } from '../api.service';
+import { ApiService } from '../api-service/api.service';
 import { Parameter } from '../../models/parameter';
 
 @Component({
