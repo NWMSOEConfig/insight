@@ -86,4 +86,24 @@ public class DataController : ControllerBase
 
         return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
     }
+
+    [HttpPost]
+    [Route("populate")]
+    public IActionResult PostQueue([FromBody] string url)
+    {
+        //clean string
+        url=url.Remove(" ");
+        url=url.Replace(".", " ").Replace("/", " ");
+        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com api applicationsettings ";  
+        //Create a Regex  
+        Regex rg = new Regex(pattern);  
+        
+        Match m = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
+
+        if(m.Success){
+            Console.WriteLine("Regex succesful"); 
+        }
+
+        return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
+    }
 }
