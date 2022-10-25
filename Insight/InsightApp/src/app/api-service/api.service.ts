@@ -10,7 +10,7 @@ import { Tenant } from '../../models/tenant';
   providedIn: 'root',
 })
 export class ApiService {
-  readonly apiURL = 'https://localhost:8000/api';
+  public readonly apiURL = 'https://localhost:8000/api';
 
   constructor(private httpClient: HttpClient) {}
 
