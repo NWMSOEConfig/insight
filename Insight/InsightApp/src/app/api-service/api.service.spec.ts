@@ -14,15 +14,15 @@ describe('ApiService', () => {
             providers: [ApiService]
         })
 
-        service = TestBed.get(ApiService);
-        httpMock = TestBed.get(HttpTestingController);
+        service = TestBed.get(ApiService); 
+        httpMock = TestBed.get(HttpTestingController); // Mocks requests
     });
 
     afterEach(() => {
         httpMock.verify();
     })
 
-    it('should GET category?id=0', () => {
+    it('should getCategory', () => {
         const dummyCategory: Category = {
             id: 0,
             name: "Category A",
@@ -32,13 +32,11 @@ describe('ApiService', () => {
         };
 
         service.getCategory(dummyCategory.id).subscribe((category) => {
-            expect(category).toEqual(dummyCategory);
+            expect(category).toEqual(dummyCategory); // Validate that output of getCategory method matches dummyCategory
         })
 
-        const request =  httpMock.expectOne(`${service.apiURL}/data/category?id=0`);
-        
-        expect(request.request.method).toBe('GET');
-
-        request.flush(dummyCategory);
+        const request =  httpMock.expectOne(`${service.apiURL}/data/category?id=0`); // Mock a request to endpoint
+        expect(request.request.method).toBe('GET'); // Validate request is a GET request
+        request.flush(dummyCategory); // Resolve request with mock data
     });
 });
