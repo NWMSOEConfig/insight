@@ -11,14 +11,11 @@ public class DatabaseCommitService
     public DatabaseCommitService(
         IOptions<DBCommmitConnection> InsightDatabaseCommits)
     {
-        var mongoClient = new MongoClient(
-            InsightDatabaseCommits.Value.ConnectionString);
+        var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            InsightDatabaseCommits.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        CommitsCollection = mongoDatabase.GetCollection<Commit>(
-            InsightDatabaseCommits.Value.CommitsCollectionName);
+        CommitsCollection = mongoDatabase.GetCollection<Commit>("Commits");
     }
 
     public async Task<List<Commit>> GetAsync() =>

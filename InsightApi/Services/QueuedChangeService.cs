@@ -11,14 +11,11 @@ public class DatabaseQueuedChangeService
     public DatabaseQueuedChangeService(
         IOptions<DBQueuedChangesConnection> bookStoreDatabaseQueuedChanges)
     {
-        var mongoClient = new MongoClient(
-            bookStoreDatabaseQueuedChanges.Value.ConnectionString);
+        var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            bookStoreDatabaseQueuedChanges.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        QueuedChangesCollection = mongoDatabase.GetCollection<QueuedChange>(
-            bookStoreDatabaseQueuedChanges.Value.QueuedChangesCollectionName);
+        QueuedChangesCollection = mongoDatabase.GetCollection<QueuedChange>("Queued Changes");
     }
 
     public async Task<List<QueuedChange>> GetAsync() =>

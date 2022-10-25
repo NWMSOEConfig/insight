@@ -11,14 +11,11 @@ public class DatabaseTenantService
     public DatabaseTenantService(
         IOptions<DBTenantConnection> insightDatabaseTenants)
     {
-        var mongoClient = new MongoClient(
-            insightDatabaseTenants.Value.ConnectionString);
+         var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            insightDatabaseTenants.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        TenantsCollection = mongoDatabase.GetCollection<Tenant>(
-            insightDatabaseTenants.Value.TenantsCollectionName);
+        TenantsCollection = mongoDatabase.GetCollection<Tenant>("Tenants");
     }
 
     public async Task<List<Tenant>> GetAsync() =>

@@ -9,16 +9,13 @@ public class DatabaseSettingsService
     private readonly IMongoCollection<Setting> settingsCollection;
 
     public DatabaseSettingsService(
-        IOptions<DBSettingConnection> bookStoreDatabaseSettings)
+        IOptions<DBSettingConnection> settingsDatabaseSettings)
     {
-        var mongoClient = new MongoClient(
-            bookStoreDatabaseSettings.Value.ConnectionString);
+        var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            bookStoreDatabaseSettings.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        settingsCollection = mongoDatabase.GetCollection<Setting>(
-            bookStoreDatabaseSettings.Value.SettingsCollectionName);
+        settingsCollection = mongoDatabase.GetCollection<Setting>("Settings");
     }
 
     public async Task<List<Setting>> GetAsync() =>

@@ -11,14 +11,11 @@ public class DatabaseUserService
     public DatabaseUserService(
         IOptions<DBUserConnection> bookStoreDatabaseUsers)
     {
-        var mongoClient = new MongoClient(
-            bookStoreDatabaseUsers.Value.ConnectionString);
+         var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            bookStoreDatabaseUsers.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        UserCollection = mongoDatabase.GetCollection<User>(
-            bookStoreDatabaseUsers.Value.UsersCollectionName);
+        UserCollection = mongoDatabase.GetCollection<User>("Users");
     }
 
     public async Task<List<User>> GetAsync() =>
