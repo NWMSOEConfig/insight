@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-publish-page',
@@ -7,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PublishPageComponent implements OnInit {
   //organize settings changed by their category?
-  
+  errorMessage: string | undefined;
+  commitMessage: string | undefined;
+  canPublish = true;
   description: string = "The following settings have been changed:";
   canEdit = false;
   settings: any[] = [
@@ -32,8 +34,12 @@ export class PublishPageComponent implements OnInit {
     
   }
 
-  onPublishClicked(){
+  onPublishClicked() {
+    this.errorMessage = undefined;
     //create confirmation modal
+    if (!this.commitMessage) {
+      this.errorMessage = "Commit text is required."
+    }
     console.log("Publish TODO");
   }
 
