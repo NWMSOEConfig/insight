@@ -1,5 +1,7 @@
 using InsightApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
+
 
 namespace InsightApi.Controllers;
 
@@ -92,18 +94,18 @@ public class DataController : ControllerBase
     public IActionResult PostQueue([FromBody] string url)
     {
         //clean string
-        url=url.Remove(" ");
+        url=url.Replace(" ", "");
         url=url.Replace(".", " ").Replace("/", " ");
         string pattern = "(?:https:  )?[a-zA-Z] newworldnow com api applicationsettings ";  
         //Create a Regex  
         Regex rg = new Regex(pattern);  
         
-        Match m = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
+        Match m = Regex.Match(url, pattern, RegexOptions.IgnoreCase);
 
         if(m.Success){
             Console.WriteLine("Regex succesful"); 
         }
 
-        return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
+        return Ok($"Url {url} is valid");
     }
 }
