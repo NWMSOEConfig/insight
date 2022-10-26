@@ -1,49 +1,49 @@
 <head>
-    <title>Configurator - Publish</title>
+  <title>Configurator - Publish</title>
 </head>
 
-<body>
-    <h1>Publish</h1>
-    <h2 id="description">{{description}}</h2>
-    <div id="settingTable">
-        <table>
-            <div *ngIf="!canEdit">
-                <tr><th>Setting Name</th><th>Current Value</th><th>New Value</th></tr>
-                <ng-container *ngFor="let setting of settings">
-                    <tr>
-                        <td>{{setting.name}}</td>
-                        <td>{{setting.oldvalue}}</td>
-                        <td>{{setting.newvalue}}</td>
-                    </tr>
-                </ng-container>
-            </div>
-            <div *ngIf="canEdit">
-                <tr><th>Setting Name</th><th>Current Value</th><th>New Value</th></tr>
-                <ng-container *ngFor="let setting of settings">
-                    <tr>
-                        <td>{{setting.name}}</td>
-                        <td>{{setting.oldvalue}}</td>
-                        <td>{{setting.newvalue}}</td>
-                        <td><button id="undo" (click)="onUndoClicked">Undo</button></td>
-                    </tr>
-                </ng-container>
-            </div>
-        </table>
-    </div>
+<h1>Publish</h1>
+<h2 id="description">{{description}}</h2>
+<div id="settingTable">
+  <table>
+    <tr><th>Setting Name</th><th>Current Value</th><th>New Value</th></tr>
+    <ng-container *ngIf="!canEdit">
+      <ng-container *ngFor="let setting of settings">
+        <tr>
+          <td>{{setting.name}}</td>
+          <td>{{setting.oldvalue}}</td>
+          <td>{{setting.newvalue}}</td>
+        </tr>
+      </ng-container>
+    </ng-container>
 
-    <div id="commitMessage">
-        <h3>Commit Message:</h3>
-        <textarea id="commitMessage"></textarea>
-    </div>
+    <ng-container *ngIf="canEdit">
+      <ng-container *ngFor="let setting of settings">
+        <tr>
+          <td>{{setting.name}}</td>
+          <td>{{setting.oldvalue}}</td>
+          <td>{{setting.newvalue}}</td>
+          <td><button id="delete" (click)="onDeleteClicked()">Delete</button></td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </table>
+</div>
 
-    <div id="buttons">
-        <ng-container *ngIf="!canEdit">
-            <button id="edit" (click)="onEditClicked">Edit</button>
-            <button id="publish" (click)="onPublishClicked">Publish</button>
-        </ng-container>
-        <ng-container *ngIf="canEdit">
-            <button id="save" (click)="onSaveClicked">Save</button>
-            <button id="undoAll" (click)="onUndoAllClicked">Undo All</button>
-        </ng-container> 
-    </div>
-</body>
+
+<div id="commitMessage">
+  <h3>Commit Message:</h3>
+  <textarea id="commitMessage"></textarea>
+</div>
+
+<div id="buttons">
+  <ng-container *ngIf="!canEdit">
+    <button id="edit" (click)="onEditClicked()">Edit</button>
+    <button id="publish" (click)="onPublishClicked()">Publish</button>
+  </ng-container>
+  <ng-container *ngIf="canEdit">
+    <button id="save" (click)="onSaveClicked()">Save</button>
+    <button id="undoAll" (click)="onUndoAllClicked()">Undo All</button>
+  </ng-container>
+</div>
+

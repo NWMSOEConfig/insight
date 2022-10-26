@@ -42,7 +42,7 @@ export class PublishPageComponent implements OnInit {
     console.log("Edit TODO");
   }
 
-  onUndoClicked(){
+  onDeleteClicked(){
     console.log("Undo TODO");
   }
 
