@@ -24,8 +24,10 @@ public class DatabaseSettingsService
     public async Task<Setting?> GetAsync(string id) =>
         await settingsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
     
-    public async Task<Setting?> GetCategoryAsync(string category) =>
-        await settingsCollection.Find(x => x.Category == category).FirstOrDefaultAsync();
+    public async Task<List<Setting>> GetEnvironmentAsync(string tenantId)
+    {
+        return await settingsCollection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
+    }
 
     public async Task CreateAsync(Setting newSetting) =>
         await settingsCollection.InsertOneAsync(newSetting);

@@ -1,10 +1,12 @@
 using InsightApi.Models;
 using InsightApi.Services;
+using InsightApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DBSettingConnection>(
     builder.Configuration.GetSection("DBSettingConnection"));
 
+builder.Services.AddScoped<DataServer>();
 builder.Services.AddSingleton<DatabaseSettingsService>();
 
 builder.Services.Configure<DBCommmitConnection>(

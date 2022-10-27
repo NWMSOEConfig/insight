@@ -14,7 +14,7 @@ public class Setting
     public string[]? Parameter { get; set; }
 
     public bool Enabled { get; set; }
-    public Tenant[] Tenants { get; set; } = null!;
+    public string[] TenantNames { get; set; } = null!;
 }
 
 public class Tenant {
