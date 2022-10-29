@@ -9,6 +9,7 @@ namespace InsightApi.Controllers;
 [Route("api/[controller]")]
 public class DataController : ControllerBase
 {
+    private HttpController httpController= new HttpController();
     private static readonly IList<Parameter> _parameters = new List<Parameter>
     {
         new(0, "Enabled", "boolean", true),
@@ -93,19 +94,7 @@ public class DataController : ControllerBase
     [Route("populate")]
     public IActionResult PostQueue([FromBody] string url)
     {
-        //clean string
-        url=url.Replace(" ", "");
-        url=url.Replace(".", " ").Replace("/", " ");
-        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com api applicationsettings ";  
-        //Create a Regex  
-        Regex rg = new Regex(pattern);  
-        
-        Match m = Regex.Match(url, pattern, RegexOptions.IgnoreCase);
-
-        if(m.Success){
-            Console.WriteLine("Regex succesful"); 
-        }
-
+        httpController.populateGetRequest(url);
         return Ok($"Url {url} is valid");
     }
 }
