@@ -1,6 +1,5 @@
 using InsightApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 
 
 namespace InsightApi.Controllers;
@@ -92,9 +91,9 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("populate")]
-    public IActionResult PostQueue([FromBody] string url)
+    public async IActionResult PostQueue([FromBody] string url)
     {
-        httpController.populateGetRequest(url);
+        await httpController.populateGetRequest(url);
         return Ok($"Url {url} is valid");
     }
 }

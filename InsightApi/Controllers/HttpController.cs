@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-// See https://aka.ms/new-console-template for more information
+using System.Text.RegularExpressions;
 
 
 class HttpController{
@@ -14,7 +14,7 @@ class HttpController{
         httpClient=new HttpClient();
     }
 
-    public void populateGetRequest(string url){
+    public async Task populateGetRequest(string url){
         if(validPopulateUrl(url)){
         HttpResponseMessage response = await httpClient.GetAsync(url);
 
