@@ -10,9 +10,7 @@ const { SpecReporter } = require("jasmine-spec-reporter");
 exports.config = {
   allScriptsTimeout: 11000,
   specs: ["./src/**/*.e2e-spec.ts"],
-  capabilities: {
-    browserName: "firefox",
-  },
+  multiCapabilities: [{ browserName: "chrome" }, { browserName: "firefox" }],
   directConnect: true,
   baseUrl: "http://localhost:4200/",
   framework: "jasmine",
