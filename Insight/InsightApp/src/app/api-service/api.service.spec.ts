@@ -7,15 +7,14 @@ describe('ApiService', () => {
     let service: ApiService;
     let httpMock: HttpTestingController;
 
-
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [ApiService]
         })
 
-        service = TestBed.get(ApiService);
-        httpMock = TestBed.get(HttpTestingController); // Mocks requests
+        service = TestBed.inject(ApiService);
+        httpMock = TestBed.inject(HttpTestingController); // Mocks requests
     });
 
     afterEach(() => {
