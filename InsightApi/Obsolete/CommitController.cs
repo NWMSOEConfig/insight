@@ -32,13 +32,6 @@ public class CommitController : ControllerBase {
         return commit;
     }
 
-    // [HttpGet("{time:length(24)}")]
-    // public async Task<List<Commit>> Get(int time)
-    // {
-    //     await _commitsService.GetTimeAsync(time);
-        
-    // }
-
     [HttpPost]
     public async Task<IActionResult> Post(Commit newCommit)
     {

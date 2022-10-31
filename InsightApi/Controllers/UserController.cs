@@ -15,7 +15,8 @@ public class UserController : ControllerBase {
      public UserController(DataServer databaseController) =>
         _dbController = databaseController;
 
-    [HttpGet("{environment:length(24)}")]
+
+    [HttpGet("{environment}")]
     public async Task<List<Setting>> environmentContext(string environment) 
     {
         List<Setting> vals = new List<Setting>();
