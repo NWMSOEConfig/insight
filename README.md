@@ -2,7 +2,7 @@
 
 1st Terminal:
 
-cd InsightApi
+cd Insight
 
 dotnet watch
 

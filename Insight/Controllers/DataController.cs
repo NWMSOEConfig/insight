@@ -1,4 +1,4 @@
-using InsightApi.Models;
+using Insight.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
