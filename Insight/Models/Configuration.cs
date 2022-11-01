@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Insight.Models;
 
-public class Setting
+public class DatabaseSetting
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -17,7 +17,7 @@ public class Setting
     public string[] TenantNames { get; set; } = null!;
 }
 
-public class Tenant {
+public class DatabaseTenant {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
@@ -30,10 +30,10 @@ public class QueuedChange {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
-    public Setting[] Settings { get; set; } = null!;
-    public Setting[] OriginalSettings { get; set; } = null!;
+    public DatabaseSetting[] Settings { get; set; } = null!;
+    public DatabaseSetting[] OriginalSettings { get; set; } = null!;
     public User User { get; set; } = null!;
-    public Tenant Tenant { get; set; } = null!;
+    public DatabaseTenant Tenant { get; set; } = null!;
 
 }
 

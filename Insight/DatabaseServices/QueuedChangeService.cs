@@ -8,8 +8,7 @@ public class DatabaseQueuedChangeService
 {
     private readonly IMongoCollection<QueuedChange> QueuedChangesCollection;
 
-    public DatabaseQueuedChangeService(
-        IOptions<DBQueuedChangesConnection> bookStoreDatabaseQueuedChanges)
+    public DatabaseQueuedChangeService()
     {
         var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 

@@ -8,8 +8,7 @@ public class DatabaseUserService
 {
     private readonly IMongoCollection<User> UserCollection;
 
-    public DatabaseUserService(
-        IOptions<DBUserConnection> bookStoreDatabaseUsers)
+    public DatabaseUserService()
     {
          var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 

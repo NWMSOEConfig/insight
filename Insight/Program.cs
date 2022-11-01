@@ -9,22 +9,22 @@ builder.Services.Configure<DBSettingConnection>(
 builder.Services.AddScoped<DataServer>();
 builder.Services.AddSingleton<DatabaseSettingsService>();
 
-builder.Services.Configure<DBCommmitConnection>(
+builder.Services.Configure<DBSettingConnection>(
     builder.Configuration.GetSection("DBCommitConnection"));
 
 builder.Services.AddSingleton<DatabaseCommitService>();
 
-builder.Services.Configure<DBUserConnection>(
+builder.Services.Configure<DBSettingConnection>(
     builder.Configuration.GetSection("DBUserConnection"));
 
 builder.Services.AddSingleton<DatabaseUserService>();
 
-builder.Services.Configure<DBQueuedChangesConnection>(
+builder.Services.Configure<DBSettingConnection>(
     builder.Configuration.GetSection("DBQueuedChangesConnection"));
 
 builder.Services.AddSingleton<DatabaseQueuedChangeService>();
 
-builder.Services.Configure<DBTenantConnection>(
+builder.Services.Configure<DBSettingConnection>(
     builder.Configuration.GetSection("DBTenantConnection"));
 
 builder.Services.AddSingleton<DatabaseTenantService>();

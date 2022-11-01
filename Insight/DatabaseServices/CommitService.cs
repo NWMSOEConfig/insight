@@ -8,8 +8,7 @@ public class DatabaseCommitService
 {
     private readonly IMongoCollection<Commit> CommitsCollection;
 
-    public DatabaseCommitService(
-        IOptions<DBCommmitConnection> InsightDatabaseCommits)
+    public DatabaseCommitService()
     {
         var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 

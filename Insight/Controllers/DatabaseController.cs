@@ -22,12 +22,13 @@ public class DataServer {
         _queuedChangeService = databaseQueuedChangeService;
     }
 
-    public async Task<List<Setting>> GetEnvironmentSettingsAsync(string tenantName)
+    public async Task<List<DatabaseSetting>> GetEnvironmentSettingsAsync(string tenantName)
     {
+        
         return await _settingsService.GetEnvironmentAsync(tenantName);
     }
 
-    public async Task<List<Setting>> GetSettingsAsync()
+    public async Task<List<DatabaseSetting>> GetSettingsAsync()
     {
         return await _settingsService.GetAsync();
     }
