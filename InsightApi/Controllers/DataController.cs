@@ -91,7 +91,7 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("populate")]
-    public async Task<IActionResult> PostQueue([FromBody] string url)
+    public async Task<IActionResult> Populate([FromBody] string url)
     {
         await httpController.populateGetRequest(url);
         return Ok($"Url {url} is valid");
