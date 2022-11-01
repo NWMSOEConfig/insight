@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json; 
-using InsightApi.Models;
+using Insight.Models;
 
 
 class HttpController{
