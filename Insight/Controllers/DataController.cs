@@ -2,7 +2,7 @@ using Insight.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace InsightApi.Controllers;
+namespace Insight.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
