@@ -1,5 +1,0 @@
-<form class="setting-editor">
-  <app-parameter *ngFor="let parameterId of parameterIds" [parameterId]="parameterId" (dataChange)="dataChange(parameterId, $event)"></app-parameter>
-  <button mat-button (click)="clickCancel()">Cancel</button>
-  <button mat-flat-button color="primary" id="queue" (click)="queue()">Queue</button>
-</form>

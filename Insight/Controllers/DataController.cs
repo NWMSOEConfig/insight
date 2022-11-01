@@ -15,12 +15,12 @@ public class DataController : ControllerBase
         new(3, "Baz", "email", "a@b.com"),
     };
 
-    // private static readonly IList<Setting> _settings = new List<Setting>
-    // {
-    //     new(0, "Foo", new List<int> { 0, 1 }),
-    //     new(1, "Bar", new List<int> { 2 }),
-    //     new(2, "Baz", new List<int> { 3 }),
-    // };
+    private static readonly IList<Setting> _settings = new List<Setting>
+    {
+        new(0, "Foo", new List<int> { 0, 1 }),
+        new(1, "Bar", new List<int> { 2 }),
+        new(2, "Baz", new List<int> { 3 }),
+    };
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
@@ -36,10 +36,10 @@ public class DataController : ControllerBase
         new(2, "Category C",  new List<int> { 2 })
     };
 
-    // private static readonly IList<Tenant> _tenants = new List<Tenant>
-    // {
-    //     new(0, "State", new List<int> { 0, 1, 2}),
-    // };
+    private static readonly IList<Tenant> _tenants = new List<Tenant>
+    {
+        new(0, "State", new List<int> { 0, 1, 2}),
+    };
 
     private static readonly List<Parameter> _queue = new();
 
@@ -50,12 +50,12 @@ public class DataController : ControllerBase
         return id < 0 || id >= _parameters.Count ? BadRequest() : Ok(_parameters[id]);
     }
 
-    // [HttpGet]
-    // [Route("setting")]
-    // public IActionResult GetSetting(int id)
-    // {
-    //     return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
-    // }
+    [HttpGet]
+    [Route("setting")]
+    public IActionResult GetSetting(int id)
+    {
+        return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
+    }
 
     [HttpGet]
     [Route("subcategory")]
@@ -71,12 +71,12 @@ public class DataController : ControllerBase
         return id < 0 || id >= _categories.Count ? BadRequest() : Ok(_categories[id]);
     }
 
-    // [HttpGet]
-    // [Route("tenant")]
-    // public IActionResult GetTenant(int id)
-    // {
-    //     return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
-    // }
+    [HttpGet]
+    [Route("tenant")]
+    public IActionResult GetTenant(int id)
+    {
+        return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
+    }
 
     [HttpPost]
     [Route("queue")]
