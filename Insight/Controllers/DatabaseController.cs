@@ -9,8 +9,17 @@ namespace Insight.Controllers;
 
 public class DataServer {
      private readonly DatabaseSettingsService _settingsService;
-     public DataServer(DatabaseSettingsService settingsService) {
+     private readonly DatabaseCommitService _commitService;
+     private readonly DatabaseTenantService _tenantService;
+     private readonly DatabaseQueuedChangeService _queuedChangeService;
+     private readonly DatabaseUserService _userService;
+     public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
+        DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService) {
         _settingsService = settingsService;
+        _commitService = commitService;
+        _tenantService = tenantService;
+        _userService = userService;
+        _queuedChangeService = databaseQueuedChangeService;
     }
 
     public async Task<List<Setting>> GetEnvironmentSettingsAsync(string tenantName)
