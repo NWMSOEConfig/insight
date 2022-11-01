@@ -15,7 +15,7 @@ exports.config = {
     { browserName: "firefox", marionette: true, acceptInsecureCerts: true },
   ],
   directConnect: true,
-  baseUrl: "http://localhost:4200/",
+  baseUrl: "https://localhost:44413/",
   framework: "jasmine",
   jasmineNodeOpts: {
     showColors: true,
