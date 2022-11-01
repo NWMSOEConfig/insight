@@ -91,9 +91,9 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("populate")]
-    public async Task<IActionResult> Populate([FromBody] string url)
+    public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string Environment)
     {
-        await httpController.populateGetRequest(url);
+        List<Setting> settings= await httpController.populateGetRequest(url);
         return Ok($"Url {url} is valid");
     }
 }

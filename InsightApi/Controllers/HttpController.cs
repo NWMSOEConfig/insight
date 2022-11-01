@@ -69,7 +69,6 @@ class HttpController{
         //Match pattern against url    
         Match m = Regex.Match(url, pattern, RegexOptions.IgnoreCase);
         if(m.Success){
-            Console.WriteLine("Regex succesful"); 
             valid= true;
         }else{
             valid = false;
