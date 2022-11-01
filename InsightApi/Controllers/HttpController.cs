@@ -16,35 +16,42 @@ class HttpController{
         httpClient=new HttpClient();
     }
 
-    public async Task populateGetRequest(string url){
+    public async Task<List<Setting>>  populateGetRequest(string url){
         if(validPopulateUrl(url)){
             HttpResponseMessage response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            jsonToSetting(response);
+            //Console.WriteLine(await response.Content.ReadAsStringAsync());
+           return await jsonToSetting(response);
         }
         else{
             throw new ArgumentException("Url is Invalid");
         }
     }
 
-    public async void jsonToSetting(HttpResponseMessage response){
-          if (response.Content is object && response.Content.Headers.ContentType.MediaType == "application/json"){
-                var contentStream = await response.Content.ReadAsStreamAsync();
-                using var streamReader = new StreamReader(contentStream);
-                using var jsonReader = new JsonTextReader(streamReader);
-                JsonSerializer serializer = new JsonSerializer();
-                try{
-                    serializer.Deserialize<Setting[]>(jsonReader);
-                }
-                catch(JsonReaderException){
-                    Console.WriteLine("Invalid JSON.");
-                } 
+    public async Task<List<Setting>> jsonToSetting(HttpResponseMessage response){
+         List<Setting> list = new List<Setting>();
+        if (response.Content is object && response.Content.Headers.ContentType.MediaType == "application/json"){
+            var contentStream = await response.Content.ReadAsStreamAsync();
+            using var streamReader = new StreamReader(contentStream);
+           using var jsonReader = new JsonTextReader(streamReader);
+            JsonSerializer serializer = new JsonSerializer();
+            try{
+                list=serializer.Deserialize<List<Setting>>(jsonReader);
+                Console.WriteLine(list.First());
             }
-            else
-            {
-                Console.WriteLine("HTTP Response was invalid and cannot be deserialized.");
-            }
+            catch(JsonReaderException){
+                Console.WriteLine("Invalid JSON.");
+            } 
+        }
+        else
+        {
+            Console.WriteLine("HTTP Response was invalid and cannot be deserialized.");
+        }
+        if(list!=null){
+             return list;
+        }else{
+            throw new NullReferenceException("New World Site did not return valid data.");
+        }
     }
         
     public bool validPopulateUrl(string url){
@@ -69,8 +76,6 @@ class HttpController{
     }
     return valid;
     }
-
-
 
 }
 
