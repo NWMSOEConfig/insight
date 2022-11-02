@@ -41,7 +41,7 @@ public class DataController : ControllerBase
         new(0, "State", new List<int> { 0, 1, 2}),
     };
 
-    private static readonly List<Parameter> _queue = new();
+    private static readonly List<QueueEntry> _queue = new();
 
     [HttpGet]
     [Route("parameter")]
@@ -80,10 +80,28 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue([FromBody] IList<Parameter> parameters)
+    public IActionResult PostQueue(int settingId, [FromBody] IList<Parameter> parameters)
     {
-        _queue.AddRange(parameters);
+        if (settingId < 0 || settingId >= _settings.Count)
+        {
+            return BadRequest("must have a valid setting ID");
+        }
 
-        return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
+        if (parameters.Any(parameter => !_settings[settingId].ParameterIds.Contains(parameter.Id)))
+        {
+            return BadRequest("all parameters must be part of the setting");
+        }
+
+        if (parameters.GroupBy(parameter => parameter.Id).Any(group => group.Count() > 1))
+        {
+            return BadRequest("cannot have duplicate parameters");
+        }
+
+        var originals = parameters.Select(parameter => _parameters[parameter.Id]).ToList();
+        var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var entry = new QueueEntry(settingId, originals, parameters, queuer);
+        _queue.Add(entry);
+
+        return Ok($"queued {parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
     }
 }

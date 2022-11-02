@@ -40,8 +40,8 @@ export class ApiService {
     return this.httpClient.get<Tenant>(`${this.apiURL}/data/tenant?id=${id}`);
   }
 
-  public postQueue(parameters: Parameter[]) {
-    return this.httpClient.post(`${this.apiURL}/data/queue`, parameters, {
+  public postQueue(settingId: number, parameters: Parameter[]) {
+    return this.httpClient.post(`${this.apiURL}/data/queue?settingId=${settingId}`, parameters, {
       responseType: 'text',
     });
   }
