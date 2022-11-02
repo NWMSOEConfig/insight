@@ -7,7 +7,7 @@ namespace Insight.Controllers;
 [Route("api/[controller]")]
 public class DataController : ControllerBase
 {
-    private HttpController httpController= new HttpController();
+    private HttpController httpController = new HttpController();
     private DataServer _dbController;
 
      public DataController(DataServer databaseController) =>
