@@ -93,6 +93,12 @@ public class DataController : ControllerBase
         return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
     }
 
+  /// <summary>
+    /// Populate uses a url to get all the settings from a new world sight with a tenant and environment
+    /// </summary>
+    /// <param name="url"> The url from which we get our settings </param>
+    /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
+    /// <param name="environmentName"> The environment to which the setting should be applied  </param>
     [HttpPost]
     [Route("populate")]
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)

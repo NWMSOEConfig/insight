@@ -17,6 +17,10 @@ class HttpController{
         httpClient=new HttpClient();
     }
 
+    /// <summary>
+    /// populateGetRequest uses a url to get all the settings from as JSON, then converts to a List<NewWorldSetting>
+    /// </summary>
+    /// <param name="url"> The url from which we get our settings </param>
     public async Task<List<NewWorldSetting>>  populateGetRequest(string url){
         if(validPopulateUrl(url)){
             HttpResponseMessage response = await httpClient.GetAsync(url);
@@ -35,7 +39,11 @@ class HttpController{
             throw new ArgumentException("Url is Invalid");
         }
     }
-        
+
+    /// <summary>
+    /// validPopulateUrl determines if a url matches our regex standards
+    /// </summary>
+    /// <param name="url"> The url which we test </param>     
     public bool validPopulateUrl(string url){
         bool valid= false;
         //Removing any extraneous white space
