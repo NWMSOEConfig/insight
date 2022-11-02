@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Setting } from '../models/setting';
-import { Parameter } from '../models/parameter';
-import { Category } from '../models/category';
-import { Subcategory } from '../models/subcategory';
-import { Tenant } from '../models/tenant';
+import { Setting } from '../../models/setting';
+import { Parameter } from '../../models/parameter';
+import { Category } from '../../models/category';
+import { Subcategory } from '../../models/subcategory';
+import { Tenant } from '../../models/tenant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  readonly apiURL = 'https://localhost:8000/api';
+  public readonly apiURL = 'https://localhost:8000/api';
 
   constructor(private httpClient: HttpClient) {}
 
