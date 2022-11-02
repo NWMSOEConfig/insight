@@ -7,6 +7,11 @@ namespace Insight.Controllers;
 [Route("api/[controller]")]
 public class DataController : ControllerBase
 {
+    private HttpController httpController = new HttpController();
+    private DataServer _dbController;
+
+     public DataController(DataServer databaseController) =>
+        _dbController = databaseController;
     private static readonly IList<Parameter> _parameters = new List<Parameter>
     {
         new(0, "Enabled", "boolean", true),
@@ -103,5 +108,28 @@ public class DataController : ControllerBase
         _queue.Add(entry);
 
         return Ok($"queued {parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
+    }
+
+    /// <summary>
+    /// Populate uses a url to get all the settings from a new world sight with a tenant and environment
+    /// </summary>
+    /// <param name="url"> The url from which we get our settings </param>
+    /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
+    /// <param name="environmentName"> The environment to which the setting should be applied  </param>
+    [HttpPost]
+    [Route("populate")]
+    public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
+    {
+        List<NewWorldSetting> settings;
+        try
+        {
+            settings = await httpController.PopulateGetRequest(url);
+        }
+        except (ArgumentException)
+        {
+            return BadRequest($"Url {url} is invalid");
+        }
+        _dbController.PopulateHierarchy(settings, tenant, environment);
+        return Ok($"Url {url} is valid");
     }
 }
