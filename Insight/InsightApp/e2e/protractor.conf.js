@@ -11,8 +11,8 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: ["./src/**/*.e2e-spec.ts"],
   directConnect: true,
-  chromeDriver: "./node_modules/webdriver-manager/selenium/chromedriver_107.0.5304.62",
-  firefoxPath: "./node_modules/webdriver-manager/selenium/geckodriver-v0.32.0",
+  // chromeDriver: "./node_modules/webdriver-manager/selenium/chromedriver_107.0.5304.62",
+  // geckoDriver: "./node_modules/webdriver-manager/selenium/geckodriver-v0.32.0",
   multiCapabilities: [
     { browserName: "chrome", marionette: true, acceptInsecureCerts: true },
     { browserName: "firefox", marionette: true, acceptInsecureCerts: true },
