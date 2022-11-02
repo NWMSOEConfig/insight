@@ -40,41 +40,52 @@ public class DataServer {
     /// <param name="settings"> All the settings to send to database </param>
     /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
     /// <param name="environmentName"> The environment to which the setting should be applied  </param>
-    public async void PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName){
+    public async void PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName)
+    {
         //Iterate through all settings
-        foreach(NewWorldSetting setting in settings){    
+        foreach (NewWorldSetting setting in settings)
+        {    
             //Setup our new setting    
-            DatabaseSetting dbSetting= new DatabaseSetting();
-            dbSetting.Name= setting.Name;
+            DatabaseSetting dbSetting = new DatabaseSetting();
+            dbSetting.Name = setting.Name;
             await _settingsService.CreateAsync(dbSetting);
 
             //Determine if setting exists
-            var isSettingInDatabase= await _settingsService.GetByNameAsync(setting.Name);
+            var isSettingInDatabase = await _settingsService.GetByNameAsync(setting.Name);
            
-            if(isSettingInDatabase!=null){
+            if (isSettingInDatabase != null)
+            {
                 //Get info from existing setting
-                dbSetting.Id=isSettingInDatabase.Id;
-                dbSetting.Category= isSettingInDatabase.Category;
+                dbSetting.Id = isSettingInDatabase.Id;
+                dbSetting.Category = isSettingInDatabase.Category;
 
                 //Get info from existing setting while dealing with null pointers
-                if(isSettingInDatabase.TenantNames!=null){
-                    dbSetting.TenantNames=isSettingInDatabase.TenantNames;
+                if (isSettingInDatabase.TenantNames != null)
+                {
+                    dbSetting.TenantNames = isSettingInDatabase.TenantNames;
                     dbSetting.TenantNames.Append(tenantName);
-                }else{
-                    dbSetting.TenantNames= new string[] { tenantName };
+                }
+                else
+                {
+                    dbSetting.TenantNames = new string[] { tenantName };
                 }
 
-                 if(isSettingInDatabase.EnvironmentNames!=null){
-                    dbSetting.EnvironmentNames=isSettingInDatabase.EnvironmentNames;
+                if (isSettingInDatabase.EnvironmentNames != null)
+                {
+                    dbSetting.EnvironmentNames = isSettingInDatabase.EnvironmentNames;
                     dbSetting.EnvironmentNames.Append(environmentName);
-                }else{
-                    dbSetting.EnvironmentNames= new string[] { environmentName };
+                }
+                else
+                {
+                    dbSetting.EnvironmentNames = new string[] { environmentName };
                 }
                 
                 //Update setting
                 await _settingsService.UpdateByNameAsync(setting.Name, dbSetting);
 
-            }else{
+            }
+            else
+            {
                 //Create new setting
                 dbSetting.TenantNames.SetValue(tenantName, 0);
                 dbSetting.EnvironmentNames.SetValue(environmentName, 0);

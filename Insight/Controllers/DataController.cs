@@ -92,7 +92,7 @@ public class DataController : ControllerBase
         return Ok($"queued {parameters.Count} changes, now at {_queue.Count}");
     }
 
-  /// <summary>
+    /// <summary>
     /// Populate uses a url to get all the settings from a new world sight with a tenant and environment
     /// </summary>
     /// <param name="url"> The url from which we get our settings </param>
@@ -102,7 +102,15 @@ public class DataController : ControllerBase
     [Route("populate")]
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
-        List<NewWorldSetting> settings= await httpController.populateGetRequest(url);
+        List<NewWorldSetting> settings;
+        try
+        {
+            settings = await httpController.PopulateGetRequest(url);
+        }
+        except (ArgumentException)
+        {
+            return BadRequest($"Url {url} is invalid");
+        }
         _dbController.PopulateHierarchy(settings, tenant, environment);
         return Ok($"Url {url} is valid");
     }

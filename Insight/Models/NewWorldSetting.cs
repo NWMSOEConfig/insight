@@ -6,8 +6,9 @@ public class NewWorldSetting{
     public Category? Category { get; set; }
     public Tenant? Tenant{ get; set; }
 
-    public NewWorldSetting(string name){
-        Name=name;
+    public NewWorldSetting(string name)
+    {
+        Name = name;
 
     }
 }
