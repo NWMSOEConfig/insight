@@ -1,0 +1,9 @@
+{
+    "app_id": "uat-jarhk",
+    "config_version": 20210101,
+    "name": "UAT",
+    "location": "US-VA",
+    "provider_region": "azure-eastus2",
+    "deployment_model": "LOCAL",
+    "environment": "testing"
+}
