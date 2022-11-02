@@ -9,6 +9,10 @@ namespace Insight.Controllers;
 public class DataController : ControllerBase
 {
     private HttpController httpController= new HttpController();
+    private DataServer _dbController;
+
+     public DataController(DataServer databaseController) =>
+        _dbController = databaseController;
     private static readonly IList<Parameter> _parameters = new List<Parameter>
     {
         new(0, "Enabled", "boolean", true),
@@ -91,9 +95,10 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("populate")]
-    public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string Environment)
+    public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
-        List<Setting> settings= await httpController.populateGetRequest(url);
+        List<NewWorldSetting> settings= await httpController.populateGetRequest(url);
+        _dbController.PopulateHierarchy(settings, tenant, environment);
         return Ok($"Url {url} is valid");
     }
 }

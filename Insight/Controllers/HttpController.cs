@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json; 
 using Insight.Models;
@@ -16,41 +17,22 @@ class HttpController{
         httpClient=new HttpClient();
     }
 
-    public async Task<List<Setting>>  populateGetRequest(string url){
+    public async Task<List<NewWorldSetting>>  populateGetRequest(string url){
         if(validPopulateUrl(url)){
             HttpResponseMessage response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             //Console.WriteLine(await response.Content.ReadAsStringAsync());
-           return await jsonToSetting(response);
+
+           List<NewWorldSetting>? settings= await response.Content.ReadFromJsonAsync<List<NewWorldSetting>>();
+           if(settings!=null){
+               Console.WriteLine(settings.First().Name);
+                return settings;
+           }else{
+                throw new NullReferenceException("HTTP Response was invalid and cannot be deserialized.");
+           }
         }
         else{
             throw new ArgumentException("Url is Invalid");
-        }
-    }
-
-    public async Task<List<Setting>> jsonToSetting(HttpResponseMessage response){
-         List<Setting> list = new List<Setting>();
-        if (response.Content is object && response.Content.Headers.ContentType.MediaType == "application/json"){
-            var contentStream = await response.Content.ReadAsStreamAsync();
-            using var streamReader = new StreamReader(contentStream);
-           using var jsonReader = new JsonTextReader(streamReader);
-            JsonSerializer serializer = new JsonSerializer();
-            try{
-                list=serializer.Deserialize<List<Setting>>(jsonReader);
-                Console.WriteLine(list.First());
-            }
-            catch(JsonReaderException){
-                Console.WriteLine("Invalid JSON.");
-            } 
-        }
-        else
-        {
-            Console.WriteLine("HTTP Response was invalid and cannot be deserialized.");
-        }
-        if(list!=null){
-             return list;
-        }else{
-            throw new NullReferenceException("New World Site did not return valid data.");
         }
     }
         
@@ -62,7 +44,7 @@ class HttpController{
         url=url.Replace(".", " ").Replace("/", " ");
 
         //pattern to match against
-        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com api applicationsettings ";  
+        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com v7 api applicationsettings ";  
         //Create a Regex  
         Regex rg = new Regex(pattern);  
 
