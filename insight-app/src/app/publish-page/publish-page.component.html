@@ -2,7 +2,7 @@
   <title>Configurator - Publish</title>
 </head>
 
-<div class="header"><h1>Publish</h1><button id="edit" class="button-21" (click)="onEditClicked()">Edit</button></div>
+<div class="header"><h1>Publish</h1><button id="edit" (click)="onEditClicked()">Edit</button></div>
 <h2 id="description">{{description}}</h2>
 <div id="settingTable">
   <table>
@@ -23,7 +23,7 @@
           <td>{{setting.name}}</td>
           <td>{{setting.oldvalue}}</td>
           <td>{{setting.newvalue}}</td>
-          <td><button id="delete" class="button-21" (click)="onDeleteClicked()">Delete</button></td>
+          <td><button id="delete" (click)="onDeleteClicked()">Delete</button></td>
         </tr>
       </ng-container>
     </ng-container>
@@ -43,11 +43,11 @@
 
 <div id="buttons">
   <ng-container *ngIf="!canEdit">
-    <button id="publish" class="button-21" (click)="onPublishClicked()">Publish</button>
+    <button id="publish" variant="contained" (click)="onPublishClicked()">Publish</button>
   </ng-container>
   <ng-container *ngIf="canEdit">
-    <button id="save" class="button-21" (click)="onSaveClicked()">Save</button>
-    <button id="undoAll" class="button-21" (click)="onUndoAllClicked()">Undo All</button>
+    <button id="save" (click)="onSaveClicked()">Save</button>
+    <button id="undoAll" (click)="onUndoAllClicked()">Undo All</button>
   </ng-container>
 </div>
 
