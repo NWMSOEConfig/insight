@@ -41,18 +41,22 @@ public class DataServer {
     /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
     /// <param name="environmentName"> The environment to which the setting should be applied  </param>
     public async void PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName){
-
-        foreach(NewWorldSetting setting in settings){        
+        //Iterate through all settings
+        foreach(NewWorldSetting setting in settings){    
+            //Setup our new setting    
             DatabaseSetting dbSetting= new DatabaseSetting();
             dbSetting.Name= setting.Name;
             await _settingsService.CreateAsync(dbSetting);
 
+            //Determine if setting exists
             var isSettingInDatabase= await _settingsService.GetByNameAsync(setting.Name);
            
             if(isSettingInDatabase!=null){
-
+                //Get info from existing setting
                 dbSetting.Id=isSettingInDatabase.Id;
+                dbSetting.Category= isSettingInDatabase.Category;
 
+                //Get info from existing setting while dealing with null pointers
                 if(isSettingInDatabase.TenantNames!=null){
                     dbSetting.TenantNames=isSettingInDatabase.TenantNames;
                     dbSetting.TenantNames.Append(tenantName);
@@ -66,11 +70,12 @@ public class DataServer {
                 }else{
                     dbSetting.EnvironmentNames= new string[] { environmentName };
                 }
-
-                dbSetting.Category= isSettingInDatabase.Category;
+                
+                //Update setting
                 await _settingsService.UpdateByNameAsync(setting.Name, dbSetting);
 
             }else{
+                //Create new setting
                 dbSetting.TenantNames.SetValue(tenantName, 0);
                 dbSetting.EnvironmentNames.SetValue(environmentName, 0);
                 await _settingsService.CreateAsync(dbSetting);

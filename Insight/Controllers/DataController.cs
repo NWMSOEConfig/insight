@@ -1,7 +1,6 @@
 using Insight.Models;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Insight.Controllers;
 
 [ApiController]
