@@ -124,8 +124,7 @@ public class DataController : ControllerBase
         try
         {
             settings = await httpController.PopulateGetRequest(url);
-        }
-        except (ArgumentException)
+        }catch (ArgumentException)
         {
             return BadRequest($"Url {url} is invalid");
         }
