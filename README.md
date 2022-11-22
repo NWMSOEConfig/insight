@@ -2,7 +2,7 @@
 
 
 
-## Run the Angular app on your machine
+## Installation
 
 Before opening the project, install npm:
 
