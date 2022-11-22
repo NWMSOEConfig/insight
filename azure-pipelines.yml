@@ -29,4 +29,5 @@ steps:
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'drop'
   displayName: 'Publish npm artifact'  
