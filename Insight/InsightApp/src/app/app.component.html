@@ -1,9 +1,9 @@
 <!-- Toolbar -->
 <mat-toolbar color="primary">
-  <span class="welcome">New World</span>
-  <div class="spacer"></div>
-  <mat-form-field class="menu-selection">
-    <mat-label>Pick the Website</mat-label>
+  <span>New World</span>
+  <span class="spacer"></span>
+  <mat-form-field>
+    <mat-label>Select a website</mat-label>
     <mat-select [(value)]="selected">
       <mat-option *ngFor="let state of states" [value]="state">
         {{ state }}
@@ -11,61 +11,42 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <div class="spacer"></div>
-  <button
-    mat-icon-button
-    aria-hidden="false"
-    aria-label="Example settings icon"
-    mat-tooltip="Click to access settings"
-  >
-    <mat-icon fontIcon="settings"></mat-icon>
+  <span class="spacer"></span>
+  <button mat-icon-button>
+    <mat-icon>person</mat-icon>
   </button>
-  <button
-    mat-icon-button
-    aria-hidden="false"
-    aria-label="Profile icon"
-    mat-tooltip="Click to access profile"
-  >
-    <mat-icon fontIcon="person"></mat-icon>
+  <button mat-icon-button>
+    <mat-icon>settings</mat-icon>
   </button>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
-
+<!-- Main Container -->
 <mat-drawer-container>
-  <mat-drawer #drawer mode="side" class="sidebar">
-    <a routerLink="configuration">
-      <img src="assets\settings.svg" />
+  <!-- Side Navigation -->
+  <mat-drawer #drawer mode="side">
+    <button mat-button routerLink="configuration">
+      <mat-icon>settings</mat-icon>
       <span>Configuration</span>
-    </a>
-    <a routerLink="publish">
-      <img src="assets\file-edit.svg" />
-      <span>Publish</span>
-    </a>
-    <a routerLink="history">
-      <img src="assets\clock-rewind.svg" />
-      <span>History</span>
-    </a>
-    <div>
-      <a>
-        <img src="assets\exit.svg" />
-        <span>Logout</span>
-      </a>
-    </div>
-  </mat-drawer>
-  <mat-drawer-content>
-    <button
-      id="toggle-sidebar"
-      title="Open sidebar"
-      mat-raised-button
-      (click)="toggle_sidebar(this.drawer)"
-    >
-      <span> {{ toggle_direction }} </span>
     </button>
-    <mat-sidenav-container>
-      <mat-sidenav-content class="content">
-        <router-outlet> </router-outlet>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </mat-drawer-content>
+    <button mat-button routerLink="publish">
+      <mat-icon>library_books</mat-icon>
+      <span>Publish</span>
+    </button>
+    <button mat-button routerLink="history">
+      <mat-icon>history</mat-icon>
+      <span>History</span>
+    </button>
+    <span class="spacer"></span>
+  </mat-drawer>
+  <!-- Content -->
+  <button
+    mat-mini-fab
+    matTooltip="Toggle sidebar"
+    matTooltipPosition="right"
+    (click)="toggle_sidebar(this.drawer)"
+    color="accent"
+  >
+    <mat-icon>{{ toggle_direction }}</mat-icon>
+  </button>
+  <router-outlet></router-outlet>
 </mat-drawer-container>
