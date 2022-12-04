@@ -8,15 +8,7 @@
     </mat-form-field>
   </form>
   <mat-action-list *ngIf="!settingClicked">
-    <!-- <button mat-list-item
-            [disabled]="(child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]) === 'Loading...'"
-            *ngFor="let child of category.children"
-            (click)="click(child)">
-      {{child.type === 'category' ? categoryNames[child.id] : settingNames[child.id]}}
-    </button> -->
-    <div *ngIf="children.length==0">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
+    <mat-progress-spinner *ngIf="children.length==0" mode="indeterminate"></mat-progress-spinner>
     <button mat-list-item *ngFor="let child of children" (click)="clickChild(child)">{{child.name}}</button>
     <mat-divider></mat-divider>
   </mat-action-list>
