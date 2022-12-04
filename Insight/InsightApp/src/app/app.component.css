@@ -1,337 +1,68 @@
-/* Styling */
+/* Variables & Font Styling */
 :host {
+  --color-primary: rgb(63, 81, 181);
+  --component-width-medium: 300px;
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 14px;
-  color: #333;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 8px 0;
+.mat-toolbar,
+.mat-drawer {
+  background-color: var(--color-primary);
+  color: white;
+  border: 0;
 }
 
-p {
-  margin: 0;
-}
-
+/* Helpers */
 .spacer {
   flex: 1 1 auto;
 }
 
-.toolbar #dropdown-menu {
-  align-items: center;
-}
-
-.toolbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+/* Toolbar */
+.mat-toolbar {
   height: 60px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
 }
 
-.toolbar img {
-  margin: 0 16px;
+.mat-toolbar .mat-form-field {
+  width: var(--component-width-medium);
+  transform: translateY(12px);
+  text-align: center;
 }
 
-.toolbar #twitter-logo:hover,
-.toolbar #youtube-logo:hover {
-  opacity: 0.8;
+.mat-toolbar .mat-form-field .mat-option {
+  text-align: center;
 }
 
-.welcome {
-  padding-left: 16px;
-  padding-right: 16px;
+/* Main Container */
+.mat-drawer-container {
+  height: calc(100% - 60px); /* 100% - Height of Tool Bar */
 }
 
-.icon {
-  padding: 0 14px;
-}
-
-.content {
-  margin: 20px;
-  padding-left: 20px;
+/* Side Navigation */
+.mat-drawer {
+  width: var(--component-width-medium);
+  display: flex;
   flex-direction: column;
-  align-items: left;
 }
 
-svg.material-icons {
-  height: 24px;
-  width: auto;
-}
-
-.card svg.material-icons path {
-  fill: #888;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.card {
-  all: unset;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  background-color: #fafafa;
-  height: 40px;
-  width: 200px;
-  margin: 0 8px 16px;
-  padding: 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.2s ease-in-out;
-  line-height: 24px;
-}
-
-.card-container .card:not(:last-child) {
-  margin-right: 0;
-}
-
-.card.card-small {
-  height: 16px;
-  width: 168px;
-  display: flex;
-  width: auto;
-}
-
-.card-container .card:not(.highlight-card) {
-  cursor: pointer;
-}
-
-.card-container .card:not(.highlight-card):hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-}
-
-.card-container .card:not(.highlight-card):hover .material-icons path {
-  fill: rgb(105, 103, 103);
-}
-
-.card.highlight-card {
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
-  border: none;
-  width: auto;
-  min-width: 30%;
-  position: relative;
-}
-
-.card.card.highlight-card span {
-  margin-left: 60px;
-}
-
-a,
-a:visited,
-a:hover {
-  color: #1976d2;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #125699;
-}
-
-.terminal {
-  position: relative;
-  width: 80%;
-  max-width: 600px;
-  border-radius: 6px;
-  padding-top: 45px;
-  margin-top: 8px;
-  overflow: hidden;
-  background-color: rgb(15, 15, 16);
-}
-
-.terminal::before {
-  content: "\2022 \2022 \2022";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 4px;
-  background: rgb(58, 58, 58);
-  color: #c2c3c4;
+.mat-drawer .mat-button {
   width: 100%;
-  font-size: 2rem;
-  line-height: 0;
-  padding: 14px 0;
-  text-indent: 4px;
+  height: 50px;
+  text-align: left;
 }
 
-.circle-link {
-  height: 40px;
-  width: 40px;
-  border-radius: 40px;
-  margin: 8px;
-  background-color: white;
-  border: 1px solid #eeeeee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: 1s ease-out;
+.mat-drawer .mat-button span {
+  padding-left: 20px;
 }
 
-footer {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  line-height: 20px;
-}
-
-footer a {
-  display: flex;
-  align-items: center;
-}
-
-.table {
-  margin: auto;
-  width: 90%;
-  align-items: center;
-  border-top: 1px solid lightgray;
-}
-
-.mat-column-position {
-  width: 10px;
-  border-right: 1px solid lightgray;
-  padding-right: 24px;
-  border-left: 1px solid lightgray;
-  text-align: center;
-}
-
-.mat-column-name {
-  border-right: 1px solid lightgray;
-  padding-right: 24px;
-  padding-left: 24px;
-  text-align: center;
-  width: 200px;
-}
-
-.mat-column-action {
-  margin: auto;
-  text-align: center;
-  width: 32px;
-  border-right: 1px solid lightgray;
-}
-
-.menu-selection {
-  padding-top: 16px;
-}
-
-mat-sidenav {
-  margin: 16px;
-  width: 200px;
-  border-right: none;
-  background: #002b5c;
-  color: white;
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-}
-
-mat-sidenav-container {
-  height: calc(100vh - 65px);
-}
-
-.card:not(.highlight-card) {
-  height: 16px;
-  margin: 8px 0;
-}
-
-.card.highlight-card span {
-  margin-left: 72px;
-}
-
-button,
-.button {
-  text-align: center;
-  min-width: 0px;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column-reverse;
-  width: 260px;
-
-  background: #172b4d;
-  color: #fff;
-
-  overflow: hidden;
-}
-
-.sidebar div {
+/* Toggle Side Navigation Button */
+.mat-drawer-container .mat-mini-fab {
   position: absolute;
-  width: 100%;
-  bottom: 0;
-}
-
-.sidebar a {
-  display: flex;
-  align-items: center;
-
-  padding: 15px;
-
-  white-space: normal;
-  word-break: break-word;
-
-  color: inherit;
-  cursor: pointer;
-}
-
-.sidebar a:hover {
-  background: hsla(209, 42.9%, 12.4%, 0.9);
-}
-
-.sidebar img {
-  width: 20px;
-  filter: invert(100%);
-}
-
-.sidebar span {
-  padding-left: 15px;
-}
-
-#toggle-sidebar {
-  z-index: 2;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-
-  min-width: 32px;
-  height: 100%;
-  padding: 0;
-
-  border-radius: 0%;
-
-  background-color: #172b4d;
-  color: #fff;
-  font-size: x-large;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-
-#toggle-sidebar:hover {
-  background: hsla(209, 42.9%, 12.4%, 0.9);
+  z-index: 100;
+  top: 10px;
+  left: 10px;
 }
