@@ -1,36 +1,13 @@
 <h1 class="header">Publish</h1>
 <div class="publish-page">
   <h2>The following settings have been changed:</h2>
-  <!-- <button id="edit" mat-raised-button (click)="onEditClicked()" color="accent">
-    Edit
-  </button> -->
-  <!-- Table of Changes -->
-  <!-- <table mat-table matSort [dataSource]="settings">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="oldvalue">
-      <th mat-header-cell *matHeaderCellDef>Old Value</th>
-      <td mat-cell *matCellDef="let element">{{ element.oldvalue }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="newvalue">
-      <th mat-header-cell *matHeaderCellDef>New Value</th>
-      <td mat-cell *matCellDef="let element">{{ element.newvalue }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table> -->
   <!-- Table -->
   <mat-divider></mat-divider>
   <mat-list>
     <mat-list-item class="header">
-      <button mat-flat-button color="accent">Setting Name</button>
-      <button mat-flat-button color="accent">Current Value</button>
-      <button mat-flat-button color="accent">New Value</button>
+      <button mat-flat-button color="primary">Setting Name</button>
+      <button mat-flat-button color="primary">Current Value</button>
+      <button mat-flat-button color="primary">New Value</button>
       <button mat-icon-button>
         <mat-icon>expand_more</mat-icon>
       </button>
