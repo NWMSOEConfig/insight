@@ -4,9 +4,8 @@ using MongoDB.Driver;
 
 namespace Insight.Services;
 
-public class DatabaseQueuedChangeService
+public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
 {
-    private readonly IMongoCollection<QueuedChange> QueuedChangesCollection;
 
     public DatabaseQueuedChangeService()
     {
@@ -14,21 +13,15 @@ public class DatabaseQueuedChangeService
 
         var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        QueuedChangesCollection = mongoDatabase.GetCollection<QueuedChange>("Queued Changes");
+        collection = mongoDatabase.GetCollection<QueuedChange>("Queued Changes");
     }
 
-    public async Task<List<QueuedChange>> GetAsync() =>
-        await QueuedChangesCollection.Find(_ => true).ToListAsync();
-
     public async Task<QueuedChange?> GetAsync(string id) =>
-        await QueuedChangesCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-
-    public async Task CreateAsync(QueuedChange newQueuedChange) =>
-        await QueuedChangesCollection.InsertOneAsync(newQueuedChange);
+        await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
     public async Task UpdateAsync(string id, QueuedChange updatedQueuedChange) =>
-        await QueuedChangesCollection.ReplaceOneAsync(x => x.Id == id, updatedQueuedChange);
+        await collection.ReplaceOneAsync(x => x.Id == id, updatedQueuedChange);
 
     public async Task RemoveAsync(string id) =>
-        await QueuedChangesCollection.DeleteOneAsync(x => x.Id == id);
+        await collection.DeleteOneAsync(x => x.Id == id);
 }

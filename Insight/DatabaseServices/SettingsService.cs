@@ -4,42 +4,34 @@ using MongoDB.Driver;
 
 namespace Insight.Services;
 
-public class DatabaseSettingsService
+public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
 {
-    private readonly IMongoCollection<DatabaseSetting> settingsCollection;
-
     public DatabaseSettingsService()
     {
         var mongoClient = new MongoClient("mongodb+srv://dbTestUser:friedegg@new-world.tmynaas.mongodb.net/?retryWrites=true&w=majority");
 
         var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        settingsCollection = mongoDatabase.GetCollection<DatabaseSetting>("Settings");
+        collection = mongoDatabase.GetCollection<DatabaseSetting>("Settings");
     }
 
-    public async Task<List<DatabaseSetting>> GetAsync() =>
-        await settingsCollection.Find(_ => true).ToListAsync();
-
     public async Task<DatabaseSetting?> GetAsync(string id) =>
-        await settingsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
      public async Task<DatabaseSetting?> GetByNameAsync(string name) =>
-        await settingsCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
+        await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
     
     public async Task<List<DatabaseSetting>> GetEnvironmentAsync(string tenantId)
     {
-        return await settingsCollection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
+        return await collection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
     }
 
-    public async Task CreateAsync(DatabaseSetting newSetting) =>
-        await settingsCollection.InsertOneAsync(newSetting);
-
     public async Task UpdateAsync(string id, DatabaseSetting updatedSetting) =>
-        await settingsCollection.ReplaceOneAsync(x => x.Id == id, updatedSetting);
+        await collection.ReplaceOneAsync(x => x.Id == id, updatedSetting);
 
     public async Task UpdateByNameAsync(string name, DatabaseSetting updatedSetting) =>
-        await settingsCollection.ReplaceOneAsync(x => x.Name == name, updatedSetting);
+        await collection.ReplaceOneAsync(x => x.Name == name, updatedSetting);
 
     public async Task RemoveAsync(string id) =>
-        await settingsCollection.DeleteOneAsync(x => x.Id == id);
+        await collection.DeleteOneAsync(x => x.Id == id);
 }
