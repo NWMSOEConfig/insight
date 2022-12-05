@@ -1,53 +1,65 @@
-<head>
-  <title>Configurator - Publish</title>
-</head>
-
-<div class="header"><h1>Publish</h1><button id="edit" (click)="onEditClicked()">Edit</button></div>
-<h2 id="description">{{description}}</h2>
-<div id="settingTable">
-  <table>
-    <tr><th>Setting Name</th><th>Current Value</th><th>New Value</th></tr>
-    <ng-container *ngIf="!canEdit">
-      <ng-container *ngFor="let setting of settings">
-        <tr>
-          <td>{{setting.name}}</td>
-          <td>{{setting.oldvalue}}</td>
-          <td>{{setting.newvalue}}</td>
-        </tr>
-      </ng-container>
+<h1 class="header">Publish</h1>
+<div class="publish-page">
+  <h2>The following settings have been changed:</h2>
+  <!-- <button id="edit" mat-raised-button (click)="onEditClicked()" color="accent">
+    Edit
+  </button> -->
+  <!-- Table of Changes -->
+  <!-- <table mat-table matSort [dataSource]="settings">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
     </ng-container>
 
-    <ng-container *ngIf="canEdit">
-      <ng-container *ngFor="let setting of settings">
-        <tr>
-          <td>{{setting.name}}</td>
-          <td>{{setting.oldvalue}}</td>
-          <td>{{setting.newvalue}}</td>
-          <td><button id="delete" (click)="onDeleteClicked()">Delete</button></td>
-        </tr>
-      </ng-container>
+    <ng-container matColumnDef="oldvalue">
+      <th mat-header-cell *matHeaderCellDef>Old Value</th>
+      <td mat-cell *matCellDef="let element">{{ element.oldvalue }}</td>
     </ng-container>
-  </table>
+
+    <ng-container matColumnDef="newvalue">
+      <th mat-header-cell *matHeaderCellDef>New Value</th>
+      <td mat-cell *matCellDef="let element">{{ element.newvalue }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table> -->
+  <!-- Table -->
+  <mat-divider></mat-divider>
+  <mat-list>
+    <mat-list-item class="header">
+      <button mat-flat-button color="accent">Setting Name</button>
+      <button mat-flat-button color="accent">Current Value</button>
+      <button mat-flat-button color="accent">New Value</button>
+      <button mat-icon-button>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+
+    <div *ngFor="let setting of settings">
+      <mat-list-item>
+        <span>{{ setting.name }}</span>
+        <span>{{ setting.oldvalue }}</span>
+        <span>{{ setting.newvalue }}</span>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon color="warn">delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-list>
+  <!-- Description Text Area -->
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Write description of changes...</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
+  <!-- Publish Button -->
+  <button id="publish" mat-raised-button color="accent">Publish</button>
 </div>
-
-
-<div class="commit">
-  <h3>Commit Message:</h3>
-  <textarea id="commitMessage">{{commitMessage}}</textarea>
-</div>
-
-<div class="error" *ngIf="errorMessage">
-  <h3>Error:</h3>
-  <p id="errorMessage">{{errorMessage}}</p>
-</div>
-
-<div id="buttons">
-  <ng-container *ngIf="!canEdit">
-    <button id="publish" variant="contained" (click)="onPublishClicked()">Publish</button>
-  </ng-container>
-  <ng-container *ngIf="canEdit">
-    <button id="save" (click)="onSaveClicked()">Save</button>
-    <button id="undoAll" (click)="onUndoAllClicked()">Undo All</button>
-  </ng-container>
-</div>
-

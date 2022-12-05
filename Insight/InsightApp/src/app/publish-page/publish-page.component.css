@@ -1,0 +1,39 @@
+/* Container */
+.publish-page {
+  margin: auto;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Buttons */
+button#edit {
+  width: 200px;
+}
+
+button#publish {
+  width: 300px;
+  align-self: center;
+}
+
+/* Material List */
+.mat-list-item.header .mat-flat-button, span {
+  width: 180px;
+  margin: auto;
+}
+
+/* Table */
+table {
+  width: 100%;
+}
+
+.mat-header-cell {
+  text-align: center;
+}
