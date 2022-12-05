@@ -9,8 +9,11 @@
   </form>
   <mat-action-list *ngIf="!settingClicked">
     <mat-progress-spinner *ngIf="children.length==0" mode="indeterminate"></mat-progress-spinner>
-    <button mat-list-item *ngFor="let child of children" (click)="clickChild(child)">{{child.name}}</button>
     <mat-divider></mat-divider>
+    <div *ngFor="let child of children">
+      <button mat-list-item (click)="clickChild(child)">{{child.name}}</button>
+      <mat-divider></mat-divider>
+    </div>
   </mat-action-list>
   <app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>
 </div>
