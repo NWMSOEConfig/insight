@@ -22,6 +22,9 @@ public class DatabaseSettingsService
 
     public async Task<DatabaseSetting?> GetAsync(string id) =>
         await settingsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+     public async Task<DatabaseSetting?> GetByNameAsync(string name) =>
+        await settingsCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
     
     public async Task<List<DatabaseSetting>> GetEnvironmentAsync(string tenantId)
     {
@@ -33,6 +36,9 @@ public class DatabaseSettingsService
 
     public async Task UpdateAsync(string id, DatabaseSetting updatedSetting) =>
         await settingsCollection.ReplaceOneAsync(x => x.Id == id, updatedSetting);
+
+    public async Task UpdateByNameAsync(string name, DatabaseSetting updatedSetting) =>
+        await settingsCollection.ReplaceOneAsync(x => x.Name == name, updatedSetting);
 
     public async Task RemoveAsync(string id) =>
         await settingsCollection.DeleteOneAsync(x => x.Id == id);
