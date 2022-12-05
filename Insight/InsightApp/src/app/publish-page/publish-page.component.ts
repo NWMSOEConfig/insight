@@ -10,7 +10,6 @@ export class PublishPageComponent implements OnInit {
   errorMessage: string | undefined;
   commitMessage: string | undefined;
   canPublish = true;
-  description: string = 'The following settings have been changed:';
   canEdit = false;
   settings: any[] = [
     {
@@ -29,8 +28,6 @@ export class PublishPageComponent implements OnInit {
       oldvalue: 'value old three',
     },
   ];
-
-  displayedColumns: string[] = ['name', 'newvalue', 'oldvalue'];
 
   constructor() {}
 
