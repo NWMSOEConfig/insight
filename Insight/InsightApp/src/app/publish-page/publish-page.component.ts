@@ -28,6 +28,7 @@ export class PublishPageComponent implements OnInit {
       oldvalue: 'value old three',
     },
   ];
+  selected: any;
 
   constructor() {}
 

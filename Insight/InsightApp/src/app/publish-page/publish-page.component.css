@@ -25,18 +25,27 @@ span {
 }
 
 /* Table */
-table {
-  width: 100%;
-}
-
-.mat-header-cell {
-  text-align: center;
-}
-
 .mat-list-item.header {
   opacity: 0.9;
 }
 
+.mat-list-item.header:hover {
+  background-color: inherit;
+}
+
+.mat-list-item {
+  cursor: auto;
+}
+/* Table List Icon */
+/* .mat-icon-button {
+  display: none;
+}
+
+.mat-list-item:hover .mat-icon-button {
+  display: block;
+} */
+
+/* Text Area*/
 .mat-form-field {
   width: 100%;
 }
