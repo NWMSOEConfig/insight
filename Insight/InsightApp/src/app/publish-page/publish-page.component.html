@@ -1,42 +1,58 @@
-<h1 class="header">Publish</h1>
 <div class="publish-page">
-  <h2>The following settings have been changed:</h2>
-  <!-- Table -->
-  <mat-divider></mat-divider>
-  <mat-list>
-    <mat-list-item class="header">
-      <button mat-flat-button color="primary">Setting Name</button>
-      <button mat-flat-button color="primary">Current Value</button>
-      <button mat-flat-button color="primary">New Value</button>
-      <button mat-icon-button>
-        <mat-icon>expand_more</mat-icon>
-      </button>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-
-    <div *ngFor="let setting of settings">
-      <mat-list-item>
-        <span>{{ setting.name }}</span>
-        <span>{{ setting.oldvalue }}</span>
-        <span>{{ setting.newvalue }}</span>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon color="warn">delete</mat-icon>
-            <span>Delete</span>
-          </button>
-        </mat-menu>
-      </mat-list-item>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Publish</mat-card-title>
+      <mat-card-subtitle>
+        The following settings have been changed:
+      </mat-card-subtitle>
+    </mat-card-header>
+    <!-- Table -->
+    <mat-card-content>
       <mat-divider></mat-divider>
-    </div>
-  </mat-list>
-  <!-- Description Text Area -->
-  <mat-form-field appearance="outline" color="primary">
-    <mat-label>Write description of changes...</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field>
-  <!-- Publish Button -->
-  <button id="publish" mat-raised-button color="accent">Publish</button>
+      <mat-list>
+        <mat-list-item class="header" color="primary">
+          <span>Setting Name</span>
+          <span>Current Value</span>
+          <span>New Value</span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <div *ngFor="let setting of settings">
+          <mat-list-item>
+            <span>{{ setting.name }}</span>
+            <span>{{ setting.oldvalue }}</span>
+            <span>{{ setting.newvalue }}</span>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <mat-icon color="warn">delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
+      </mat-list>
+    </mat-card-content>
+    <!-- Description Text Area -->
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Write description of changes...</mat-label>
+      <textarea matInput></textarea>
+    </mat-form-field>
+    <!-- Publish Button -->
+    <button
+      id="publish"
+      mat-raised-button
+      color="accent"
+      (click)="canPublish = false"
+    >
+      Publish
+    </button>
+    <!-- Progress Bar -->
+    <mat-card-footer *ngIf="!canPublish">
+      <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+    </mat-card-footer>
+  </mat-card>
 </div>

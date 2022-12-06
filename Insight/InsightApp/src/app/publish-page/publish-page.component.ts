@@ -32,12 +32,7 @@ export class PublishPageComponent implements OnInit {
   constructor() {}
 
   onPublishClicked() {
-    this.errorMessage = undefined;
-    //create confirmation modal
-    if (!this.commitMessage) {
-      this.errorMessage = 'Commit text is required.';
-    }
-    console.log('Publish TODO');
+    this.canPublish = false;
   }
 
   onEditClicked() {
