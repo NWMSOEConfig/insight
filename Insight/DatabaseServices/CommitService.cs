@@ -4,9 +4,8 @@ using MongoDB.Driver;
 
 namespace Insight.Services;
 
-public class DatabaseCommitService
+public class DatabaseCommitService : ServiceParent<Commit>
 {
-    private readonly IMongoCollection<Commit> CommitsCollection;
 
     public DatabaseCommitService()
     {
@@ -14,24 +13,18 @@ public class DatabaseCommitService
 
         var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        CommitsCollection = mongoDatabase.GetCollection<Commit>("Commits");
+        collection = mongoDatabase.GetCollection<Commit>("Commits");
     }
 
-    public async Task<List<Commit>> GetAsync() =>
-        await CommitsCollection.Find(_ => true).ToListAsync();
-
     public async Task<Commit?> GetAsync(string id) =>
-        await CommitsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
     public async Task<Commit?> GetTimeAsync(int time) =>
-        await CommitsCollection.Find(x => x.Time == time).FirstOrDefaultAsync();
-
-    public async Task CreateAsync(Commit newCommit) =>
-        await CommitsCollection.InsertOneAsync(newCommit);
+        await collection.Find(x => x.Time == time).FirstOrDefaultAsync();
 
     public async Task UpdateAsync(string id, Commit updatedCommit) =>
-        await CommitsCollection.ReplaceOneAsync(x => x.Id == id, updatedCommit);
+        await collection.ReplaceOneAsync(x => x.Id == id, updatedCommit);
 
     public async Task RemoveAsync(string id) =>
-        await CommitsCollection.DeleteOneAsync(x => x.Id == id);
+        await collection.DeleteOneAsync(x => x.Id == id);
 }
