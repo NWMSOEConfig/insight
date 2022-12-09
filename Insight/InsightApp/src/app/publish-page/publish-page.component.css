@@ -27,6 +27,8 @@ span {
 /* Table */
 .mat-list-item.header {
   opacity: 0.9;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .mat-list-item.header:hover {
@@ -36,14 +38,6 @@ span {
 .mat-list-item {
   cursor: auto;
 }
-/* Table List Icon */
-/* .mat-icon-button {
-  display: none;
-}
-
-.mat-list-item:hover .mat-icon-button {
-  display: block;
-} */
 
 /* Text Area*/
 .mat-form-field {
