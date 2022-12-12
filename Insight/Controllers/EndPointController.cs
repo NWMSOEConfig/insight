@@ -40,7 +40,7 @@ public class DataController : ControllerBase
     private HttpController httpController = new HttpController();
     private DataServer _dbController;
 
-     public DataController(DataServer databaseController) =>
+    public DataController(DataServer databaseController) =>
         _dbController = databaseController;
 
     private static readonly IList<NewWorldSetting> _settings = new List<NewWorldSetting>
@@ -71,30 +71,32 @@ public class DataController : ControllerBase
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
-        new(0, "Subcategory 1", new List<int> { 0 }),
-        new(1, "Subcategory 2", new List<int> { 1 }),
-        new(2, "Subcategory 3", new List<int> { 2 })
+        new(0, "Subcategory 1", new List<string> { "Foo" }),
+        new(1, "Subcategory 2", new List<string> { "Bar" }),
+        new(2, "Subcategory 3", new List<string> { "Baz" })
     };
 
     private static readonly IList<Category> _categories = new List<Category>
     {
         new(0, "Category A", new List<int> { 0 }),
         new(1, "Category B", new List<int> { 1 }),
-        new(2, "Category C",  new List<int> { 2 })
+        new(2, "Category C", new List<int> { 2 })
     };
 
     private static readonly IList<Tenant> _tenants = new List<Tenant>
     {
-        new(0, "State", new List<int> { 0, 1, 2}),
+        new(0, "State", new List<int> { 0, 1, 2 }),
     };
 
     private static readonly List<QueueEntry> _queue = new();
 
     [HttpGet]
     [Route("setting")]
-    public IActionResult GetSetting(int id)
+    public IActionResult GetSetting(string name)
     {
-        return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
+        var setting = _settings.FirstOrDefault(s => s.Name == name);
+
+        return setting is null ? BadRequest() : Ok(setting);
     }
 
     [HttpGet]
@@ -127,7 +129,7 @@ public class DataController : ControllerBase
     [Route("queue")]
     public IActionResult PostQueue([FromBody] NewWorldSetting setting)
     {
-        var originalSetting = _settings.First(s => s.Name == setting.Name);
+        var originalSetting = _settings.FirstOrDefault(s => s.Name == setting.Name);
 
         if (originalSetting is null)
         {
