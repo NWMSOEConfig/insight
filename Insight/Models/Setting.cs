@@ -1,3 +1,3 @@
 namespace Insight.Models;
 
-public record Setting(int Id, string Name, IList<int> ParameterIds);
+public record Setting(int Id, string Name, IList<Parameter> Parameters);

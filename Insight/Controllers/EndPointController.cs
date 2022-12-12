@@ -45,19 +45,22 @@ public class DataController : ControllerBase
 
      public DataController(DataServer databaseController) =>
         _dbController = databaseController;
-    private static readonly IList<Parameter> _parameters = new List<Parameter>
-    {
-        new(0, "Enabled", "boolean", true),
-        new(1, "Foo", "number", 123),
-        new(2, "Bar", "text", "Text"),
-        new(3, "Baz", "email", "a@b.com"),
-    };
 
     private static readonly IList<Setting> _settings = new List<Setting>
     {
-        new(0, "Foo", new List<int> { 0, 1 }),
-        new(1, "Bar", new List<int> { 2 }),
-        new(2, "Baz", new List<int> { 3 }),
+        new(0, "Foo", new List<Parameter>
+        {
+            new("Enabled", true, true),
+            new("Foo", 123, true),
+        }),
+        new(1, "Bar", new List<Parameter>
+        {
+            new("Bar", "Text", true),
+        }),
+        new(2, "Baz", new List<Parameter>
+        {
+            new("Baz", "a@b.com", true),
+        }),
     };
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
@@ -80,13 +83,6 @@ public class DataController : ControllerBase
     };
 
     private static readonly List<QueueEntry> _queue = new();
-
-    [HttpGet]
-    [Route("parameter")]
-    public IActionResult GetParameter(int id)
-    {
-        return id < 0 || id >= _parameters.Count ? BadRequest() : Ok(_parameters[id]);
-    }
 
     [HttpGet]
     [Route("setting")]
@@ -118,29 +114,29 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue(int settingId, [FromBody] IList<Parameter> parameters)
+    public IActionResult PostQueue([FromBody] Setting setting)
     {
-        if (settingId < 0 || settingId >= _settings.Count)
+        if (setting.Id < 0 || setting.Id >= _settings.Count)
         {
             return BadRequest("must have a valid setting ID");
         }
 
-        if (parameters.Any(parameter => !_settings[settingId].ParameterIds.Contains(parameter.Id)))
+        if (setting.Parameters.Any(parameter => !_settings[setting.Id].Parameters.Any(p => p.Name == parameter.Name)))
         {
             return BadRequest("all parameters must be part of the setting");
         }
 
-        if (parameters.GroupBy(parameter => parameter.Id).Any(group => group.Count() > 1))
+        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
         {
             return BadRequest("cannot have duplicate parameters");
         }
 
-        var originals = parameters.Select(parameter => _parameters[parameter.Id]).ToList();
+        var originals = _settings[setting.Id].Parameters;
         var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var entry = new QueueEntry(settingId, originals, parameters, queuer);
+        var entry = new QueueEntry(setting.Id, originals, setting.Parameters, queuer);
         _queue.Add(entry);
 
-        return Ok($"queued {parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
+        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
     }
 
     /// <summary>
