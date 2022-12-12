@@ -26,10 +26,9 @@ export class ParameterComponent implements OnInit {
       this.initialValue = this.param.value;
       this.loaded = true;
       this.dataChange.emit({
-        id: this.param.id,
         name: this.param.name,
-        type: this.param.type,
         value: this.value,
+        isBrowserVisible: this.param.isBrowserVisible,
       });
     });
   }
@@ -37,10 +36,9 @@ export class ParameterComponent implements OnInit {
   change(): void {
     this.modified = this.value !== this.initialValue;
     this.dataChange.emit({
-      id: this.param.id,
       name: this.param.name,
-      type: this.param.type,
       value: this.value,
+      isBrowserVisible: this.param.isBrowserVisible,
     });
   }
 }
