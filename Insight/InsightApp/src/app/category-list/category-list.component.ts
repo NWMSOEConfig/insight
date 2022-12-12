@@ -1,6 +1,5 @@
-import { Component, DebugElement, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
-import { getCategory } from '../data-service';
 
 /**
  * TODO: Temporary location
