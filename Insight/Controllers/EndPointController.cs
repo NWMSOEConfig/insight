@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using Insight.Services;
 using Insight.Models;
 
 namespace Insight.Controllers;
@@ -11,9 +8,9 @@ namespace Insight.Controllers;
 [Route("api/database")]
 public class UserController : ControllerBase {
     private DataServer _dbController;
-     public UserController(DataServer databaseController) =>
-        _dbController = databaseController;
 
+    public UserController(DataServer databaseController) =>
+        _dbController = databaseController;
 
     [HttpGet("{environment}")]
     public async Task<List<DatabaseSetting>> environmentContext(string environment) 
@@ -46,21 +43,30 @@ public class DataController : ControllerBase
      public DataController(DataServer databaseController) =>
         _dbController = databaseController;
 
-    private static readonly IList<Setting> _settings = new List<Setting>
+    private static readonly IList<NewWorldSetting> _settings = new List<NewWorldSetting>
     {
-        new(0, "Foo", new List<Parameter>
+        new("Foo")
         {
-            new("Enabled", true, true),
-            new("Foo", 123, true),
-        }),
-        new(1, "Bar", new List<Parameter>
+            Parameters = new List<Parameter>
+            {
+                new("Enabled", true, true),
+                new("Foo", 123, true),
+            },
+        },
+        new("Bar")
         {
-            new("Bar", "Text", true),
-        }),
-        new(2, "Baz", new List<Parameter>
+            Parameters = new List<Parameter>
+            {
+                new("Bar", "Text", true),
+            },
+        },
+        new("Baz")
         {
-            new("Baz", "a@b.com", true),
-        }),
+            Parameters = new List<Parameter>
+            {
+                new("Baz", "a@b.com", true),
+            },
+        },
     };
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
@@ -114,14 +120,21 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue([FromBody] Setting setting)
+    public IActionResult PostQueue([FromBody] NewWorldSetting setting)
     {
-        if (setting.Id < 0 || setting.Id >= _settings.Count)
+        var originalSetting = _settings.First(s => s.Name == setting.Name);
+
+        if (originalSetting is null)
         {
-            return BadRequest("must have a valid setting ID");
+            return BadRequest("must have a valid setting name");
         }
 
-        if (setting.Parameters.Any(parameter => !_settings[setting.Id].Parameters.Any(p => p.Name == parameter.Name)))
+        if (originalSetting.Parameters is null || originalSetting.Parameters.Count == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
+        {
+            return BadRequest("setting definition must have parameters");
+        }
+
+        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
         {
             return BadRequest("all parameters must be part of the setting");
         }
@@ -131,9 +144,8 @@ public class DataController : ControllerBase
             return BadRequest("cannot have duplicate parameters");
         }
 
-        var originals = _settings[setting.Id].Parameters;
         var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var entry = new QueueEntry(setting.Id, originals, setting.Parameters, queuer);
+        var entry = new QueueEntry(setting.Name, originalSetting.Parameters, setting.Parameters, queuer);
         _queue.Add(entry);
 
         return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
