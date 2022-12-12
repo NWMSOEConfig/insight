@@ -57,7 +57,8 @@ export class CategoryListComponent implements OnInit {
     } else if (target == DbObjects.Subcategory) {
       this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
         this.parent = data;
-        this.parent.settingNames.forEach((name: string) => {
+        data.settingNames.forEach((name: string) => {
+          this.settingName = name;
           this.apiService.getSetting(name).subscribe((data) => {
             this.children.push(data);
           });
@@ -66,7 +67,7 @@ export class CategoryListComponent implements OnInit {
     } else {
       // we've gone too far!!! 😲😲😲
       this.settingClicked = true;
-      this.settingName = this.parent.id;
+      this.settingName = this.parent.name;
     }
   }
 

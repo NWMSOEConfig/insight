@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 /* Models */
 import { Setting } from '../../models/setting';
-import { Parameter } from '../../models/parameter';
 import { Category } from '../../models/category';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
-
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +15,9 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   public getSetting(name: string) {
-    return this.httpClient.get<Setting>(`${this.apiURL}/data/setting?name=${name}`);
+    return this.httpClient.get<Setting>(
+      `${this.apiURL}/data/setting?name=${name}`
+    );
   }
 
   public getCategory(id: number) {

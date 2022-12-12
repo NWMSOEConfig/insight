@@ -11,7 +11,7 @@ import { Setting } from 'src/models/setting';
 export class SettingEditorComponent implements OnInit {
   @Input() settingName = '';
   @Output() cancel = new EventEmitter();
-  setting!: Setting;
+  setting: Setting | null = null;
 
   constructor(private apiService: ApiService) {
   }
@@ -27,7 +27,7 @@ export class SettingEditorComponent implements OnInit {
   }
 
   queue(): void {
-    this.apiService.postQueue(this.setting).subscribe(message => {
+    this.apiService.postQueue(this.setting!).subscribe(message => {
       alert(message);
     });
   }
@@ -37,7 +37,7 @@ export class SettingEditorComponent implements OnInit {
    * @param newParameter the parameter with the new value
    */
   dataChange(newParameter: Parameter): void {
-    for (const parameter of this.setting.parameters ?? []) {
+    for (const parameter of this.setting!.parameters ?? []) {
       if (parameter.name === newParameter.name) {
         parameter.value = newParameter.value;
         break;
