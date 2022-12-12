@@ -16,14 +16,8 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) {}
 
-  public getSetting(id: number) {
-    return this.httpClient.get<Setting>(`${this.apiURL}/data/setting?id=${id}`);
-  }
-
-  public getParameter(id: number) {
-    return this.httpClient.get<Parameter>(
-      `${this.apiURL}/data/parameter?id=${id}`
-    );
+  public getSetting(name: string) {
+    return this.httpClient.get<Setting>(`${this.apiURL}/data/setting?name=${name}`);
   }
 
   public getCategory(id: number) {
@@ -42,8 +36,8 @@ export class ApiService {
     return this.httpClient.get<Tenant>(`${this.apiURL}/data/tenant?id=${id}`);
   }
 
-  public postQueue(settingId: number, parameters: Parameter[]) {
-    return this.httpClient.post(`${this.apiURL}/data/queue?settingId=${settingId}`, parameters, {
+  public postQueue(setting: Setting) {
+    return this.httpClient.post(`${this.apiURL}/data/queue`, setting, {
       responseType: 'text',
     });
   }

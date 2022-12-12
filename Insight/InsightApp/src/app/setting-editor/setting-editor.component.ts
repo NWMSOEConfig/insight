@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
 import { Parameter } from '../../models/parameter';
+import { Setting } from 'src/models/setting';
 
 @Component({
   selector: 'app-setting-editor',
@@ -8,17 +9,16 @@ import { Parameter } from '../../models/parameter';
   styleUrls: ['./setting-editor.component.css']
 })
 export class SettingEditorComponent implements OnInit {
-  @Input() settingId = 0;
+  @Input() settingName = '';
   @Output() cancel = new EventEmitter();
-  data: any = {};
-  parameterIds: number[] = [];
+  setting!: Setting;
 
   constructor(private apiService: ApiService) {
   }
 
   ngOnInit(): void {
-    this.apiService.getSetting(this.settingId).subscribe(setting => {
-      this.parameterIds = setting.parameterIds;
+    this.apiService.getSetting(this.settingName).subscribe(setting => {
+      this.setting = setting;
     });
   }
 
@@ -27,12 +27,21 @@ export class SettingEditorComponent implements OnInit {
   }
 
   queue(): void {
-    this.apiService.postQueue(this.settingId, Object.values(this.data)).subscribe(message => {
+    this.apiService.postQueue(this.setting).subscribe(message => {
       alert(message);
     });
   }
 
-  dataChange(parameterId: number, newData: Parameter): void {
-    this.data[parameterId] = newData;
+  /**
+   * Update the current setting with a parameter's new value.
+   * @param newParameter the parameter with the new value
+   */
+  dataChange(newParameter: Parameter): void {
+    for (const parameter of this.setting.parameters ?? []) {
+      if (parameter.name === newParameter.name) {
+        parameter.value = newParameter.value;
+        break;
+      }
+    }
   }
 }

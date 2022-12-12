@@ -20,5 +20,5 @@
     <button mat-list-item *ngFor="let child of children" (click)="clickChild(child)">{{child.name}}</button>
     <mat-divider></mat-divider>
   </mat-action-list>
-  <app-setting-editor *ngIf="settingClicked" [settingId]="settingId" (cancel)="cancel()"></app-setting-editor>
+  <app-setting-editor *ngIf="settingClicked" [settingName]="settingName" (cancel)="cancel()"></app-setting-editor>
 </div>

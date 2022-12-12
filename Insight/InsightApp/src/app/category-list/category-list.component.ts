@@ -19,7 +19,7 @@ enum DbObjects {
 })
 export class CategoryListComponent implements OnInit {
   settingClicked = false;
-  settingId = 0;
+  settingName = '';
   children: any = [];
   level = DbObjects.Tenant;
   parent: any;
@@ -57,8 +57,8 @@ export class CategoryListComponent implements OnInit {
     } else if (target == DbObjects.Subcategory) {
       this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
         this.parent = data;
-        this.parent.settingIds.forEach((id: number) => {
-          this.apiService.getSetting(id).subscribe((data) => {
+        this.parent.settingNames.forEach((name: string) => {
+          this.apiService.getSetting(name).subscribe((data) => {
             this.children.push(data);
           });
         });
@@ -66,7 +66,7 @@ export class CategoryListComponent implements OnInit {
     } else {
       // we've gone too far!!! 😲😲😲
       this.settingClicked = true;
-      this.settingId = this.parent.id;
+      this.settingName = this.parent.id;
     }
   }
 
