@@ -118,6 +118,11 @@ public class DataController : ControllerBase
         return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
     }
 
+    /// <summary>
+    /// Add a modified setting to the batch of queued setting changes.
+    /// </summary>
+    /// <param name="setting">the setting to add to the batch</param>
+    /// <returns>400 Bad Request if passed setting is invalid, else 200 OK</returns>
     [HttpPost]
     [Route("queue")]
     public IActionResult PostQueue([FromBody] NewWorldSetting setting)
