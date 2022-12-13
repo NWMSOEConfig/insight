@@ -1,0 +1,45 @@
+/* Container */
+.publish-page {
+  margin: auto;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Buttons */
+button#edit {
+  width: 200px;
+}
+
+button#publish {
+  width: 100%;
+  align-self: center;
+}
+
+/* Material List */
+.mat-list-item.header .mat-flat-button,
+span {
+  width: 150px;
+  margin: auto;
+}
+
+/* Table */
+.mat-list-item.header {
+  opacity: 0.9;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.mat-list-item.header:hover {
+  background-color: inherit;
+}
+
+.mat-list-item {
+  cursor: auto;
+}
+
+/* Text Area*/
+.mat-form-field {
+  width: 100%;
+}

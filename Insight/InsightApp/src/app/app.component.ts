@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +7,17 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'insight-app';
   states: string[] = ['Wisconsin', 'Minnesota', 'Indiana', 'Ohio', 'Michigan'];
-  toggle_direction: string = '>';
-  selected = "";
+  toggle_direction: string = 'keyboard_arrow_right';
+  selected = '';
 
   constructor(private http: HttpClient) {}
 
   toggle_sidebar(sidebar: any): void {
     sidebar.toggle();
-    this.toggle_direction === '>'
-      ? (this.toggle_direction = '<')
-      : (this.toggle_direction = '>');
+    this.toggle_direction === 'keyboard_arrow_right'
+      ? (this.toggle_direction = 'keyboard_arrow_left')
+      : (this.toggle_direction = 'keyboard_arrow_right');
   }
 
   changeSite(selector: string): void {
@@ -29,5 +28,3 @@ export class AppComponent {
     return this.selected;
   }
 }
-
-

@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,7 +26,25 @@ import { PublishPageComponent } from './publish-page/publish-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {HttpClientModule} from '@angular/common/http'; 
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTreeModule } from '@angular/material/tree';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,7 +54,7 @@ import {HttpClientModule} from '@angular/common/http';
     CategoryListComponent,
     ConfigurationPageComponent,
     PublishPageComponent,
-    HistoryPageComponent
+    HistoryPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +62,7 @@ import {HttpClientModule} from '@angular/common/http';
     FormsModule,
     MatButtonModule,
     MatSliderModule,
+    MatBadgeModule,
     MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
@@ -55,13 +74,32 @@ import {HttpClientModule} from '@angular/common/http';
     MatIconModule,
     MatSidenavModule,
     MatSelectModule,
+    MatBottomSheetModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatStepperModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatNativeDateModule,
+    MatRippleModule,
+    MatPaginatorModule,
+    MatRadioModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTreeModule,
     MatTabsModule,
     MatTooltipModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
