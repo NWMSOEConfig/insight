@@ -15,7 +15,7 @@ public class UserController : ControllerBase {
         _dbController = databaseController;
 
 
-    [HttpGet("{environment}")]
+    [HttpGet("environments/{environment}")]
     public async Task<List<DatabaseSetting>> environmentContext(string environment) 
     {
         List<DatabaseSetting> vals = new List<DatabaseSetting>();
@@ -23,6 +23,12 @@ public class UserController : ControllerBase {
         vals = await _dbController.GetEnvironmentSettingsAsync(environment);
 
         return vals;
+    }
+
+    [HttpGet("tenants/{tenant}")]
+    public async Task<List<DatabaseSetting>> tenantContext(string environment)
+    {
+        return await _dbController.GetTenantSettingsAsync(environment);
     }
 
     [HttpGet]
@@ -33,6 +39,12 @@ public class UserController : ControllerBase {
         DatabaseSettings = await _dbController.GetSettingsAsync();
 
         return DatabaseSettings;
+    }
+
+    [HttpGet("{name}")]
+    public async Task<DatabaseSetting?> getSingleDatabaseSetting(string name)
+    {
+        return await _dbController.GetSingleSettingAsync(name);
     }
         
 }

@@ -26,6 +26,31 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
         return await collection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
     }
 
+    public async Task<List<DatabaseSetting>> GetTenantsAsync(string tenantName)
+    {
+        // create placeholder lists to hold information and one list to return
+        List<DatabaseSetting> settings = new List<DatabaseSetting>();
+        List<DatabaseTenant> tenants = new List<DatabaseTenant>();
+        List<DatabaseSetting> matched_settings = new List<DatabaseSetting>();
+
+        // get all settings
+        settings = await GetAsync();
+
+        settings.ForEach(x => {
+            tenants = x.Tenants.ToList();
+            // search in each setting, for each tenant, to see of the environment name matches
+            tenants.ForEach(y => {
+                if(y.Environment.Contains(tenantName))
+                {
+                    matched_settings.Add(x);
+                    return;
+                }
+            });
+        });
+
+        return matched_settings;
+    }
+
     public async Task UpdateAsync(string id, DatabaseSetting updatedSetting) =>
         await collection.ReplaceOneAsync(x => x.Id == id, updatedSetting);
 

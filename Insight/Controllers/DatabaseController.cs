@@ -28,9 +28,19 @@ public class DataServer {
         return await _settingsService.GetEnvironmentAsync(tenantName);
     }
 
+    public async Task<List<DatabaseSetting>> GetTenantSettingsAsync(string tenantName)
+    {
+        return await _settingsService.GetTenantsAsync(tenantName);
+    }
+
     public async Task<List<DatabaseSetting>> GetSettingsAsync()
     {
         return await _settingsService.GetAsync();
+    }
+
+    public async Task<DatabaseSetting?> GetSingleSettingAsync(string name)
+    {
+        return await _settingsService.GetByNameAsync(name);
     }
 
     /// <summary>
