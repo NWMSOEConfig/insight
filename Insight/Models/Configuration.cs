@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Insight.Models;
 
+[BsonIgnoreExtraElements]
 public class DatabaseSetting
 {
     [BsonId]
