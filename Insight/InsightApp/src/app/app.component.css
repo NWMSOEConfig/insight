@@ -67,3 +67,8 @@
   top: 10px;
   left: 10px;
 }
+
+/* Remove scrolling from tenant selection */
+::ng-deep .mat-select-panel{
+  max-height: none!important;
+}
