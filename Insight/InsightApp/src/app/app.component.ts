@@ -7,7 +7,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  states: string[] = ['Wisconsin', 'Minnesota', 'Indiana', 'Ohio', 'Michigan'];
+  tenants: any = [
+    { site: 'Wisconsin', environments: [] },
+    { site: 'Minnesota', environments: [] },
+    { site: 'Indiana', environments: [] },
+    { site: 'Ohio', environments: [] },
+    { site: 'Michigan', environments: [] },
+  ];
   toggle_direction: string = 'keyboard_arrow_right';
   selected = '';
 
