@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using Insight.Services;
 using Insight.Models;
 
 namespace Insight.Controllers;
@@ -11,9 +8,9 @@ namespace Insight.Controllers;
 [Route("api/database")]
 public class UserController : ControllerBase {
     private DataServer _dbController;
-     public UserController(DataServer databaseController) =>
-        _dbController = databaseController;
 
+    public UserController(DataServer databaseController) =>
+        _dbController = databaseController;
 
     [HttpGet("environments/{environment}")]
     public async Task<List<DatabaseSetting>> environmentContext(string environment) 
@@ -55,56 +52,63 @@ public class DataController : ControllerBase
     private HttpController httpController = new HttpController();
     private DataServer _dbController;
 
-     public DataController(DataServer databaseController) =>
+    public DataController(DataServer databaseController) =>
         _dbController = databaseController;
-    private static readonly IList<Parameter> _parameters = new List<Parameter>
-    {
-        new(0, "Enabled", "boolean", true),
-        new(1, "Foo", "number", 123),
-        new(2, "Bar", "text", "Text"),
-        new(3, "Baz", "email", "a@b.com"),
-    };
 
-    private static readonly IList<Setting> _settings = new List<Setting>
+    private static readonly IList<NewWorldSetting> _settings = new List<NewWorldSetting>
     {
-        new(0, "Foo", new List<int> { 0, 1 }),
-        new(1, "Bar", new List<int> { 2 }),
-        new(2, "Baz", new List<int> { 3 }),
+        new("Foo")
+        {
+            Parameters = new List<Parameter>
+            {
+                new("Enabled", true, true),
+                new("Foo", 123, true),
+            },
+        },
+        new("Bar")
+        {
+            Parameters = new List<Parameter>
+            {
+                new("Bar", "Text", true),
+            },
+        },
+        new("Baz")
+        {
+            Parameters = new List<Parameter>
+            {
+                new("Baz", "a@b.com", true),
+            },
+        },
     };
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
-        new(0, "Subcategory 1", new List<int> { 0 }),
-        new(1, "Subcategory 2", new List<int> { 1 }),
-        new(2, "Subcategory 3", new List<int> { 2 })
+        new(0, "Subcategory 1", new List<string> { "Foo" }),
+        new(1, "Subcategory 2", new List<string> { "Bar" }),
+        new(2, "Subcategory 3", new List<string> { "Baz" })
     };
 
     private static readonly IList<Category> _categories = new List<Category>
     {
         new(0, "Category A", new List<int> { 0 }),
         new(1, "Category B", new List<int> { 1 }),
-        new(2, "Category C",  new List<int> { 2 })
+        new(2, "Category C", new List<int> { 2 })
     };
 
     private static readonly IList<Tenant> _tenants = new List<Tenant>
     {
-        new(0, "State", new List<int> { 0, 1, 2}),
+        new(0, "State", new List<int> { 0, 1, 2 }),
     };
 
     private static readonly List<QueueEntry> _queue = new();
 
     [HttpGet]
-    [Route("parameter")]
-    public IActionResult GetParameter(int id)
-    {
-        return id < 0 || id >= _parameters.Count ? BadRequest() : Ok(_parameters[id]);
-    }
-
-    [HttpGet]
     [Route("setting")]
-    public IActionResult GetSetting(int id)
+    public IActionResult GetSetting(string name)
     {
-        return id < 0 || id >= _settings.Count ? BadRequest() : Ok(_settings[id]);
+        var setting = _settings.FirstOrDefault(s => s.Name == name);
+
+        return setting is null ? BadRequest() : Ok(setting);
     }
 
     [HttpGet]
@@ -128,31 +132,42 @@ public class DataController : ControllerBase
         return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
     }
 
+    /// <summary>
+    /// Add a modified setting to the batch of queued setting changes.
+    /// </summary>
+    /// <param name="setting">the setting to add to the batch</param>
+    /// <returns>400 Bad Request if passed setting is invalid, else 200 OK</returns>
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue(int settingId, [FromBody] IList<Parameter> parameters)
+    public IActionResult PostQueue([FromBody] NewWorldSetting setting)
     {
-        if (settingId < 0 || settingId >= _settings.Count)
+        var originalSetting = _settings.FirstOrDefault(s => s.Name == setting.Name);
+
+        if (originalSetting is null)
         {
-            return BadRequest("must have a valid setting ID");
+            return BadRequest("must have a valid setting name");
         }
 
-        if (parameters.Any(parameter => !_settings[settingId].ParameterIds.Contains(parameter.Id)))
+        if (originalSetting.Parameters is null || originalSetting.Parameters.Count == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
+        {
+            return BadRequest("setting definition must have parameters");
+        }
+
+        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
         {
             return BadRequest("all parameters must be part of the setting");
         }
 
-        if (parameters.GroupBy(parameter => parameter.Id).Any(group => group.Count() > 1))
+        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
         {
             return BadRequest("cannot have duplicate parameters");
         }
 
-        var originals = parameters.Select(parameter => _parameters[parameter.Id]).ToList();
         var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var entry = new QueueEntry(settingId, originals, parameters, queuer);
+        var entry = new QueueEntry(setting.Name, originalSetting.Parameters, setting.Parameters, queuer);
         _queue.Add(entry);
 
-        return Ok($"queued {parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
+        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
     }
 
     /// <summary>
