@@ -1,0 +1,47 @@
+import { browser, by, element } from 'protractor';
+
+describe('Tenant form', () => {
+  const tenantForm = element(by.id('tenantForm')); // Constant to describe the tenant form
+
+  beforeEach(async () => {
+    browser.get(browser.baseUrl); // Navigate to browser
+  });
+
+  it('can select a site and environment', async () => {
+    const initialText = tenantForm.getText(); // Read initial text
+
+    tenantForm.click(); // Click the tenant drop-down
+
+    const siteText = await element
+      .all(by.tagName('mat-option'))
+      .first()
+      .getText(); // Get site text
+    await element.all(by.tagName('mat-option')).first().click(); // Click the first site option
+
+    const environmentText = await element
+      .all(by.tagName('mat-option'))
+      .first()
+      .getText(); // Get environment text
+    await element.all(by.tagName('mat-option')).first().click(); // Click the first environment option
+
+    expect(initialText).not.toEqual(tenantForm.getText()); // Verify that drop-down has changed
+    expect(await tenantForm.getText()).toEqual(
+      siteText + ' (' + environmentText + ')'
+    ); // Verify the change matches format i.e. "Site (Environment)"
+  });
+
+  it('recovers if a site is selected but not environment', async () => {
+    const initialText = tenantForm.getText(); // Read initial text
+
+    tenantForm.click(); // Click the tenant drop-down
+
+    await element.all(by.tagName('mat-option')).first().click(); // Click the first site option
+
+    browser
+      .actions()
+      .mouseMove(element.all(by.tagName('span')).first())
+      .click(); // Move the mouse and click away i.e. first span element
+
+    expect(initialText).toEqual(tenantForm.getText()); // Verify that drop-down has not changed
+  });
+});
