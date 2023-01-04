@@ -17,6 +17,7 @@ public class DatabaseSetting
     public string[]? Parameter { get; set; }
 
     public bool Enabled { get; set; }
+    
     public string[] TenantNames { get; set; } = null!;
 
     public string[] EnvironmentNames { get; set; } = null!;

@@ -23,8 +23,11 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
     
     public async Task<List<DatabaseSetting>> GetEnvironmentAsync(string tenantId)
     {
-        return await collection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
+        return await collection.Find(x => x.EnvironmentNames.Contains(tenantId)).ToListAsync();
     }
+
+    public async Task DeleteAllAsync() =>
+        await collection.DeleteManyAsync(_ => true);
 
     public async Task<List<DatabaseSetting>> GetTenantsAsync(string tenantName)
     {

@@ -176,6 +176,11 @@ public class DataController : ControllerBase
         _dbController.PopulateHierarchy(settings, tenant, environment);
         return Ok($"Url {url} is valid");
     }
+
+    [HttpGet]
+    [Route("DeleteAllSettings")]
+    public void Delete() =>
+        _dbController.DeleteAllAsync();
 }
 
 

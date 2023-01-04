@@ -18,6 +18,9 @@ public class DatabaseTenantService : ServiceParent<DatabaseTenant>
     public async Task<DatabaseTenant?> GetAsync(string id) =>
         await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+    public async Task<DatabaseTenant?> GetByNameAsync(string name) =>
+        await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
+
     public async Task<DatabaseTenant?> GetCategoryAsync(string name) =>
         await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
