@@ -15,7 +15,7 @@ export class AppComponent {
     { site: 'Ohio', environments: ['Prod', 'Test', 'Test2'] },
     { site: 'Michigan', environments: ['Prod'] },
   ];
-  selectedTenant: any = { site: null, environment: null };
+  selectedTenant: any = {};
 
   constructor(private http: HttpClient) {}
 
