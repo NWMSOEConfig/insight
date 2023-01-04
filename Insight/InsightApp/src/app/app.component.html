@@ -3,11 +3,27 @@
   <span>New World</span>
   <span class="spacer"></span>
   <mat-form-field>
-    <mat-label>Select a website</mat-label>
-    <mat-select [(value)]="selected">
-      <mat-option *ngFor="let state of states" [value]="state">
-        {{ state }}
-        {{ changeSite(selected) }}
+    <mat-label *ngIf="selectedTenant.site == null">
+      Select a website
+    </mat-label>
+    <mat-label *ngIf="selectedTenant.site != null">
+      {{ selectedTenant.site + " (" + selectedTenant.environment + ")" }}
+    </mat-label>
+
+    <mat-select>
+      <mat-option *ngFor="let tenant of tenants">
+        <div>
+          {{ tenant.site }}
+          <mat-select>
+            <mat-option
+              *ngFor="let environment of tenant.environments"
+              (onSelectionChange)="changeTenant(tenant.site, environment)"
+            >
+              {{ environment }}
+            </mat-option>
+          </mat-select>
+          hi
+        </div>
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -43,10 +59,10 @@
     mat-mini-fab
     matTooltip="Toggle sidebar"
     matTooltipPosition="right"
-    (click)="toggle_sidebar(this.drawer)"
+    (click)="toggleSidebar(this.drawer)"
     color="accent"
   >
-    <mat-icon>{{ toggle_direction }}</mat-icon>
+    <mat-icon>{{ toggleDirection }}</mat-icon>
   </button>
   <router-outlet></router-outlet>
 </mat-drawer-container>
