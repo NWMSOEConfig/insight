@@ -22,6 +22,9 @@ describe('Tenant form', () => {
       .all(by.tagName('mat-option'))
       .first()
       .getText(); // Get environment text
+
+    expect(siteText).not.toEqual(environmentText); // Verify that site and environment aren't the same
+
     await element.all(by.tagName('mat-option')).first().click(); // Click the first environment option
 
     expect(initialText).not.toEqual(tenantForm.getText()); // Verify that drop-down has changed
