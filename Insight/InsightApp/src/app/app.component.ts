@@ -7,30 +7,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  toggleDirection: string = 'keyboard_arrow_right';
   tenants: any = [
-    { site: 'Wisconsin', environments: [] },
-    { site: 'Minnesota', environments: [] },
-    { site: 'Indiana', environments: [] },
-    { site: 'Ohio', environments: [] },
-    { site: 'Michigan', environments: [] },
+    { site: 'Wisconsin', environments: ['Test', 'Prod'] },
+    { site: 'Minnesota', environments: ['Prod'] },
+    { site: 'Indiana', environments: ['Prod'] },
+    { site: 'Ohio', environments: ['Prod', 'Test', 'Test2'] },
+    { site: 'Michigan', environments: ['Prod'] },
   ];
-  toggle_direction: string = 'keyboard_arrow_right';
-  selected = '';
+  selectedTenant: any = { site: null, environment: null };
 
   constructor(private http: HttpClient) {}
 
-  toggle_sidebar(sidebar: any): void {
+  changeTenant(site: string, environment: string): void {
+    this.selectedTenant.site = site;
+    this.selectedTenant.environment = environment;
+  }
+
+  toggleSidebar(sidebar: any): void {
     sidebar.toggle();
-    this.toggle_direction === 'keyboard_arrow_right'
-      ? (this.toggle_direction = 'keyboard_arrow_left')
-      : (this.toggle_direction = 'keyboard_arrow_right');
-  }
-
-  changeSite(selector: string): void {
-    this.selected = selector;
-  }
-
-  getSite(): string {
-    return this.selected;
+    this.toggleDirection === 'keyboard_arrow_right'
+      ? (this.toggleDirection = 'keyboard_arrow_left')
+      : (this.toggleDirection = 'keyboard_arrow_right');
   }
 }
