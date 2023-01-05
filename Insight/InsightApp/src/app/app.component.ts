@@ -9,11 +9,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AppComponent {
   toggleDirection: string = 'keyboard_arrow_right';
   tenants: any = [
-    { site: 'Wisconsin', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
-    { site: 'Minnesota', environments: ['Prod'] },
-    { site: 'Indiana', environments: ['Dev', 'Test', 'Prod'] },
-    { site: 'Ohio', environments: ['Test', 'Alt', 'Prod'] },
-    { site: 'Michigan', environments: ['UAT', 'Prod'] },
+    { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
+    { site: 'MN', environments: ['Prod'] },
+    { site: 'IN', environments: ['Dev', 'Test', 'Prod'] },
+    { site: 'OH', environments: ['Test', 'Alt', 'Prod'] },
+    { site: 'MI', environments: ['UAT', 'Prod'] },
   ];
   selectedTenant: any = {};
 
