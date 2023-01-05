@@ -2,7 +2,7 @@
 <mat-toolbar color="primary">
   <span>New World</span>
   <span class="spacer"></span>
-  <mat-form-field id="tenantForm">
+  <mat-form-field id="tenantForm" (mouseout)="selectedTenant={}">
     <mat-label>
       {{
         getTenant().environment == null
