@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  toggleDirection: string = 'keyboard_arrow_right';
+  toggleDirection: string = 'keyboard_arrow_left';
   tenants: any = [
     { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
     { site: 'MN', environments: ['Prod'] },
