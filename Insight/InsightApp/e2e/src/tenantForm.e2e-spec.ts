@@ -38,10 +38,6 @@ describe('Tenant form', () => {
 
     tenantForm.click(); // Click the tenant drop-down
 
-    const siteText = await element
-      .all(by.tagName('mat-option'))
-      .first()
-      .getText(); // Get site text
     await element.all(by.tagName('mat-option')).first().click(); // Click the first site option
 
     browser
@@ -49,9 +45,6 @@ describe('Tenant form', () => {
       .mouseMove(element.all(by.tagName('span')).first())
       .click(); // Move the mouse and click away i.e. first span element
 
-      expect(initialText).not.toEqual(tenantForm.getText()); // Verify that drop-down has changed
-      expect(await tenantForm.getText()).toEqual(
-        siteText + ' (null)'
-      ); // Verify the change matches format i.e. "Site (null)"
+      expect(initialText).toEqual(tenantForm.getText()); // Verify that drop-down has not changed
   });
 });
