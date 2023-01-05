@@ -4,21 +4,28 @@
   <span class="spacer"></span>
   <mat-form-field id="tenantForm">
     <mat-label>
-      {{ selectedTenant.site == null ? "Select a tenant" : selectedTenant.site + " (" + selectedTenant.environment + ")" }}
-    </mat-label> 
+      {{
+        getTenant().environment == null
+          ? "Select a tenant"
+          : getTenant().site + " (" + getTenant().environment + ")"
+      }}
+    </mat-label>
 
     <mat-select #selector>
-      <div *ngIf="selectedTenant.site == null || selectedTenant.environment != null">
+      <div *ngIf="selectedTenant.site == null">
         <mat-option
           *ngFor="let tenant of tenants"
           (click)="selector.open()"
-          (onSelectionChange)="selectedTenant = tenant; selectedTenant.environment = null;"
+          (onSelectionChange)="selectedTenant = tenant"
         >
           {{ tenant.site }}
         </mat-option>
       </div>
       <div *ngIf="selectedTenant.environment == null">
-        <mat-option *ngFor="let environment of selectedTenant.environments" (onSelectionChange)="changeTenant(selectedTenant.site, environment)">
+        <mat-option
+          *ngFor="let environment of selectedTenant.environments"
+          (click)="changeTenant(selectedTenant.site, environment)"
+        >
           {{ environment }}
         </mat-option>
       </div>
@@ -32,7 +39,6 @@
     <mat-icon>settings</mat-icon>
   </button>
 </mat-toolbar>
-
 <!-- Main Container -->
 <mat-drawer-container>
   <!-- Side Navigation -->

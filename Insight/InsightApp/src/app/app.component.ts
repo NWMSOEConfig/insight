@@ -20,8 +20,20 @@ export class AppComponent {
   constructor(private http: HttpClient) {}
 
   changeTenant(site: string, environment: string): void {
-    this.selectedTenant.site = site;
-    this.selectedTenant.environment = environment;
+    localStorage.setItem('site', site); // Set site data to client's local storage
+    localStorage.setItem('environment', environment); // Set environment data to client's local storage
+    this.selectedTenant = {}; 
+  }
+
+  /**
+   * Get the tenant a client has previously selected to persist data despite browser refreshes
+   * @returns client's local storage of Tenant selection (site and environment) 
+   */
+  getTenant(): any {
+    return {
+      site: localStorage.getItem('site'),
+      environment: localStorage.getItem('environment'),
+    };
   }
 
   toggleSidebar(sidebar: any): void {
