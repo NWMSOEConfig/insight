@@ -112,6 +112,24 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
+    [Route("livesetting")]
+    public async Task<IActionResult> GetSettingAsync(string name, [FromBody] string url)
+    {
+        List<NewWorldSetting> settings;
+        Console.WriteLine("Hello World");
+        try
+        {
+            settings = await httpController.PopulateGetRequest(url);
+        }catch (ArgumentException)
+        {
+            return BadRequest($"Url {url} is invalid");
+        }
+        var setting = settings.FirstOrDefault(s => s.Name == name);
+
+        return setting is null ? BadRequest() : Ok(setting);
+    }
+
+    [HttpGet]
     [Route("subcategory")]
     public IActionResult GetSubcategory(int id)
     {
