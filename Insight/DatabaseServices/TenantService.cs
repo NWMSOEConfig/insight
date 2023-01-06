@@ -27,6 +27,9 @@ public class DatabaseTenantService : ServiceParent<DatabaseTenant>
     public async Task UpdateAsync(string id, DatabaseTenant updatedDatabaseTenant) =>
         await collection.ReplaceOneAsync(x => x.Id == id, updatedDatabaseTenant);
 
+    public async Task UpdateByNameAsync(string name, DatabaseTenant updatedDatabaseTenant) =>
+        await collection.ReplaceOneAsync(x => x.Name == name, updatedDatabaseTenant);
+
     public async Task RemoveAsync(string id) =>
         await collection.DeleteOneAsync(x => x.Id == id);
 }

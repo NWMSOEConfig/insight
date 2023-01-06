@@ -25,10 +25,10 @@ public class UserController : ControllerBase {
         return vals;
     }
 
-    [HttpGet("tenants/{tenant}")]
-    public async Task<List<DatabaseSetting>> tenantContext(string environment)
+    [HttpGet("tenants/{environment}/{tenant}")]
+    public async Task<List<DatabaseSetting>> tenantContext(string environment, string tenant)
     {
-        return await _dbController.GetTenantSettingsAsync(environment);
+        return await _dbController.GetTenantSettingsAsync(tenant, environment);
     }
 
     [HttpGet]
@@ -165,7 +165,7 @@ public class DataController : ControllerBase
     [Route("populate")]
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
-        List<NewWorldSetting> settings;
+        List<NewWorldSetting> settings = new List<NewWorldSetting>();
         try
         {
             settings = await httpController.PopulateGetRequest(url);
@@ -177,9 +177,9 @@ public class DataController : ControllerBase
         return Ok($"Url {url} is valid");
     }
 
-    [HttpGet]
+    [HttpDelete]
     [Route("DeleteAllSettings")]
-    public void Delete() =>
+    public Task Delete() =>
         _dbController.DeleteAllAsync();
 }
 

@@ -28,7 +28,7 @@ class HttpController
         {
             HttpResponseMessage response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            //Console.WriteLine(await response.Content.ReadAsStringAsync());
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
 
            List<NewWorldSetting>? settings = await response.Content.ReadFromJsonAsync<List<NewWorldSetting>>();
            if (settings != null)
