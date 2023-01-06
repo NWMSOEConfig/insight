@@ -7,6 +7,8 @@ import { ApiService } from '../api-service/api.service';
   styleUrls: ['./configuration-page.component.css']
 })
 export class ConfigurationPageComponent implements OnInit {
+  disabled = false;
+
   constructor(private apiService: ApiService) {
   }
 
@@ -14,8 +16,10 @@ export class ConfigurationPageComponent implements OnInit {
   }
 
   clickRefresh(): void {
+    this.disabled = true;
     this.apiService.postPopulate('https://pauat.newworldnow.com/v7/api/applicationsettings/', 'TODO', 'TODO').subscribe(message => {
       alert(message);
+      this.disabled = false;
     });
   }
 }
