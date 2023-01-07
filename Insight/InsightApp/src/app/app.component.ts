@@ -7,24 +7,39 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  states: string[] = ['Wisconsin', 'Minnesota', 'Indiana', 'Ohio', 'Michigan'];
-  toggle_direction: string = 'keyboard_arrow_right';
-  selected = '';
+  toggleDirection: string = 'keyboard_arrow_left';
+  tenants: any = [
+    { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
+    { site: 'MN', environments: ['Prod'] },
+    { site: 'IN', environments: ['Dev', 'Test', 'Prod'] },
+    { site: 'OH', environments: ['Test', 'Alt', 'Prod'] },
+    { site: 'MI', environments: ['UAT', 'Prod'] },
+  ];
+  selectedTenant: any = {};
 
   constructor(private http: HttpClient) {}
 
-  toggle_sidebar(sidebar: any): void {
+  changeTenant(site: string, environment: string): void {
+    localStorage.setItem('site', site); // Set site data to client's local storage
+    localStorage.setItem('environment', environment); // Set environment data to client's local storage
+    this.selectedTenant = {}; 
+  }
+
+  /**
+   * Get the tenant a client has previously selected to persist data despite browser refreshes
+   * @returns client's local storage of Tenant selection (site and environment) 
+   */
+  getTenant(): any {
+    return {
+      site: localStorage.getItem('site'),
+      environment: localStorage.getItem('environment'),
+    };
+  }
+
+  toggleSidebar(sidebar: any): void {
     sidebar.toggle();
-    this.toggle_direction === 'keyboard_arrow_right'
-      ? (this.toggle_direction = 'keyboard_arrow_left')
-      : (this.toggle_direction = 'keyboard_arrow_right');
-  }
-
-  changeSite(selector: string): void {
-    this.selected = selector;
-  }
-
-  getSite(): string {
-    return this.selected;
+    this.toggleDirection === 'keyboard_arrow_right'
+      ? (this.toggleDirection = 'keyboard_arrow_left')
+      : (this.toggleDirection = 'keyboard_arrow_right');
   }
 }
