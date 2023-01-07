@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  toggleDirection: string = 'keyboard_arrow_left';
+  toggleDirection: string;
   tenants: any = [
     { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
     { site: 'MN', environments: ['Prod'] },
@@ -18,7 +18,9 @@ export class AppComponent {
   ];
   selectedTenant: any = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
+  }
 
   changeTenant(site: string, environment: string): void {
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
@@ -35,9 +37,14 @@ export class AppComponent {
   }
 
   toggleSidebar(sidebar: any): void {
-    sidebar.toggle();
     this.toggleDirection === 'keyboard_arrow_right'
       ? (this.toggleDirection = 'keyboard_arrow_left')
       : (this.toggleDirection = 'keyboard_arrow_right');
+
+    localStorage.setItem('toggleDirection', this.toggleDirection)
+  }
+
+  getToggle(): boolean {
+    return this.toggleDirection === 'keyboard_arrow_right' ? false : true;
   }
 }
