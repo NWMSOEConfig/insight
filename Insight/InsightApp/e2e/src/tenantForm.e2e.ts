@@ -5,6 +5,9 @@ describe('Tenant form', () => {
 
   beforeEach(async () => {
     browser.get(browser.baseUrl); // Navigate to browser
+    browser.executeScript('window.localStorage.clear();');
+    browser.executeScript('window.sessionStorage.clear();');
+    browser.driver.manage().deleteAllCookies();
   });
 
   it('can select a site and environment', async () => {

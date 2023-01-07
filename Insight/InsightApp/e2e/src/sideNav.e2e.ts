@@ -9,6 +9,9 @@ describe('Side navigation', () => {
 
   beforeEach(async () => {
     browser.get(browser.baseUrl); // Navigate to browser
+    browser.executeScript('window.localStorage.clear();');
+    browser.executeScript('window.sessionStorage.clear();');
+    browser.driver.manage().deleteAllCookies();
   });
 
   it('is open by default', async () => {
@@ -63,5 +66,17 @@ describe('Side navigation', () => {
     await element(by.id('history')).click(); // Click history button
 
     expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + 'history'); // Verify correct URL
+  });
+
+  it("can persist user's toggle selection", async () => {
+    await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
+
+    const toggleDirection = element(by.id('sideNavToggleId')).getText();
+
+    browser.refresh(); // Refresh the browser
+
+    expect(toggleDirection).toEqual(
+      element(by.id('sideNavToggleId')).getText()
+    ); // Verify that toggle direction has not changed
   });
 });
