@@ -7,11 +7,13 @@ describe('Side navigation', () => {
   const leftIcon = 'keyboard_arrow_left';
   const rightIcon = 'keyboard_arrow_right';
 
-  beforeEach(async () => {
+  beforeEach(() => {
     browser.get(browser.baseUrl); // Navigate to browser
+  });
+
+  afterEach(() => {
     browser.executeScript('window.localStorage.clear();');
-    browser.executeScript('window.sessionStorage.clear();');
-    browser.driver.manage().deleteAllCookies();
+    browser.refresh();
   });
 
   it('is open by default', async () => {
@@ -27,7 +29,11 @@ describe('Side navigation', () => {
   it('can open side navigation', async () => {
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
 
+    browser.sleep(1000);
+
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
+    
+    browser.sleep(1000);
 
     expect(leftIcon).toEqual(
       await element(by.id(sideNavToggleId)).getText() // Verify that toggle arrow is pointing left (to indicate closing sideNav)
@@ -44,6 +50,8 @@ describe('Side navigation', () => {
     expect(rightIcon).toEqual(
       await element(by.id(sideNavToggleId)).getText() // Verify that toggle arrow is now pointing right
     );
+
+    browser.sleep(1000);
 
     expect('none').toEqual(
       await element(by.id(sideNavId)).getCssValue('display') // Verify that the side navigation is hidden
@@ -71,12 +79,10 @@ describe('Side navigation', () => {
   it("can persist user's toggle selection", async () => {
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
 
-    const toggleDirection = element(by.id('sideNavToggleId')).getText();
+    const toggleDirection = element(by.id(sideNavToggleId)).getText();
 
     browser.refresh(); // Refresh the browser
 
-    expect(toggleDirection).toEqual(
-      element(by.id('sideNavToggleId')).getText()
-    ); // Verify that toggle direction has not changed
+    expect(toggleDirection).toEqual(element(by.id(sideNavToggleId)).getText()); // Verify that toggle direction has not changed
   });
 });

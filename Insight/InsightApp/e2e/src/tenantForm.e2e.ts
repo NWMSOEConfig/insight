@@ -3,11 +3,13 @@ import { browser, by, element } from 'protractor';
 describe('Tenant form', () => {
   const tenantForm = element(by.id('tenantForm')); // Constant to describe the tenant form
 
-  beforeEach(async () => {
+  beforeEach(() => {
     browser.get(browser.baseUrl); // Navigate to browser
+  });
+
+  afterEach(() => {
     browser.executeScript('window.localStorage.clear();');
-    browser.executeScript('window.sessionStorage.clear();');
-    browser.driver.manage().deleteAllCookies();
+    browser.refresh();
   });
 
   it('can select a site and environment', async () => {
