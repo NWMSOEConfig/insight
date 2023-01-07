@@ -2,7 +2,7 @@
 <mat-toolbar color="primary">
   <span>New World</span>
   <span class="spacer"></span>
-  <mat-form-field id="tenantForm" (mouseout)="selectedTenant={}">
+  <mat-form-field id="tenantForm" (mouseout)="selectedTenant = {}">
     <mat-label>
       {{
         getTenant().environment == null
@@ -24,6 +24,7 @@
       <div *ngIf="selectedTenant.environment == null">
         <mat-option
           *ngFor="let environment of selectedTenant.environments"
+          (onSelectionChange)="selectedTenant.environment = environment"
           (click)="changeTenant(selectedTenant.site, environment)"
         >
           {{ environment }}

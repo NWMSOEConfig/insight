@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -20,20 +21,17 @@ export class AppComponent {
   constructor(private http: HttpClient) {}
 
   changeTenant(site: string, environment: string): void {
-    localStorage.setItem('site', site); // Set site data to client's local storage
-    localStorage.setItem('environment', environment); // Set environment data to client's local storage
-    this.selectedTenant = {}; 
+    localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
+    this.selectedTenant = {};
   }
 
   /**
    * Get the tenant a client has previously selected to persist data despite browser refreshes
-   * @returns client's local storage of Tenant selection (site and environment) 
+   * @returns client's local storage of Tenant selection (site and environment)
    */
   getTenant(): any {
-    return {
-      site: localStorage.getItem('site'),
-      environment: localStorage.getItem('environment'),
-    };
+    const noTenant = JSON.stringify({ site: null, environment: null });
+    return JSON.parse(localStorage.getItem('tenant') || noTenant);
   }
 
   toggleSidebar(sidebar: any): void {
