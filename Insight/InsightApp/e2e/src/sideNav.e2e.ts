@@ -24,30 +24,26 @@ describe('Side navigation', () => {
   it('can open side navigation', async () => {
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
 
-    browser.sleep(1000); // Delay to allow sideNav to close
-
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
 
     expect(leftIcon).toEqual(
       await element(by.id(sideNavToggleId)).getText() // Verify that toggle arrow is pointing left (to indicate closing sideNav)
     );
 
-    expect('visible').toEqual(
-      await element(by.id(sideNavId)).getCssValue('visibility') // Verify that the side navigation is visible
+    expect('none').not.toEqual(
+      await element(by.id(sideNavId)).getCssValue('display') // Verify that the side navigation is visible
     );
   });
 
   it('can can close side navigation', async () => {
     await element(by.id(sideNavToggleId)).click(); // Click the side nav toggle
 
-    browser.sleep(1000); // Delay to allow sideNav to close
-
     expect(rightIcon).toEqual(
       await element(by.id(sideNavToggleId)).getText() // Verify that toggle arrow is now pointing right
     );
 
-    expect('hidden').toEqual(
-      await element(by.id(sideNavId)).getCssValue('visibility') // Verify that the side navigation is hidden
+    expect('none').toEqual(
+      await element(by.id(sideNavId)).getCssValue('display') // Verify that the side navigation is hidden
     );
   });
 
