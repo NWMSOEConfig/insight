@@ -45,6 +45,20 @@ describe('Tenant form', () => {
       .mouseMove(element.all(by.tagName('span')).first())
       .click(); // Move the mouse and click away i.e. first span element
 
-      expect(initialText).toEqual(tenantForm.getText()); // Verify that drop-down has not changed
+    expect(initialText).toEqual(tenantForm.getText()); // Verify that drop-down has not changed
+  });
+
+  it("will persist user's selection", async () => {
+    tenantForm.click(); // Click the tenant drop-down
+
+    await element.all(by.tagName('mat-option')).first().click(); // Click the first site option
+
+    await element.all(by.tagName('mat-option')).first().click(); // Click the first environment option
+
+    const selection = tenantForm.getText(); // Get user selection from drop-down
+
+    browser.refresh(); // Refresh the browser
+
+    expect(selection).toEqual(tenantForm.getText()); // Verify that tenant's drop-down text has not changed
   });
 });
