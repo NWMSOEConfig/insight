@@ -44,7 +44,7 @@ export class AppComponent {
     localStorage.setItem('toggleDirection', this.toggleDirection)
   }
 
-  getToggle(): boolean {
+  isSidebarToggled(): boolean {
     return this.toggleDirection === 'keyboard_arrow_right' ? false : true;
   }
 }

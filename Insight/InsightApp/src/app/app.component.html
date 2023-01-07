@@ -43,7 +43,7 @@
 <!-- Main Container -->
 <mat-drawer-container>
   <!-- Side Navigation -->
-  <mat-drawer #drawer mode="side" [opened]="getToggle()" id="sideNav">
+  <mat-drawer #drawer mode="side" [opened]="isSidebarToggled()" id="sideNav">
     <button mat-button routerLink="configuration" id="configuration">
       <mat-icon>settings</mat-icon>
       <span>Configuration</span>
