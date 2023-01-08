@@ -2,13 +2,33 @@
 <mat-toolbar color="primary">
   <span>New World</span>
   <span class="spacer"></span>
-  <mat-form-field>
-    <mat-label>Select a website</mat-label>
-    <mat-select [(value)]="selected">
-      <mat-option *ngFor="let state of states" [value]="state">
-        {{ state }}
-        {{ changeSite(selected) }}
-      </mat-option>
+  <mat-form-field id="tenantForm" (mouseout)="selectedTenant={}">
+    <mat-label>
+      {{
+        getTenant().environment == null
+          ? "Select a tenant"
+          : getTenant().site + " (" + getTenant().environment + ")"
+      }}
+    </mat-label>
+
+    <mat-select #selector>
+      <div *ngIf="selectedTenant.site == null">
+        <mat-option
+          *ngFor="let tenant of tenants"
+          (click)="selector.open()"
+          (onSelectionChange)="selectedTenant = tenant"
+        >
+          {{ tenant.site }}
+        </mat-option>
+      </div>
+      <div *ngIf="selectedTenant.environment == null">
+        <mat-option
+          *ngFor="let environment of selectedTenant.environments"
+          (click)="changeTenant(selectedTenant.site, environment)"
+        >
+          {{ environment }}
+        </mat-option>
+      </div>
     </mat-select>
   </mat-form-field>
   <span class="spacer"></span>
@@ -19,11 +39,10 @@
     <mat-icon>settings</mat-icon>
   </button>
 </mat-toolbar>
-
 <!-- Main Container -->
 <mat-drawer-container>
   <!-- Side Navigation -->
-  <mat-drawer #drawer mode="side">
+  <mat-drawer #drawer mode="side" opened="true">
     <button mat-button routerLink="configuration">
       <mat-icon>settings</mat-icon>
       <span>Configuration</span>
@@ -43,10 +62,10 @@
     mat-mini-fab
     matTooltip="Toggle sidebar"
     matTooltipPosition="right"
-    (click)="toggle_sidebar(this.drawer)"
+    (click)="toggleSidebar(this.drawer)"
     color="accent"
   >
-    <mat-icon>{{ toggle_direction }}</mat-icon>
+    <mat-icon>{{ toggleDirection }}</mat-icon>
   </button>
   <router-outlet></router-outlet>
 </mat-drawer-container>

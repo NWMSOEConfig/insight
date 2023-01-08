@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-describe('Angular App', () => {
+describe('Example Test', () => {
   it('example read & click', async () => {
     browser.get(browser.baseUrl); // Navigate to browser
 
