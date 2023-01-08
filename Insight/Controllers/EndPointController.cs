@@ -102,13 +102,11 @@ public class DataController : ControllerBase
 
     private static readonly List<QueueEntry> _queue = new();
 
-    [HttpGet]
-    [Route("setting")]
-    public IActionResult GetSetting(string name)
+    public NewWorldSetting GetQueuedSetting(string name)
     {
         var setting = _settings.FirstOrDefault(s => s.Name == name);
 
-        return setting is null ? BadRequest() : Ok(setting);
+        return setting;
     }
 
     [HttpGet]
@@ -118,14 +116,17 @@ public class DataController : ControllerBase
         string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
         Console.WriteLine("Hello World");
-        try
-        {
-            settings = await httpController.PopulateGetRequest(url);
-        }catch (ArgumentException)
-        {
-            return BadRequest($"Url {url} is invalid");
+        var setting = GetQueuedSetting(name);
+        if(setting == null){
+            try
+            {
+                settings = await httpController.PopulateGetRequest(url);
+            }catch (ArgumentException)
+            {
+                return BadRequest($"Url {url} is invalid");
+            }
+            setting = settings.FirstOrDefault(s => s.Name == name);
         }
-        var setting = settings.FirstOrDefault(s => s.Name == name);
 
         return setting is null ? BadRequest() : Ok(setting);
     }
