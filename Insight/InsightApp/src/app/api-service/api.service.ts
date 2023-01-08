@@ -16,7 +16,7 @@ export class ApiService {
 
   public getSetting(name: string) {
     return this.httpClient.get<Setting>(
-      `${this.apiURL}/data/setting?name=${name}`
+      `${this.apiURL}/data/settinglive?name=${name}`
     );
   }
 

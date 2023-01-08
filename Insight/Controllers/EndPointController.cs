@@ -113,8 +113,9 @@ public class DataController : ControllerBase
 
     [HttpGet]
     [Route("livesetting")]
-    public async Task<IActionResult> GetSettingAsync(string name, [FromBody] string url)
+    public async Task<IActionResult> GetSettingAsync(string name)
     {
+        string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
         Console.WriteLine("Hello World");
         try
