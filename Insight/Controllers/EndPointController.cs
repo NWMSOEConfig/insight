@@ -181,15 +181,19 @@ public class DataController : ControllerBase
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
         List<NewWorldSetting> settings;
+
         try
         {
             settings = await httpController.PopulateGetRequest(url);
-        }catch (ArgumentException)
+        }
+        catch (ArgumentException)
         {
             return BadRequest($"Url {url} is invalid");
         }
-        _dbController.PopulateHierarchy(settings, tenant, environment);
-        return Ok($"Url {url} is valid");
+
+        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment);
+
+        return Ok(lastPulled);
     }
 }
 

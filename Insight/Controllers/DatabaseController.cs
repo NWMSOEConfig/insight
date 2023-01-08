@@ -44,13 +44,15 @@ public class DataServer {
     }
 
     /// <summary>
-    /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database
-    /// If a setting already exists, all relevant data is copied before updating
+    /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
+    /// If a setting already exists, all relevant data is copied before updating.
+    /// The EnvironmentLastPulled for the tenant's environment is then set to the current time.
     /// </summary>
     /// <param name="settings"> All the settings to send to database </param>
     /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
     /// <param name="environmentName"> The environment to which the setting should be applied  </param>
-    public async void PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName)
+    /// <returns>The new EnvironmentLastPulled time</returns>
+    public async Task<DateTime> PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName)
     {
         //Iterate through all settings
         foreach (NewWorldSetting setting in settings)
@@ -103,10 +105,21 @@ public class DataServer {
                 await _settingsService.CreateAsync(dbSetting);
             }
         }
+
+        var tenant = await _tenantService.GetCategoryAsync(tenantName);
+        var lastPulled = DateTime.UtcNow;
+
+        if (tenant is not null)
+        {
+            if (tenant.EnvironmentLastPulled is null)
+            {
+                tenant.EnvironmentLastPulled = new();
+            }
+
+            tenant.EnvironmentLastPulled[environmentName] = lastPulled;
+            await _tenantService.UpdateAsync(tenantName, tenant);
+        }
+
+        return lastPulled;
     }
-    
 }
-
-
-
-
