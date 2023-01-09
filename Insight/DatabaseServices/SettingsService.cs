@@ -33,7 +33,7 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
     {
         // create placeholder lists to hold information and one list to return
         List<DatabaseSetting> settings = new List<DatabaseSetting>();
-        List<DatabaseTenant> tenants = new List<DatabaseTenant>();
+        DatabaseTenant tenants = new DatabaseTenant();
         List<DatabaseSetting> matched_settings = new List<DatabaseSetting>();
 
         // get all settings
@@ -41,15 +41,11 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
 
         settings.ForEach(x => {
             if(x.Tenants != null) {
-                 tenants = x.Tenants.ToList();
+                 tenants = x.Tenants;
                 // search in each setting, for each tenant, to see of the environment name matches
-                tenants.ForEach(y => {
-                    if(y.Environment.Contains(tenantName) && y.Name == tenantName)
-                    {
+                if(tenants.Environment != null && tenants.Name != null)
+                    if(tenants.Environment.Contains(environment) && tenants.Name == tenantName)
                         matched_settings.Add(x);
-                        return;
-                    }
-                });
             }
         });
 
