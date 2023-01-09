@@ -1,2 +1,3 @@
 namespace Insight.Models;
-public record Subcategory(int Id, string Name, IList<int> SettingIds);
+
+public record Subcategory(int Id, string Name, IList<string> SettingNames);

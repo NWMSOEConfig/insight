@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/InsightApi/InsightApi.csproj",
+                "${workspaceFolder}/Insight/Insight.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/InsightApi/InsightApi.csproj",
+                "${workspaceFolder}/Insight/Insight.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/InsightApi/InsightApi.csproj"
+                "${workspaceFolder}/Insight/Insight.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

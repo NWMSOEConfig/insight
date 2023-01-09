@@ -1,6 +1,5 @@
-import { Component, DebugElement, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
-import { getCategory } from '../data-service';
 
 /**
  * TODO: Temporary location
@@ -19,14 +18,25 @@ enum DbObjects {
   styleUrls: ['./category-list.component.css'],
 })
 export class CategoryListComponent implements OnInit {
-  settingClicked = false;
-  settingId = 0;
+  settingClicked: boolean = false;
+  settingName = '';
   children: any = [];
-  level = DbObjects.Tenant;
+  level: DbObjects;
   parent: any;
-  breadcrumbs: any = [{ name: 'Root', level: this.level }];
+  breadcrumbs: any;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) {
+    this.parent = JSON.parse(localStorage.getItem('parent')!);
+
+    this.level = parseInt(
+      localStorage.getItem('level') || String(DbObjects.Tenant)
+    );
+
+    const noCrumbs = JSON.stringify([{ name: 'Root', level: this.level }]);
+    this.breadcrumbs = JSON.parse(
+      localStorage.getItem('breadcrumbs') || noCrumbs
+    );
+  }
 
   /** API request call to parent and its children
    * TODO: Make API requests less redundant
@@ -58,8 +68,9 @@ export class CategoryListComponent implements OnInit {
     } else if (target == DbObjects.Subcategory) {
       this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
         this.parent = data;
-        this.parent.settingIds.forEach((id: number) => {
-          this.apiService.getSetting(id).subscribe((data) => {
+        data.settingNames.forEach((name: string) => {
+          this.settingName = name;
+          this.apiService.getSetting(name).subscribe((data) => {
             this.children.push(data);
           });
         });
@@ -67,12 +78,14 @@ export class CategoryListComponent implements OnInit {
     } else {
       // we've gone too far!!! 😲😲😲
       this.settingClicked = true;
-      this.settingId = this.parent.id;
+      this.settingName = this.parent.name;
     }
+
+    this.updateLocalStorage();
   }
 
   ngOnInit(): void {
-    this.requestDbTarget(DbObjects.Tenant);
+    this.requestDbTarget(this.level);
   }
 
   clickChild(child: any) {
@@ -93,5 +106,11 @@ export class CategoryListComponent implements OnInit {
     this.breadcrumbs.length = index + 1;
     this.settingClicked = false;
     this.requestDbTarget(breadcrumb.level);
+  }
+
+  updateLocalStorage(): void {
+    localStorage.setItem('parent', JSON.stringify(this.parent));
+    localStorage.setItem('level', String(this.level));
+    localStorage.setItem('breadcrumbs', JSON.stringify(this.breadcrumbs));
   }
 }
