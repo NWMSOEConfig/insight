@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { setTenant } from './tenant-singleton';
 
 @Component({
   selector: 'app-root',
@@ -17,17 +18,20 @@ export class AppComponent {
   ];
   selectedTenant: any = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    setTenant(this.getTenant());
+  }
 
   changeTenant(site: string, environment: string): void {
     localStorage.setItem('site', site); // Set site data to client's local storage
     localStorage.setItem('environment', environment); // Set environment data to client's local storage
-    this.selectedTenant = {}; 
+    setTenant(this.getTenant());
+    this.selectedTenant = {};
   }
 
   /**
    * Get the tenant a client has previously selected to persist data despite browser refreshes
-   * @returns client's local storage of Tenant selection (site and environment) 
+   * @returns client's local storage of Tenant selection (site and environment)
    */
   getTenant(): any {
     return {

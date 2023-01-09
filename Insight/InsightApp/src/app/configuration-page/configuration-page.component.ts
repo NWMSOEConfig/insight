@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
+import { getTenant } from '../tenant-singleton';
 
 @Component({
   selector: 'app-configuration-page',
@@ -19,7 +20,10 @@ export class ConfigurationPageComponent implements OnInit {
 
   clickRefresh(): void {
     this.disabled = true;
-    this.apiService.postPopulate('https://pauat.newworldnow.com/v7/api/applicationsettings/', 'TODO', 'TODO').subscribe(object => {
+
+    const tenant = getTenant();
+
+    this.apiService.postPopulate('https://pauat.newworldnow.com/v7/api/applicationsettings/', tenant.site ?? '', tenant.environment ?? '').subscribe(object => {
       const dateSeconds = Date.parse(object as string) / 1000;
       const nowSeconds = Date.now() / 1000;
       this.secondsLeft = Math.ceil(dateSeconds + 300 - nowSeconds);

@@ -124,16 +124,22 @@ public class DataServer {
 
         lastPulled = DateTime.UtcNow;
 
-        if (tenant is not null)
+        if (tenant is null)
         {
-            if (tenant.EnvironmentLastPulled is null)
+            tenant = new DatabaseTenant
             {
-                tenant.EnvironmentLastPulled = new();
-            }
-
-            tenant.EnvironmentLastPulled[environmentName] = lastPulled.Value;
-            await _tenantService.UpdateAsync(tenant.Id, tenant);
+                Name = tenantName,
+            };
+            await _tenantService.CreateAsync(tenant);
         }
+
+        if (tenant.EnvironmentLastPulled is null)
+        {
+            tenant.EnvironmentLastPulled = new();
+        }
+
+        tenant.EnvironmentLastPulled[environmentName] = lastPulled.Value;
+        await _tenantService.UpdateAsync(tenant.Id, tenant);
 
         return lastPulled.Value;
     }
