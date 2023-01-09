@@ -9,7 +9,7 @@ const { SpecReporter } = require("jasmine-spec-reporter");
  */
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: ["./src/**/*.e2e-spec.ts"],
+  specs: ["./src/**/*.e2e.ts"],
   directConnect: true,
   // chromeDriver: "./node_modules/webdriver-manager/selenium/chromedriver_107.0.5304.62",
   // geckoDriver: "./node_modules/webdriver-manager/selenium/geckodriver-v0.32.0",

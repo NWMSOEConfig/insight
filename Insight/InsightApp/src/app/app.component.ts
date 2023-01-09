@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  toggleDirection: string = 'keyboard_arrow_left';
+  toggleDirection: string;
   tenants: any = [
     { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
     { site: 'MN', environments: ['Prod'] },
@@ -17,29 +18,33 @@ export class AppComponent {
   ];
   selectedTenant: any = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
+  }
 
   changeTenant(site: string, environment: string): void {
-    localStorage.setItem('site', site); // Set site data to client's local storage
-    localStorage.setItem('environment', environment); // Set environment data to client's local storage
-    this.selectedTenant = {}; 
+    localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
+    this.selectedTenant = {};
   }
 
   /**
    * Get the tenant a client has previously selected to persist data despite browser refreshes
-   * @returns client's local storage of Tenant selection (site and environment) 
+   * @returns client's local storage of Tenant selection (site and environment)
    */
   getTenant(): any {
-    return {
-      site: localStorage.getItem('site'),
-      environment: localStorage.getItem('environment'),
-    };
+    const noTenant = JSON.stringify({ site: null, environment: null });
+    return JSON.parse(localStorage.getItem('tenant') || noTenant);
   }
 
   toggleSidebar(sidebar: any): void {
-    sidebar.toggle();
     this.toggleDirection === 'keyboard_arrow_right'
       ? (this.toggleDirection = 'keyboard_arrow_left')
       : (this.toggleDirection = 'keyboard_arrow_right');
+
+    localStorage.setItem('toggleDirection', this.toggleDirection)
+  }
+
+  isSidebarToggled(): boolean {
+    return this.toggleDirection === 'keyboard_arrow_right' ? false : true;
   }
 }
