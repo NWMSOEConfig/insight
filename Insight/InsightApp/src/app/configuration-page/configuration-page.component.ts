@@ -22,8 +22,8 @@ export class ConfigurationPageComponent implements OnInit {
     this.apiService.postPopulate('https://pauat.newworldnow.com/v7/api/applicationsettings/', 'TODO', 'TODO').subscribe(object => {
       const dateSeconds = Date.parse(object as string) / 1000;
       const nowSeconds = Date.now() / 1000;
-      this.secondsLeft = dateSeconds + 300 - nowSeconds;
-      this.timer = setInterval(this.tick, 1000);
+      this.secondsLeft = Math.ceil(dateSeconds + 300 - nowSeconds);
+      this.timer = setInterval(() => this.tick(), 1000);
     });
   }
 
