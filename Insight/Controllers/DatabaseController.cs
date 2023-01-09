@@ -55,6 +55,13 @@ public class DataServer {
     /// <returns>The new EnvironmentLastPulled time</returns>
     public async Task<DateTime> PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName)
     {
+        // If we just did this already, don't update yet.
+        var tenant = await _tenantService.GetCategoryAsync(tenantName);
+        var lastPulled = tenant?.EnvironmentLastPulled?[environmentName];
+        if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
+            return lastPulled.Value;
+        }
+
         //Iterate through all settings
         foreach (NewWorldSetting setting in settings)
         {    
@@ -115,8 +122,7 @@ public class DataServer {
             }
         }
 
-        var tenant = await _tenantService.GetCategoryAsync(tenantName);
-        var lastPulled = DateTime.UtcNow;
+        lastPulled = DateTime.UtcNow;
 
         if (tenant is not null)
         {
@@ -125,10 +131,10 @@ public class DataServer {
                 tenant.EnvironmentLastPulled = new();
             }
 
-            tenant.EnvironmentLastPulled[environmentName] = lastPulled;
+            tenant.EnvironmentLastPulled[environmentName] = lastPulled.Value;
             await _tenantService.UpdateAsync(tenant.Id, tenant);
         }
 
-        return lastPulled;
+        return lastPulled.Value;
     }
 }

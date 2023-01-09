@@ -1,6 +1,7 @@
 <button mat-button id="refresh" (click)="clickRefresh()" [disabled]="disabled">
   <mat-icon>refresh</mat-icon>
   <span>Refresh settings tree</span>
+  <span *ngIf="secondsLeft > 0"> ({{secondsLeft}} seconds left)</span>
 </button>
 
 <app-category-list></app-category-list>
