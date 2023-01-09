@@ -127,7 +127,6 @@ public class DataController : ControllerBase
     {
         string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
-        Console.WriteLine("Hello World");
         var setting = GetQueuedSetting(name);
         if(setting == null){
             try
