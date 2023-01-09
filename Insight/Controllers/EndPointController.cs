@@ -22,10 +22,10 @@ public class UserController : ControllerBase {
         return vals;
     }
 
-    [HttpGet("tenants/{tenant}")]
-    public async Task<List<DatabaseSetting>> tenantContext(string environment)
+    [HttpGet("tenants/{environment}/{tenant}")]
+    public async Task<List<DatabaseSetting>> tenantContext(string environment, string tenant)
     {
-        return await _dbController.GetTenantSettingsAsync(environment);
+        return await _dbController.GetTenantSettingsAsync(tenant, environment);
     }
 
     [HttpGet]
@@ -223,6 +223,11 @@ public class DataController : ControllerBase
         _dbController.PopulateHierarchy(settings, tenant, environment);
         return Ok($"Url {url} is valid");
     }
+
+    [HttpDelete]
+    [Route("DeleteAllSettings")]
+    public Task Delete() =>
+        _dbController.DeleteAllAsync();
 }
 
 

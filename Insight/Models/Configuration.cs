@@ -24,7 +24,7 @@ public class DatabaseSetting
 
     public string[] EnvironmentNames { get; set; } = null!;
 
-    public DatabaseTenant[] Tenants { get; set; } = null!;
+    public DatabaseTenant Tenants { get; set; } = null!;
 }
 
 public class DatabaseTenant {

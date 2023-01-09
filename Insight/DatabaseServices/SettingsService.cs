@@ -23,29 +23,30 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
     
     public async Task<List<DatabaseSetting>> GetEnvironmentAsync(string tenantId)
     {
-        return await collection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
+        return await collection.Find(x => x.EnvironmentNames.Contains(tenantId)).ToListAsync();
     }
 
-    public async Task<List<DatabaseSetting>> GetTenantsAsync(string tenantName)
+    public async Task DeleteAllAsync() =>
+        await collection.DeleteManyAsync(_ => true);
+
+    public async Task<List<DatabaseSetting>> GetTenantsAsync(string tenantName, string environment)
     {
         // create placeholder lists to hold information and one list to return
         List<DatabaseSetting> settings = new List<DatabaseSetting>();
-        List<DatabaseTenant> tenants = new List<DatabaseTenant>();
+        DatabaseTenant tenants = new DatabaseTenant();
         List<DatabaseSetting> matched_settings = new List<DatabaseSetting>();
 
         // get all settings
         settings = await GetAsync();
 
         settings.ForEach(x => {
-            tenants = x.Tenants.ToList();
-            // search in each setting, for each tenant, to see of the environment name matches
-            tenants.ForEach(y => {
-                if(y.Environment.Contains(tenantName))
-                {
-                    matched_settings.Add(x);
-                    return;
-                }
-            });
+            if(x.Tenants != null) {
+                 tenants = x.Tenants;
+                // search in each setting, for each tenant, to see of the environment name matches
+                if(tenants.Environment != null && tenants.Name != null)
+                    if(tenants.Environment.Contains(environment) && tenants.Name == tenantName)
+                        matched_settings.Add(x);
+            }
         });
 
         return matched_settings;
