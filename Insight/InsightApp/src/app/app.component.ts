@@ -21,11 +21,11 @@ export class AppComponent {
 
   constructor(private http: HttpClient) {
     setTenant(this.getTenant());
+    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
   }
 
   changeTenant(site: string, environment: string): void {
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
-    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
     setTenant(this.getTenant());
     this.selectedTenant = {};
   }
