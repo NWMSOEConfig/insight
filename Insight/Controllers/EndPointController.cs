@@ -84,7 +84,7 @@ public class DataController : ControllerBase
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
         new(0, "Subcategory 1", new List<string> { "Foo" }),
-        new(1, "Subcategory 2", new List<string> { "Bar" }),
+        new(1, "Subcategory 2", new List<string> { "Bar", "ActionItemCaseAssignmentEnabled" }),
         new(2, "Subcategory 3", new List<string> { "Baz" })
     };
 
@@ -102,11 +102,43 @@ public class DataController : ControllerBase
 
     private static readonly List<QueueEntry> _queue = new();
 
-    [HttpGet]
-    [Route("setting")]
-    public IActionResult GetSetting(string name)
+    
+    /// <summary>
+    /// This method will eventually get a setting from the saved queue. It is presently being mocked.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public NewWorldSetting GetQueuedSetting(string name)
     {
         var setting = _settings.FirstOrDefault(s => s.Name == name);
+
+        return setting;
+    }
+    /// <summary>
+    /// This method retrieves setting information to display to the editor.
+    /// If the setting has been modified it gets queued information instead.
+    /// #TODO: Add tenant and environment filters, and get URL from environment
+    /// </summary>
+    /// <param name="name"></param> The setting name to search for.
+    /// <returns></returns>
+    [HttpGet]
+    [Route("livesetting")]
+    public async Task<IActionResult> GetSettingAsync(string name)
+    {
+        string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
+        List<NewWorldSetting> settings;
+        Console.WriteLine("Hello World");
+        var setting = GetQueuedSetting(name);
+        if(setting == null){
+            try
+            {
+                settings = await httpController.PopulateGetRequest(url);
+            }catch (ArgumentException)
+            {
+                return BadRequest($"Url {url} is invalid");
+            }
+            setting = settings.FirstOrDefault(s => s.Name == name);
+        }
 
         return setting is null ? BadRequest() : Ok(setting);
     }
