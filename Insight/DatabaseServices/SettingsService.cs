@@ -40,15 +40,17 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
         settings = await GetAsync();
 
         settings.ForEach(x => {
-            tenants = x.Tenants.ToList();
-            // search in each setting, for each tenant, to see of the environment name matches
-            tenants.ForEach(y => {
-                if(y.Environment.Contains(tenantName) && y.Name == tenantName)
-                {
-                    matched_settings.Add(x);
-                    return;
-                }
-            });
+            if(x.Tenants != null) {
+                 tenants = x.Tenants.ToList();
+                // search in each setting, for each tenant, to see of the environment name matches
+                tenants.ForEach(y => {
+                    if(y.Environment.Contains(tenantName) && y.Name == tenantName)
+                    {
+                        matched_settings.Add(x);
+                        return;
+                    }
+                });
+            }
         });
 
         return matched_settings;

@@ -165,7 +165,7 @@ public class DataController : ControllerBase
     [Route("populate")]
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
-        List<NewWorldSetting> settings = new List<NewWorldSetting>();
+        List<NewWorldSetting> settings;
         try
         {
             settings = await httpController.PopulateGetRequest(url);
