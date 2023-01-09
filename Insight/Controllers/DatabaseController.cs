@@ -124,7 +124,7 @@ public class DataServer {
                 dbSetting.EnvironmentNames.SetValue(environmentName, 0);
                 
                 dbTenant.Name = tenantName;
-                dbTenant.Environment.SetValue(environmentName, 0);
+                dbTenant.Environment = new string[] { environmentName };
                 dbSetting.Tenants = dbTenant;
                     
                 await _settingsService.CreateAsync(dbSetting);
