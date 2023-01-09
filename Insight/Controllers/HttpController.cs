@@ -30,16 +30,21 @@ class HttpController
             response.EnsureSuccessStatusCode();
             //Console.WriteLine(await response.Content.ReadAsStringAsync());
 
-           List<NewWorldSetting>? settings = await response.Content.ReadFromJsonAsync<List<NewWorldSetting>>();
-           if (settings != null)
-           {
-               Console.WriteLine(settings.First().Name);
+            List<Parameter>? parameters = await response.Content.ReadFromJsonAsync<List<Parameter>>();
+            List<NewWorldSetting>? settings = parameters?.Select(parameter => new NewWorldSetting(parameter.Name)
+            {
+                Parameters = new() { parameter },
+            }).ToList();
+
+            if (settings != null)
+            {
+                Console.WriteLine(settings.First().Name);
                 return settings;
-           }
-           else
-           {
+            }
+            else
+            {
                 throw new NullReferenceException("HTTP Response was invalid and cannot be deserialized.");
-           }
+            }
         }
         else
         {
