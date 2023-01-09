@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
@@ -100,7 +101,15 @@ public class DataServer {
             else
             {
                 //Create new setting
+                if (dbSetting.TenantNames is null)
+                {
+                    dbSetting.TenantNames = new string[] { string.Empty };
+                }
                 dbSetting.TenantNames.SetValue(tenantName, 0);
+                if (dbSetting.EnvironmentNames is null)
+                {
+                    dbSetting.EnvironmentNames = new string[] { string.Empty };
+                }
                 dbSetting.EnvironmentNames.SetValue(environmentName, 0);
                 await _settingsService.CreateAsync(dbSetting);
             }
@@ -117,7 +126,7 @@ public class DataServer {
             }
 
             tenant.EnvironmentLastPulled[environmentName] = lastPulled;
-            await _tenantService.UpdateAsync(tenantName, tenant);
+            await _tenantService.UpdateAsync(tenant.Id, tenant);
         }
 
         return lastPulled;

@@ -12,7 +12,7 @@ public class DatabaseTenantService : ServiceParent<DatabaseTenant>
 
         var mongoDatabase = mongoClient.GetDatabase("Configurations");
 
-        collection = mongoDatabase.GetCollection<DatabaseTenant>("DatabaseTenants");
+        collection = mongoDatabase.GetCollection<DatabaseTenant>("Tenants");
     }
 
     public async Task<DatabaseTenant?> GetAsync(string id) =>
