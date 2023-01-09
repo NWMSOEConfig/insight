@@ -41,4 +41,12 @@ export class ApiService {
       responseType: 'text',
     });
   }
+
+  public postPopulate(url: string, tenant: string, environment: string) {
+    return this.httpClient.post(`${this.apiURL}/data/populate?tenant=${tenant}&environment=${environment}`, JSON.stringify(url), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 }

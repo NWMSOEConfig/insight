@@ -22,10 +22,10 @@ public class UserController : ControllerBase {
         return vals;
     }
 
-    [HttpGet("tenants/{environment}/{tenant}")]
-    public async Task<List<DatabaseSetting>> tenantContext(string environment, string tenant)
+    [HttpGet("tenants/{tenant}")]
+    public async Task<List<DatabaseSetting>> tenantContext(string environment)
     {
-        return await _dbController.GetTenantSettingsAsync(tenant, environment);
+        return await _dbController.GetTenantSettingsAsync(environment);
     }
 
     [HttpGet]
@@ -213,21 +213,20 @@ public class DataController : ControllerBase
     public async Task<IActionResult> Populate([FromBody] string url, [FromQuery] string tenant, [FromQuery] string environment)
     {
         List<NewWorldSetting> settings;
+
         try
         {
             settings = await httpController.PopulateGetRequest(url);
-        }catch (ArgumentException)
+        }
+        catch (ArgumentException)
         {
             return BadRequest($"Url {url} is invalid");
         }
-        _dbController.PopulateHierarchy(settings, tenant, environment);
-        return Ok($"Url {url} is valid");
-    }
 
-    [HttpDelete]
-    [Route("DeleteAllSettings")]
-    public Task Delete() =>
-        _dbController.DeleteAllAsync();
+        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment);
+
+        return Ok(lastPulled);
+    }
 }
 
 

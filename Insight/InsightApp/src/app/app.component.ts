@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { setTenant } from './tenant-singleton';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -19,11 +20,13 @@ export class AppComponent {
   selectedTenant: any = {};
 
   constructor(private http: HttpClient) {
-    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
+    setTenant(this.getTenant());
   }
 
   changeTenant(site: string, environment: string): void {
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
+    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
+    setTenant(this.getTenant());
     this.selectedTenant = {};
   }
 
