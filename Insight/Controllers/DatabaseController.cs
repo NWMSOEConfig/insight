@@ -76,6 +76,7 @@ public class DataServer {
            
             if (isSettingInDatabase != null)
             {
+                dbSetting.Parameters = setting.Parameters?.ToArray();
                 //Get info from existing setting
                 dbSetting.Id = isSettingInDatabase.Id;
                 dbSetting.Category = isSettingInDatabase.Category;

@@ -1,5 +1,10 @@
+import { Category } from "./category";
+import { Parameter } from "./parameter";
+import { Tenant } from "./tenant";
+
 export interface Setting {
-  id: number,
   name: string,
-  parameterIds: number[],
+  parameters: Parameter[] | null,
+  category: Category | null,
+  tenant: Tenant | null,
 }
