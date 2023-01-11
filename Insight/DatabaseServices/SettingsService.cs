@@ -57,6 +57,16 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
     public async Task UpdateByNameAsync(string name, DatabaseSetting updatedSetting) =>
         await collection.ReplaceOneAsync(x => x.Name == name, updatedSetting);
 
+    public async Task UpdateManyAsync(IEnumerable<DatabaseSetting> settings)
+    {
+        var updates = settings.Select(setting =>
+        {
+            var filter = Builders<DatabaseSetting>.Filter.Eq(x => x.Id, setting.Id);
+            return new ReplaceOneModel<DatabaseSetting>(filter, setting);
+        });
+        await collection.BulkWriteAsync(updates);
+    }
+
     public async Task RemoveAsync(string id) =>
         await collection.DeleteOneAsync(x => x.Id == id);
 }

@@ -61,8 +61,8 @@ public class DataController : ControllerBase
         {
             Parameters = new List<Parameter>
             {
-                new("Enabled", true, true),
-                new("Foo", 123, true),
+                new("Enabled", "true", true),
+                new("Foo", "123", true),
             },
         },
         new("Bar")

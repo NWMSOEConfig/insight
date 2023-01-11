@@ -1,7 +1,4 @@
-using System;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Insight.Services;
 using Insight.Models;
@@ -57,70 +54,55 @@ public class DataServer {
     {
         // If we just did this already, don't update yet.
         var tenant = await _tenantService.GetCategoryAsync(tenantName);
-        var lastPulled = tenant?.EnvironmentLastPulled?[environmentName];
+        DateTime? lastPulled = tenant?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
+            ? tenant.EnvironmentLastPulled[environmentName] : null;
         if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
             return lastPulled.Value;
         }
 
-        //Iterate through all settings
-        foreach (NewWorldSetting setting in settings)
-        {    
-            //Setup our new setting    
-            DatabaseSetting dbSetting = new DatabaseSetting();
-            dbSetting.Name = setting.Name;
-            await _settingsService.CreateAsync(dbSetting);
+        var dbSettings = await _settingsService.GetAsync();
+        var newSettings = new List<DatabaseSetting>();
 
-            //Determine if setting exists
-            var isSettingInDatabase = await _settingsService.GetByNameAsync(setting.Name);
-           
-            if (isSettingInDatabase != null)
+        // Iterate through all settings
+        settings.ForEach(setting =>
+        {
+            // Determine if setting exists
+            var dbSetting = dbSettings.FirstOrDefault(s => s.Name == setting.Name);
+
+            if (dbSetting is not null)
             {
+                // Update setting
                 dbSetting.Parameters = setting.Parameters?.ToArray();
-                //Get info from existing setting
-                dbSetting.Id = isSettingInDatabase.Id;
-                dbSetting.Category = isSettingInDatabase.Category;
 
-                //Get info from existing setting while dealing with null pointers
-                if (isSettingInDatabase.TenantNames != null)
-                {
-                    dbSetting.TenantNames = isSettingInDatabase.TenantNames;
-                    dbSetting.TenantNames.Append(tenantName);
-                }
-                else
-                {
+                if (dbSetting.TenantNames is null)
                     dbSetting.TenantNames = new string[] { tenantName };
-                }
+                else if (!dbSetting.TenantNames.Contains(tenantName))
+                    dbSetting.TenantNames.Append(tenantName);
 
-                if (isSettingInDatabase.EnvironmentNames != null)
-                {
-                    dbSetting.EnvironmentNames = isSettingInDatabase.EnvironmentNames;
-                    dbSetting.EnvironmentNames.Append(environmentName);
-                }
-                else
-                {
+                if (dbSetting.EnvironmentNames is null)
                     dbSetting.EnvironmentNames = new string[] { environmentName };
-                }
-                
-                //Update setting
-                await _settingsService.UpdateByNameAsync(setting.Name, dbSetting);
-
+                else if (!dbSetting.EnvironmentNames.Contains(environmentName))
+                    dbSetting.EnvironmentNames.Append(environmentName);
             }
             else
             {
-                //Create new setting
-                if (dbSetting.TenantNames is null)
+                // Setup our new setting    
+                var newSetting = new DatabaseSetting
                 {
-                    dbSetting.TenantNames = new string[] { string.Empty };
-                }
-                dbSetting.TenantNames.SetValue(tenantName, 0);
-                if (dbSetting.EnvironmentNames is null)
-                {
-                    dbSetting.EnvironmentNames = new string[] { string.Empty };
-                }
-                dbSetting.EnvironmentNames.SetValue(environmentName, 0);
-                await _settingsService.CreateAsync(dbSetting);
+                    Name = setting.Name,
+                    Parameters = setting.Parameters?.ToArray(),
+                    TenantNames = new string[] { tenantName },
+                    EnvironmentNames = new string[] { environmentName },
+                };
+
+                newSettings.Add(newSetting);
             }
-        }
+        });
+
+        if (dbSettings.Count > 0)
+            await _settingsService.UpdateManyAsync(dbSettings);
+        if (newSettings.Count > 0)
+            await _settingsService.CreateManyAsync(newSettings);
 
         lastPulled = DateTime.UtcNow;
 
