@@ -14,8 +14,6 @@ public class DatabaseSetting
 
     public string Category { get; set; } = null!;
 
-    public string[] Parameter { get; set; }
-
     public Parameter[]? Parameters { get; set; }
 
     public bool Enabled { get; set; }

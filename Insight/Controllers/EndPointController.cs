@@ -22,10 +22,10 @@ public class UserController : ControllerBase {
         return vals;
     }
 
-    [HttpGet("tenants/{tenant}")]
-    public async Task<List<DatabaseSetting>> tenantContext(string environment)
+    [HttpGet("tenants/{tenant}/{environment}")]
+    public async Task<List<DatabaseSetting>> tenantContext(string tenant, string environment)
     {
-        return await _dbController.GetTenantSettingsAsync(environment);
+        return await _dbController.GetTenantSettingsAsync(tenant, environment);
     }
 
     [HttpGet]
@@ -226,6 +226,11 @@ public class DataController : ControllerBase
 
         return Ok(lastPulled);
     }
+
+    [HttpDelete]
+    [Route("DeleteAllSettings")]
+    public Task DeleteSettings() =>
+        _dbController.DeleteAllAsync();
 }
 
 
