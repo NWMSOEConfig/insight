@@ -1,10 +1,9 @@
-using Insight.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Insight.Services;
 
-public class ServiceParent<T> {
+public class ServiceParent<T>
+{
     protected IMongoCollection<T> collection;
 
     public async Task<List<T>> GetAsync() =>
@@ -12,4 +11,7 @@ public class ServiceParent<T> {
 
     public async Task CreateAsync(T newSetting) =>
         await collection.InsertOneAsync(newSetting);
+
+    public async Task CreateManyAsync(IEnumerable<T> items) =>
+        await collection.InsertManyAsync(items);
 }
