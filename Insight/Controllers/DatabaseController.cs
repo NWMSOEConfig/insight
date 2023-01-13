@@ -26,9 +26,9 @@ public class DataServer {
         return await _settingsService.GetEnvironmentAsync(tenantName);
     }
 
-    public async Task<List<DatabaseSetting>> GetTenantSettingsAsync(string tenantName)
+    public async Task<List<DatabaseSetting>> GetTenantSettingsAsync(string tenantName, string environmentName)
     {
-        return await _settingsService.GetTenantsAsync(tenantName);
+        return await _settingsService.GetTenantsAsync(tenantName, environmentName);
     }
 
     public async Task<List<DatabaseSetting>> GetSettingsAsync()
@@ -40,6 +40,9 @@ public class DataServer {
     {
         return await _settingsService.GetByNameAsync(name);
     }
+
+    public async Task DeleteAllAsync() =>
+        await _settingsService.DeleteAllAsync();
 
     /// <summary>
     /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
@@ -79,6 +82,28 @@ public class DataServer {
                 else if (!dbSetting.TenantNames.Contains(tenantName))
                     dbSetting.TenantNames.Append(tenantName);
 
+                if (dbSetting.Tenants is null)
+                {
+                    dbSetting.Tenants = new DatabaseTenant[]
+                    {
+                        new DatabaseTenant
+                        {
+                            Environment = new string[] { environmentName },
+                            Name = tenantName,
+                        },
+                    };
+                }
+                else if (!dbSetting.Tenants.Any(tenant => tenant.Name == tenantName))
+                {
+                    var list = dbSetting.Tenants.ToList();
+                    list.Add(new DatabaseTenant
+                    {
+                        Environment = new string[] { environmentName },
+                        Name = tenantName,
+                    });
+                    dbSetting.Tenants = list.ToArray();
+                }
+
                 if (dbSetting.EnvironmentNames is null)
                     dbSetting.EnvironmentNames = new string[] { environmentName };
                 else if (!dbSetting.EnvironmentNames.Contains(environmentName))
@@ -93,7 +118,15 @@ public class DataServer {
                     Parameters = setting.Parameters?.ToArray(),
                     TenantNames = new string[] { tenantName },
                     EnvironmentNames = new string[] { environmentName },
-                };
+                    Tenants = new DatabaseTenant[]
+                    {
+                        new DatabaseTenant
+                        {
+                            Environment = new string[] { environmentName },
+                            Name = tenantName,
+                        },
+                    },
+            };
 
                 newSettings.Add(newSetting);
             }
@@ -111,6 +144,7 @@ public class DataServer {
             tenant = new DatabaseTenant
             {
                 Name = tenantName,
+                Environment = new string[] { environmentName },
             };
             await _tenantService.CreateAsync(tenant);
         }
@@ -118,6 +152,17 @@ public class DataServer {
         if (tenant.EnvironmentLastPulled is null)
         {
             tenant.EnvironmentLastPulled = new();
+        }
+
+        if (tenant.Environment is null)
+        {
+            tenant.Environment = new string[] { environmentName };
+        }
+        else if (!tenant.Environment.Contains(environmentName))
+        {
+            var list = tenant.Environment.ToList();
+            list.Add(environmentName);
+            tenant.Environment = list.ToArray();
         }
 
         tenant.EnvironmentLastPulled[environmentName] = lastPulled.Value;
