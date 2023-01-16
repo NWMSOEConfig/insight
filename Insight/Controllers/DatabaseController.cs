@@ -170,4 +170,19 @@ public class DataServer {
 
         return lastPulled.Value;
     }
+
+    
+    public async Task<Commit?> CreateCommitFromQueue(string queueId){
+        Commit myCommit = new Commit();
+        QueuedChange? queuedChange = await _queuedChangeService.GetAsync(queueId);
+
+       if(queuedChange!=null){
+            myCommit.QueueChange = queuedChange;
+            myCommit.Time = DateTime.UtcNow;
+            await _commitService.CreateAsync(myCommit);
+            return myCommit;
+        }
+
+        return null;
+    }    
 }

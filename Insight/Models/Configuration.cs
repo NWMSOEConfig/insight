@@ -58,7 +58,7 @@ public class Commit {
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     public int CommitId { get; set; }
-    public double Time { get; set; }
+    public DateTime Time { get; set; }
     public QueuedChange QueueChange { get; set; } = null!;
 }
 

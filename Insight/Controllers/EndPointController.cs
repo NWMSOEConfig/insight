@@ -143,6 +143,13 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
+    [Route("publish")]
+    public async void PublishSettingsAsync(string queueId)
+    {
+       await _dbController.CreateCommitFromQueue(queueId);
+    }
+
+    [HttpGet]
     [Route("subcategory")]
     public IActionResult GetSubcategory(int id)
     {
