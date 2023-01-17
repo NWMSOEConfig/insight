@@ -102,18 +102,34 @@ public class DataController : ControllerBase
 
     private static readonly List<QueueEntry> _queue = new();
 
-    
     /// <summary>
     /// This method will eventually get a setting from the saved queue. It is presently being mocked.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    public NewWorldSetting GetQueuedSetting(string name)
+    /// <param name="name">name of the setting</param>
+    /// <returns>the setting, or null if not queued for this tenant/environment/user</returns>
+    public async Task<NewWorldSetting?> GetQueuedSetting(string name)
     {
-        var setting = _settings.FirstOrDefault(s => s.Name == name);
+        // TODO: get these from frontend
+        var queue = await _dbController.QueuedChangeService.GetAsync(null, null, null);
+
+        if (queue is null)
+            return null;
+
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == name);
+
+        if (dbSetting is null)
+            return null;
+
+        var setting = new NewWorldSetting(dbSetting.Name)
+        {
+            Parameters = dbSetting.Parameters?.ToList(),
+            Category = null,
+            Tenant = null, // TODO
+        };
 
         return setting;
     }
+
     /// <summary>
     /// This method retrieves setting information to display to the editor.
     /// If the setting has been modified it gets queued information instead.
@@ -127,12 +143,13 @@ public class DataController : ControllerBase
     {
         string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
-        var setting = GetQueuedSetting(name);
-        if(setting == null){
+        var setting = await GetQueuedSetting(name);
+        if (setting == null){
             try
             {
                 settings = await httpController.PopulateGetRequest(url);
-            }catch (ArgumentException)
+            }
+            catch (ArgumentException)
             {
                 return BadRequest($"Url {url} is invalid");
             }
