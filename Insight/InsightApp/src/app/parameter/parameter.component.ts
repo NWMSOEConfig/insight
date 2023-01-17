@@ -15,7 +15,12 @@ export class ParameterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialValue = this.parameter.value;
-    this.type = typeof this.parameter.value;
+
+    if (this.parameter.value == "true" || this.parameter.value == "false") {
+      this.type = "boolean";
+    } else {
+      this.type = typeof this.parameter.value;
+    }
   }
 
   change(): void {
