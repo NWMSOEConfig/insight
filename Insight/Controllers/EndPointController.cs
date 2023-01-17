@@ -146,7 +146,10 @@ public class DataController : ControllerBase
     [Route("publish")]
     public async void PublishSettingsAsync(string queueId)
     {
-       await _dbController.CreateCommitFromQueue(queueId);
+        string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
+        await httpController.MakePostRequestAsync(new QueuedChange(), url);
+        await _dbController.CreateCommitFromQueue(queueId);
+
     }
 
     [HttpGet]
