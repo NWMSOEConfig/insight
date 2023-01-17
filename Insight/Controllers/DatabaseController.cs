@@ -6,18 +6,18 @@ using Insight.Models;
 namespace Insight.Controllers;
 
 public class DataServer {
-     private readonly DatabaseSettingsService _settingsService;
-     private readonly DatabaseCommitService _commitService;
-     private readonly DatabaseTenantService _tenantService;
-     private readonly DatabaseQueuedChangeService _queuedChangeService;
-     private readonly DatabaseUserService _userService;
-     public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
+    private readonly DatabaseSettingsService _settingsService;
+    private readonly DatabaseCommitService _commitService;
+    private readonly DatabaseTenantService _tenantService;
+    public DatabaseQueuedChangeService QueuedChangeService { get; private init; }
+    private readonly DatabaseUserService _userService;
+    public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
         DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService) {
         _settingsService = settingsService;
         _commitService = commitService;
         _tenantService = tenantService;
         _userService = userService;
-        _queuedChangeService = databaseQueuedChangeService;
+        QueuedChangeService = databaseQueuedChangeService;
     }
 
     public async Task<List<DatabaseSetting>> GetEnvironmentSettingsAsync(string tenantName)
