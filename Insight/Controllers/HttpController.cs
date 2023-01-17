@@ -53,15 +53,14 @@ class HttpController
         }
     }
 
-    public async Task MakePostRequestAsync(QueuedChange changes, string url){
+    public void MakePostRequest(QueuedChange changes, string url)
+    {
 
-       string jsonString = JsonConvert.SerializeObject(changes.Settings);
-
-       var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
+        string jsonString = JsonConvert.SerializeObject(changes.Settings);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
         Console.WriteLine(content);
 
-        var request = await httpClient.PostAsync(url, content);
+        //var request = await httpClient.PostAsync(url, content);
 
     }
 

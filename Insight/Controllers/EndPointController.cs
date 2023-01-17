@@ -142,12 +142,12 @@ public class DataController : ControllerBase
         return setting is null ? BadRequest() : Ok(setting);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("publish")]
     public async void PublishSettingsAsync(string queueId)
     {
         string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
-        await httpController.MakePostRequestAsync(new QueuedChange(), url);
+        httpController.MakePostRequest(new QueuedChange(), url);
         await _dbController.CreateCommitFromQueue(queueId);
 
     }
