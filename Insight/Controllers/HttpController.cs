@@ -58,8 +58,10 @@ class HttpController
        string jsonString = JsonConvert.SerializeObject(changes.Settings);
 
        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-        
-       var request = await httpClient.PostAsync(url, content);
+
+        Console.WriteLine(content);
+
+        var request = await httpClient.PostAsync(url, content);
 
     }
 
