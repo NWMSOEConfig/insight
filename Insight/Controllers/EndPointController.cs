@@ -103,19 +103,21 @@ public class DataController : ControllerBase
     private static readonly List<QueueEntry> _queue = new();
 
     /// <summary>
-    /// This method will eventually get a setting from the saved queue. It is presently being mocked.
+    /// Attempt to fetch a setting from the saved queue for this tenant/environment/user combination.
     /// </summary>
-    /// <param name="name">name of the setting</param>
+    /// <param name="settingName">name of the setting</param>
+    /// <param name="userName">name of the user</param>
+    /// <param name="tenantName">name of the tenant</param>
+    /// <param name="environmentName">name of the environment</param>
     /// <returns>the setting, or null if not queued for this tenant/environment/user</returns>
-    public async Task<NewWorldSetting?> GetQueuedSetting(string name)
+    public async Task<NewWorldSetting?> GetQueuedSetting(string settingName, string userName, string tenantName, string environmentName)
     {
-        // TODO: get these from frontend
-        var queue = await _dbController.QueuedChangeService.GetAsync(null, null, null);
+        var queue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
 
         if (queue is null)
             return null;
 
-        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == name);
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == settingName);
 
         if (dbSetting is null)
             return null;
@@ -139,11 +141,11 @@ public class DataController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("livesetting")]
-    public async Task<IActionResult> GetSettingAsync(string name)
+    public async Task<IActionResult> GetSettingAsync(string settingName, string userName, string tenantName, string environmentName)
     {
         string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
-        var setting = await GetQueuedSetting(name);
+        var setting = await GetQueuedSetting(settingName, userName, tenantName, environmentName);
         if (setting == null){
             try
             {
@@ -153,7 +155,7 @@ public class DataController : ControllerBase
             {
                 return BadRequest($"Url {url} is invalid");
             }
-            setting = settings.FirstOrDefault(s => s.Name == name);
+            setting = settings.FirstOrDefault(s => s.Name == settingName);
         }
 
         return setting is null ? BadRequest() : Ok(setting);
