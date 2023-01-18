@@ -15,9 +15,9 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   public getSetting(name: string) {
-    // TODO: pass tenant/environment/user
+    // TODO: pass tenant/environment
     return this.httpClient.get<Setting>(
-      `${this.apiURL}/data/livesetting?settingName=${name}&userName=TODO&tenantName=TODO&environmentName=TODO`
+      `${this.apiURL}/data/livesetting?settingName=${name}&tenantName=TODO&environmentName=TODO`
     );
   }
 
