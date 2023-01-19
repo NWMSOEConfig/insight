@@ -10,7 +10,7 @@
 
 <p>
   <mat-form-field>
-    <mat-label>{{ this.inputLabel }}</mat-label>
+    <mat-label>{{ this.inputLabel }}{{this.modified ? '*' : ''}}</mat-label>
     <input
       matInput
       [type]="type"
