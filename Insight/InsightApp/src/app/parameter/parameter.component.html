@@ -5,12 +5,16 @@
     [(ngModel)]="parameter.isBrowserVisible"
   >
     Is browser visible
+    {{ parameter.isBrowserVisible !== this.initialBrowser ? "*" : "" }}
   </mat-slide-toggle>
 </p>
 
 <p>
   <mat-form-field>
-    <mat-label>{{ this.inputLabel }}{{this.modified ? '*' : ''}}</mat-label>
+    <mat-label>
+      {{ this.inputLabel }}
+      {{ this.parameter.value !== this.initialValue ? "*" : "" }}
+    </mat-label>
     <input
       matInput
       [type]="type"

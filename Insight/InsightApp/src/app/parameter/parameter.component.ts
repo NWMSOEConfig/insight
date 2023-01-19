@@ -13,6 +13,7 @@ export class ParameterComponent implements OnInit {
   type!: string;
   modified = false;
   inputLabel: string = 'Value';
+  initialBrowser: any;
 
   createInputLabel(): void {
     const paramName = this.parameter.name.toLowerCase();
@@ -28,11 +29,11 @@ export class ParameterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialValue = this.parameter.value;
+    this.initialBrowser = this.parameter.isBrowserVisible;
     this.createInputLabel();
   }
 
   change(): void {
-    this.modified = this.parameter.value !== this.initialValue;
     this.dataChange.emit(this.parameter);
   }
 }
