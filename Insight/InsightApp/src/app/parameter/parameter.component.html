@@ -1,9 +1,25 @@
-<p *ngIf="type === 'boolean'">
-  <mat-slide-toggle (change)="change()" [(ngModel)]="parameter.value">{{parameter.name}}{{this.modified ? '*' : ''}}</mat-slide-toggle>
+<p>
+  <mat-slide-toggle
+    (change)="change()"
+    checked="true"
+    [(ngModel)]="parameter.isBrowserVisible"
+  >
+    Is browser visible
+    {{ parameter.isBrowserVisible !== this.initialBrowser ? "*" : "" }}
+  </mat-slide-toggle>
 </p>
-<p *ngIf="type !== 'boolean'">
+
+<p>
   <mat-form-field>
-    <mat-label>{{parameter.name}}{{this.modified ? '*' : ''}}</mat-label>
-    <input matInput [type]="type" (change)="change()" [(ngModel)]="parameter.value" />
+    <mat-label>
+      {{ this.inputLabel }}
+      {{ this.parameter.value !== this.initialValue ? "*" : "" }}
+    </mat-label>
+    <input
+      matInput
+      [type]="type"
+      (change)="change()"
+      [(ngModel)]="parameter.value"
+    />
   </mat-form-field>
 </p>
