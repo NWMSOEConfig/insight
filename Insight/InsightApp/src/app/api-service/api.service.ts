@@ -39,7 +39,8 @@ export class ApiService {
   }
 
   public postQueue(setting: Setting) {
-    return this.httpClient.post(`${this.apiURL}/data/queue`, setting, {
+    const context = getTenant();
+    return this.httpClient.post(`${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`, setting, {
       responseType: 'text',
     });
   }

@@ -189,19 +189,21 @@ public class DataController : ControllerBase
     /// Add a modified setting to the batch of queued setting changes.
     /// </summary>
     /// <param name="setting">the setting to add to the batch</param>
+    /// <param name="tenantName">the tenant to queue for</param>
+    /// <param name="environmentName">the environment to queue for</param>
     /// <returns>400 Bad Request if passed setting is invalid, else 200 OK</returns>
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue([FromBody] NewWorldSetting setting)
+    public async Task<IActionResult> PostQueue([FromBody] NewWorldSetting setting, [FromQuery] string tenantName, [FromQuery] string environmentName)
     {
-        var originalSetting = _settings.FirstOrDefault(s => s.Name == setting.Name);
+        var originalSetting = await _dbController.GetSingleSettingAsync(setting.Name);
 
         if (originalSetting is null)
         {
             return BadRequest("must have a valid setting name");
         }
 
-        if (originalSetting.Parameters is null || originalSetting.Parameters.Count == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
+        if (originalSetting.Parameters is null || originalSetting.Parameters.Length == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
         {
             return BadRequest("setting definition must have parameters");
         }
@@ -217,10 +219,32 @@ public class DataController : ControllerBase
         }
 
         var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var entry = new QueueEntry(setting.Name, originalSetting.Parameters, setting.Parameters, queuer);
-        _queue.Add(entry);
 
-        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
+        var entry = new QueuedChange
+        {
+            Settings = new DatabaseSetting[]
+            {
+                new DatabaseSetting
+                {
+                    Name = setting.Name,
+                    Parameters = setting.Parameters.ToArray(),
+                }
+            },
+            OriginalSettings = new DatabaseSetting[] { originalSetting },
+            User = new User
+            {
+                Name = queuer,
+            },
+            Tenant = new DatabaseTenant
+            {
+                Name = tenantName,
+            },
+            Environment = environmentName,
+        };
+
+        await _dbController.QueuedChangeService.CreateOrUpdateAsync(entry);
+
+        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {entry.Settings.Count()} setting(s) queued");
     }
 
     /// <summary>
