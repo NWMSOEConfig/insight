@@ -192,27 +192,42 @@ public class DataController : ControllerBase
 
         var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-        var entry = new QueuedChange
+        var entry = await _dbController.QueuedChangeService.GetAsync(queuer, tenantName, environmentName);
+
+        if (entry is null)
         {
-            Settings = new DatabaseSetting[]
+            entry = new QueuedChange
             {
-                new DatabaseSetting
+                Settings = new DatabaseSetting[]
                 {
-                    Name = setting.Name,
-                    Parameters = setting.Parameters.ToArray(),
-                }
-            },
-            OriginalSettings = new DatabaseSetting[] { originalSetting },
-            User = new User
+                    new DatabaseSetting
+                    {
+                        Name = setting.Name,
+                        Parameters = setting.Parameters.ToArray(),
+                    }
+                },
+                OriginalSettings = new DatabaseSetting[] { originalSetting },
+                User = new User
+                {
+                    Name = queuer,
+                },
+                Tenant = new DatabaseTenant
+                {
+                    Name = tenantName,
+                },
+                Environment = environmentName,
+            };
+        }
+        else
+        {
+            var settings = entry.Settings.ToList();
+            settings.Add(new DatabaseSetting
             {
-                Name = queuer,
-            },
-            Tenant = new DatabaseTenant
-            {
-                Name = tenantName,
-            },
-            Environment = environmentName,
-        };
+                Name = setting.Name,
+                Parameters = setting.Parameters.ToArray(),
+            });
+            entry.Settings = settings.ToArray();
+        }
 
         await _dbController.QueuedChangeService.CreateOrUpdateAsync(entry);
 
