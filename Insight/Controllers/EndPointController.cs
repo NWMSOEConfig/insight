@@ -222,7 +222,7 @@ public class DataController : ControllerBase
             return BadRequest($"Url {url} is invalid");
         }
 
-        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment);
+        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment, url);
 
         return Ok(lastPulled);
     }

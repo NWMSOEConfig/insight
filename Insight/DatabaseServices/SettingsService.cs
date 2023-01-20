@@ -23,7 +23,21 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
     
     public async Task<List<DatabaseSetting>> GetEnvironmentAsync(string tenantId)
     {
-        return await collection.Find(x => x.TenantNames.Contains(tenantId)).ToListAsync();
+        List<DatabaseSetting> settings = new List<DatabaseSetting>();
+        List<DatabaseSetting> matched_settings = new List<DatabaseSetting>();
+        List<DatabaseEnvironment> environments = new List<DatabaseEnvironment>();
+
+        settings = await GetAsync();
+        
+        settings.ForEach(x => {
+            if(x.Environments != null)
+                environments = x.Environments.ToList();
+            environments.ForEach(y => {
+                if(y.Name == tenantId)
+                    matched_settings.Add(x);
+            });
+        });
+        return matched_settings;
     }
 
     public async Task<List<DatabaseSetting>> GetTenantsAsync(string tenantName, string environmentName)
@@ -32,19 +46,25 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
         List<DatabaseSetting> settings = new List<DatabaseSetting>();
         List<DatabaseTenant> tenants = new List<DatabaseTenant>();
         List<DatabaseSetting> matched_settings = new List<DatabaseSetting>();
+        List<DatabaseEnvironment> environments = new List<DatabaseEnvironment>();
 
         // get all settings
         settings = await GetAsync();
 
         settings.ForEach(x => {
-            tenants = x.Tenants.ToList();
+            if(x.Tenants != null)
+                tenants = x.Tenants.ToList();
             // search in each setting, for each tenant, to see of the environment name matches
             tenants.ForEach(y => {
-                if(y.Environment.Contains(environmentName) && y.Name == tenantName)
-                {
-                    matched_settings.Add(x);
-                    return;
-                }
+                if(y.Environments != null)
+                    environments = y.Environments.ToList();
+                environments.ForEach(z => {
+                    if(z.Name == environmentName && y.Name == tenantName)
+                    {
+                        matched_settings.Add(x);
+                        return;
+                    }
+                });
             });
         });
 

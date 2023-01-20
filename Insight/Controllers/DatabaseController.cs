@@ -11,13 +11,15 @@ public class DataServer {
      private readonly DatabaseTenantService _tenantService;
      private readonly DatabaseQueuedChangeService _queuedChangeService;
      private readonly DatabaseUserService _userService;
+     private readonly DatabaseEnvironmentService _environmentService;
      public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
-        DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService) {
+        DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService, DatabaseEnvironmentService environmentService) {
         _settingsService = settingsService;
         _commitService = commitService;
         _tenantService = tenantService;
         _userService = userService;
         _queuedChangeService = databaseQueuedChangeService;
+        _environmentService = environmentService;
     }
 
     public async Task<List<DatabaseSetting>> GetEnvironmentSettingsAsync(string tenantName)
@@ -53,12 +55,13 @@ public class DataServer {
     /// <param name="tenantName"> The tenant to which the setting should be applied  </param>
     /// <param name="environmentName"> The environment to which the setting should be applied  </param>
     /// <returns>The new EnvironmentLastPulled time</returns>
-    public async Task<DateTime> PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName)
+    public async Task<DateTime> PopulateHierarchy(List<NewWorldSetting> settings, string tenantName, string environmentName, string url)
     {
         // If we just did this already, don't update yet.
+        var environment = await _environmentService.GetNameAsync(environmentName);
         var tenant = await _tenantService.GetCategoryAsync(tenantName);
-        DateTime? lastPulled = tenant?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
-            ? tenant.EnvironmentLastPulled[environmentName] : null;
+        DateTime? lastPulled = environment?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
+            ? environment.EnvironmentLastPulled[environmentName] : null;
         if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
             return lastPulled.Value;
         }
@@ -81,6 +84,28 @@ public class DataServer {
                     dbSetting.TenantNames = new string[] { tenantName };
                 else if (!dbSetting.TenantNames.Contains(tenantName))
                     dbSetting.TenantNames.Append(tenantName);
+                
+                if(dbSetting.Environments is null)
+                {
+                    dbSetting.Environments = new DatabaseEnvironment[]
+                    {
+                        new DatabaseEnvironment 
+                        {
+                            Name = environmentName,
+                            Url = url
+                        }
+                    };
+                }
+                else if (!dbSetting.Environments.Any(environment => environment.Name == environmentName))
+                {
+                    var list = dbSetting.Environments.ToList();
+                    list.Add(new DatabaseEnvironment
+                    {
+                        Name = environmentName,
+                        Url = url
+                    });
+                    dbSetting.Environments = list.ToArray();
+                }
 
                 if (dbSetting.Tenants is null)
                 {
@@ -90,6 +115,7 @@ public class DataServer {
                         {
                             Environment = new string[] { environmentName },
                             Name = tenantName,
+                            Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                         },
                     };
                 }
@@ -100,14 +126,20 @@ public class DataServer {
                     {
                         Environment = new string[] { environmentName },
                         Name = tenantName,
+                        Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                     });
                     dbSetting.Tenants = list.ToArray();
                 }
 
-                if (dbSetting.EnvironmentNames is null)
+
+                if (dbSetting.EnvironmentNames is null) {
                     dbSetting.EnvironmentNames = new string[] { environmentName };
-                else if (!dbSetting.EnvironmentNames.Contains(environmentName))
+                    dbSetting.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }};
+                }
+                else if (!dbSetting.EnvironmentNames.Contains(environmentName)) {
                     dbSetting.EnvironmentNames.Append(environmentName);
+                    dbSetting.Environments.Append(new DatabaseEnvironment { Name = environmentName, Url = url });
+                }
             }
             else
             {
@@ -124,8 +156,17 @@ public class DataServer {
                         {
                             Environment = new string[] { environmentName },
                             Name = tenantName,
+                            Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                         },
                     },
+                    Environments = new DatabaseEnvironment[]
+                    {
+                        new DatabaseEnvironment
+                        {
+                            Name = environmentName,
+                            Url = url,
+                        }
+                    }
             };
 
                 newSettings.Add(newSetting);
@@ -145,18 +186,30 @@ public class DataServer {
             {
                 Name = tenantName,
                 Environment = new string[] { environmentName },
+                Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}},
             };
             await _tenantService.CreateAsync(tenant);
         }
 
-        if (tenant.EnvironmentLastPulled is null)
+        if(environment is null)
         {
-            tenant.EnvironmentLastPulled = new();
+            environment = new DatabaseEnvironment
+            {
+                Name = environmentName,
+                Url = url,
+            };
+            await _environmentService.CreateAsync(environment);
+        }
+
+        if (environment.EnvironmentLastPulled is null)
+        {
+            environment.EnvironmentLastPulled = new();
         }
 
         if (tenant.Environment is null)
         {
             tenant.Environment = new string[] { environmentName };
+            
         }
         else if (!tenant.Environment.Contains(environmentName))
         {
@@ -164,9 +217,20 @@ public class DataServer {
             list.Add(environmentName);
             tenant.Environment = list.ToArray();
         }
+        if ( tenant.Environments is null)
+        {
+            tenant.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}};
+        }
+        else if (!tenant.Environments.Any(environment => environment.Name == environmentName))
+        {
+            var list = tenant.Environments.ToList();
+            list.Add(new DatabaseEnvironment{ Name = environmentName, Url = url});
+            tenant.Environments = list.ToArray();
+        }
 
-        tenant.EnvironmentLastPulled[environmentName] = lastPulled.Value;
+        environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
         await _tenantService.UpdateAsync(tenant.Id, tenant);
+        await _environmentService.UpdateAsync(environment.Id, environment);
 
         return lastPulled.Value;
     }
