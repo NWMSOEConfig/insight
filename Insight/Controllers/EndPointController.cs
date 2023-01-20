@@ -184,6 +184,38 @@ public class DataController : ControllerBase
     }
 
     /// <summary>
+    /// Delete a setting from a user's queue.
+    /// </summary>
+    /// <param name="tenantName">the tenant the queue is for</param>
+    /// <param name="environmentName">the environment the queue is for</param>
+    /// <param name="settingName">the setting to remove from the queue</param>
+    /// <returns>204 No Content if removed, else 404 Not Found if setting not in queue</returns>
+    [HttpDelete]
+    [Route("queue")]
+    public async Task<IActionResult> DeleteQueuedSetting([FromQuery] string tenantName, [FromQuery] string environmentName, [FromQuery] string settingName)
+    {
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var dbQueue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
+
+        if (dbQueue is null)
+            return NotFound();
+
+        bool success;
+
+        var settings = dbQueue.Settings.ToList();
+        success = settings.RemoveAll(setting => setting.Name == settingName) > 0;
+        dbQueue.Settings = settings.ToArray();
+
+        var oldSettings = dbQueue.OriginalSettings.ToList();
+        success &= oldSettings.RemoveAll(setting => setting.Name == settingName) > 0;
+        dbQueue.OriginalSettings = oldSettings.ToArray();
+
+        await _dbController.QueuedChangeService.CreateOrUpdateAsync(dbQueue);
+
+        return success ? NoContent() : NotFound();
+    }
+
+    /// <summary>
     /// Add a modified setting to the batch of queued setting changes.
     /// </summary>
     /// <param name="setting">the setting to add to the batch</param>
