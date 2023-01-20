@@ -158,6 +158,32 @@ public class DataController : ControllerBase
     }
 
     /// <summary>
+    /// Get the user's current setting queue.
+    /// </summary>
+    /// <param name="tenantName">the tenant the queue is for</param>
+    /// <param name="environmentName">the environment the queue is for</param>
+    /// <returns>the current setting queue</returns>
+    [HttpGet]
+    [Route("queue")]
+    public async Task<IEnumerable<NewWorldSetting>> GetQueue([FromQuery] string tenantName, [FromQuery] string environmentName)
+    {
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var dbQueue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
+
+        if (dbQueue is null)
+        {
+            return new NewWorldSetting[] {};
+        }
+        else
+        {
+            return dbQueue.Settings.Select(setting => new NewWorldSetting(setting.Name)
+            {
+                Parameters = setting.Parameters?.ToList(),
+            });
+        }
+    }
+
+    /// <summary>
     /// Add a modified setting to the batch of queued setting changes.
     /// </summary>
     /// <param name="setting">the setting to add to the batch</param>
