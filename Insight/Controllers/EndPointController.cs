@@ -56,32 +56,6 @@ public class DataController : ControllerBase
     public DataController(DataServer databaseController) =>
         _dbController = databaseController;
 
-    private static readonly IList<NewWorldSetting> _settings = new List<NewWorldSetting>
-    {
-        new("Foo")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Enabled", "true", true),
-                new("Foo", "123", true),
-            },
-        },
-        new("Bar")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Bar", "Text", true),
-            },
-        },
-        new("Baz")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Baz", "a@b.com", true),
-            },
-        },
-    };
-
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
         new(0, "Subcategory 1", new List<string> { "ActionItemCaseAssignmentEnabled", "ActionItemInvestmentMaterialsDescriptionMaxCharacterLength"}),
@@ -100,8 +74,6 @@ public class DataController : ControllerBase
     {
         new(0, "State", new List<int> { 0, 1, 2 }),
     };
-
-    private static readonly List<QueueEntry> _queue = new();
 
     /// <summary>
     /// Attempt to fetch a setting from the saved queue for this tenant/environment/user combination.
