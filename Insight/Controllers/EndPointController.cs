@@ -221,12 +221,36 @@ public class DataController : ControllerBase
         else
         {
             var settings = entry.Settings.ToList();
-            settings.Add(new DatabaseSetting
+            var oldSettings = entry.OriginalSettings.ToList();
+            var newSetting = new DatabaseSetting
             {
                 Name = setting.Name,
                 Parameters = setting.Parameters.ToArray(),
-            });
+            };
+
+            // If this setting was added to this batch sometime earlier,
+            // don't make a duplicate queue entry.
+            foreach (var s in settings)
+            {
+                if (s.Name == setting.Name)
+                {
+                    settings.Remove(s);
+                    break;
+                }
+            }
+            settings.Add(newSetting);
             entry.Settings = settings.ToArray();
+
+            foreach (var s in entry.OriginalSettings)
+            {
+                if (s.Name == setting.Name)
+                {
+                    settings.Remove(s);
+                    break;
+                }
+            }
+            oldSettings.Add(originalSetting);
+            entry.OriginalSettings = oldSettings.ToArray();
         }
 
         await _dbController.QueuedChangeService.CreateOrUpdateAsync(entry);
