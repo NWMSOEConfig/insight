@@ -46,6 +46,9 @@ public class DataServer {
     public async Task DeleteAllAsync() =>
         await _settingsService.DeleteAllAsync();
 
+    public async Task DeleteAllTenantsAsync() =>
+        await _tenantService.DeleteAllAsync();
+
     /// <summary>
     /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
     /// If a setting already exists, all relevant data is copied before updating.
@@ -62,9 +65,9 @@ public class DataServer {
         var tenant = await _tenantService.GetCategoryAsync(tenantName);
         DateTime? lastPulled = environment?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
             ? environment.EnvironmentLastPulled[environmentName] : null;
-        if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
-            return lastPulled.Value;
-        }
+        // if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
+        //     return lastPulled.Value;
+        // }
 
         var dbSettings = await _settingsService.GetAsync();
         var newSettings = new List<DatabaseSetting>();
@@ -113,7 +116,6 @@ public class DataServer {
                     {
                         new DatabaseTenant
                         {
-                            Environment = new string[] { environmentName },
                             Name = tenantName,
                             Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                         },
@@ -124,21 +126,10 @@ public class DataServer {
                     var list = dbSetting.Tenants.ToList();
                     list.Add(new DatabaseTenant
                     {
-                        Environment = new string[] { environmentName },
                         Name = tenantName,
                         Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                     });
                     dbSetting.Tenants = list.ToArray();
-                }
-
-
-                if (dbSetting.EnvironmentNames is null) {
-                    dbSetting.EnvironmentNames = new string[] { environmentName };
-                    dbSetting.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }};
-                }
-                else if (!dbSetting.EnvironmentNames.Contains(environmentName)) {
-                    dbSetting.EnvironmentNames.Append(environmentName);
-                    dbSetting.Environments.Append(new DatabaseEnvironment { Name = environmentName, Url = url });
                 }
             }
             else
@@ -149,12 +140,10 @@ public class DataServer {
                     Name = setting.Name,
                     Parameters = setting.Parameters?.ToArray(),
                     TenantNames = new string[] { tenantName },
-                    EnvironmentNames = new string[] { environmentName },
                     Tenants = new DatabaseTenant[]
                     {
                         new DatabaseTenant
                         {
-                            Environment = new string[] { environmentName },
                             Name = tenantName,
                             Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
                         },
@@ -185,7 +174,6 @@ public class DataServer {
             tenant = new DatabaseTenant
             {
                 Name = tenantName,
-                Environment = new string[] { environmentName },
                 Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}},
             };
             await _tenantService.CreateAsync(tenant);
@@ -206,17 +194,6 @@ public class DataServer {
             environment.EnvironmentLastPulled = new();
         }
 
-        if (tenant.Environment is null)
-        {
-            tenant.Environment = new string[] { environmentName };
-            
-        }
-        else if (!tenant.Environment.Contains(environmentName))
-        {
-            var list = tenant.Environment.ToList();
-            list.Add(environmentName);
-            tenant.Environment = list.ToArray();
-        }
         if ( tenant.Environments is null)
         {
             tenant.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}};
@@ -228,7 +205,8 @@ public class DataServer {
             tenant.Environments = list.ToArray();
         }
 
-        environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
+        if(lastPulled.Value != null)
+            environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
         await _tenantService.UpdateAsync(tenant.Id, tenant);
         await _environmentService.UpdateAsync(environment.Id, environment);
 

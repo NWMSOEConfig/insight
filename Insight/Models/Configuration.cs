@@ -20,8 +20,6 @@ public class DatabaseSetting
 
     public string[] TenantNames { get; set; } = null!;
 
-    public string[] EnvironmentNames { get; set; } = null!;
-
     public DatabaseEnvironment[] Environments { get; set; } = null!;
 
     public DatabaseTenant[] Tenants { get; set; } = null!;
@@ -33,8 +31,8 @@ public class DatabaseTenant {
     public string? Id { get; set; }
     public string Name { get; set; } = null!;
     public DatabaseEnvironment[] Environments { get; set; } = null!;
-    public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
-    public string[] Environment { get; set; } = null!;
+    //public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
+    // public string[] Environment { get; set; } = null!;
 }
 
 public class QueuedChange {

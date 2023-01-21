@@ -231,7 +231,13 @@ public class DataController : ControllerBase
     [Route("DeleteAllSettings")]
     public Task DeleteSettings() =>
         _dbController.DeleteAllAsync();
+
+    [HttpDelete]
+    [Route("DeleteAllTenants")]
+    public Task DeleteTenants() =>
+        _dbController.DeleteAllTenantsAsync();
 }
+
 
 
 
