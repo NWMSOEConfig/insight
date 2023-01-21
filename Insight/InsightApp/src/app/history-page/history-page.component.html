@@ -1,1 +1,33 @@
-<p>history-page works!</p>
+<div class="history-page">
+  <mat-paginator
+    [length]="mockCommits.length"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 25, 50]"
+  >
+  </mat-paginator>
+
+  <mat-expansion-panel *ngFor="let commit of mockCommits">
+    <mat-expansion-panel-header>
+      <div>
+        <mat-panel-title>
+          <div class="panel-title">
+            <button mat-button disableRipple>
+              {{ commit.id }}
+            </button>
+            <span>
+              {{ commit.message }}
+            </span>
+          </div>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ commit.user }}
+          committed on
+          {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
+          at
+          {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+        </mat-panel-description>
+      </div>
+    </mat-expansion-panel-header>
+    description
+  </mat-expansion-panel>
+</div>

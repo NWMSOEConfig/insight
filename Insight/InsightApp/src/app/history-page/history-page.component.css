@@ -1,0 +1,21 @@
+/* Container */
+.history-page {
+  margin: auto;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.mat-expansion-panel,
+.mat-paginator {
+  margin: 2px;
+}
+
+.mat-expansion-panel-header {
+  min-height: 8vh;
+}
+
+.mat-button-toggle-focus-overlay {
+  display: none;
+}
