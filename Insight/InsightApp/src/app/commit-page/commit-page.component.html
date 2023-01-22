@@ -1,0 +1,33 @@
+<div class="commit-page">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <b>
+          {{ commit.id }}
+        </b>
+        {{ commit.message }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ commit.user }}
+        committed on
+        {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
+        at
+        {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      {{ commit.batch.length }}
+      {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
+      <mat-list>
+        <mat-list-item *ngFor="let change of commit.batch">
+          <mat-icon>arrow_right</mat-icon>
+          {{ change.settingName }}
+          changed from
+          {{ change.oldValue }}
+          to
+          {{ change.newValue }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
