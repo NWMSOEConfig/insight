@@ -13,9 +13,13 @@
 }
 
 .mat-expansion-panel-header {
-  min-height: 7.8vh;
+  min-height: 7vh;
 }
 
 b {
   padding: 10px;
+}
+
+mat-form-field {
+  margin-left: 1vw;
 }

@@ -1,13 +1,54 @@
 <div class="history-page">
+  <form>
+    <!-- Date Range -->
+    <mat-form-field>
+      <mat-label>Date Range</mat-label>
+      <mat-date-range-input
+        [rangePicker]="picker"
+        [min]="minDate"
+        [max]="maxDate"
+      >
+        <input
+          matStartDate
+          placeholder="MM/DD/YYY"
+          (dateInput)="this.selectedMinDate = $event.value"
+        />
+        <input
+          matEndDate
+          placeholder="MM/DD/YYY"
+          (dateInput)="this.selectedMaxDate = $event.value"
+        />
+      </mat-date-range-input>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <button mat-icon-button color="accent" (click)="picker.open()">
+      <mat-icon>calendar_today</mat-icon>
+    </button>
+
+    <!-- Search by username -->
+    <mat-form-field>
+      <mat-label>User</mat-label>
+      <input matInput placeholder="" />
+    </mat-form-field>
+
+    <!-- Search for setting  -->
+    <mat-form-field>
+      <mat-label>Setting</mat-label>
+      <input matInput placeholder="" />
+    </mat-form-field>
+  </form>
+  Showing {{ filteredCommits.length }} out of {{ commits.length }} total commits
+
+  <!-- Paginator  -->
   <mat-paginator
-    [length]="mockCommits.length"
+    [length]="filteredCommits.length"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="pageIndex"
     (page)="handlePageEvent($event)"
-  >
-  </mat-paginator>
+  ></mat-paginator>
 
+  <!-- Commits -->
   <mat-expansion-panel *ngFor="let commit of getPage()">
     <mat-expansion-panel-header>
       <div>
