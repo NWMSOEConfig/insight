@@ -15,8 +15,8 @@ export const mockCommits = [
   {
     id: 'A92CE2L',
     timestamp: '2023-01-09T01:56:47.909Z',
-    message: 'Modified all these settings because they were wrong before',
-    user: 'Kaif',
+    message: 'Modified settings per client request',
+    user: 'Lad',
     batch: [
       {
         settingName: 'ActivateStudyPlanNoteActivityID',
@@ -78,8 +78,8 @@ export const mockCommits = [
       },
       {
         settingName: 'NCConsultingEventApproval',
-        oldValue: '9"',
-        newValue: '18"',
+        oldValue: '9',
+        newValue: '18',
       },
       {
         settingName: 'NAConferenceStatus',
