@@ -1,7 +1,7 @@
 /* Container */
 .history-page {
   margin: auto;
-  max-width: 960px;
+  max-width: 75vw;
   display: flex;
   flex-direction: column;
   padding: 20px;
