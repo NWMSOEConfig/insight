@@ -12,8 +12,8 @@ export class HistoryPageComponent implements OnInit {
   mockCommits: any;
   few = 4; // what "Few" means in getFirstFewFromBatch method
   pageIndex = 0;
-  pageSize = 5;
-  pageSizeOptions = [this.pageSize, 10, 20];
+  pageSize = 10;
+  pageSizeOptions = [this.pageSize, this.pageSize * 2, this.pageSize * 5];
   pageEvent: PageEvent = new PageEvent();
 
   constructor(private apiService: ApiService) {
