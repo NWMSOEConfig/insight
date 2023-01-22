@@ -89,6 +89,12 @@ export class HistoryPageComponent implements OnInit {
       this.minDate < timestamp ? null : (this.minDate = timestamp);
     }); // Set the minimum selectable date on date picker
 
+    this.commits.forEach((c: { timestamp: string }) => {
+      var timestamp = new Date(c.timestamp);
+      this.maxDate > timestamp ? null : (this.maxDate = timestamp);
+    }); // Set the maximum selectable date on date picker
+
     this.selectedMinDate = this.minDate;
+    this.selectedMaxDate = this.maxDate;
   }
 }
