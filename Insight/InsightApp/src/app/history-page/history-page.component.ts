@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
+import { PageEvent } from '@angular/material/paginator';
+import { mockCommits } from './mock-commits';
 
 @Component({
   selector: 'app-history-page',
@@ -7,40 +9,45 @@ import { ApiService } from '../api-service/api.service';
   styleUrls: ['./history-page.component.css'],
 })
 export class HistoryPageComponent implements OnInit {
-  mockCommits: any = [
-    {
-      id: 'A92CE2L',
-      timestamp: '2023-01-09T01:56:47.909Z',
-      message: 'Modified all these settings because they were wrong before',
-      user: 'Kaif',
-      batch: [
-        {
-          settingName: '',
-          oldValue: '',
-          newValue: '',
-        },
-      ],
-    },
-    {
-      id: 'B93ASD3',
-      timestamp: '2023-01-13T09:12:03.909Z',
-      message: 'Creating settings for a new client in California',
-      user: 'Guy',
-      batch: [
-        {
-          settingName: '',
-          oldValue: '',
-          newValue: '',
-        },
-      ],
-    },
-  ];
+  mockCommits: any;
+  few = 4; // what "Few" means in getFirstFewFromBatch method
+  pageIndex = 0;
+  pageSize = 5;
+  pageSizeOptions = [this.pageSize, 10, 20];
+  pageEvent: PageEvent = new PageEvent();
+
+  constructor(private apiService: ApiService) {
+    this.mockCommits = mockCommits;
+    this.pageEvent = new PageEvent();
+  }
 
   getTimestamp(dateTime: any): Date {
     return new Date(dateTime);
   }
 
-  constructor(private apiService: ApiService) {}
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+  }
+
+  getPage(): any {
+    var startIndex = this.pageIndex * this.pageSize;
+    return mockCommits.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  /**
+   * Get the first few (defined above) entries from a list of settings
+   * @param batch
+   * @returns first few entries
+   */
+  getFirstFewFromBatch(batch: any): any {
+    return batch.slice(0, this.few);
+  }
+
+  getRemainingBatchCount(batch: any): any {
+    return batch.length - this.getFirstFewFromBatch(batch).length;
+  }
 
   ngOnInit() {}
 }
