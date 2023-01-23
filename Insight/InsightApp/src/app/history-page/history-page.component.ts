@@ -50,6 +50,11 @@ export class HistoryPageComponent implements OnInit {
     return date;
   }
 
+  clearFilters(): void {
+    this.selectedMinDate = new Date(this.minDate);
+    this.selectedMaxDate = new Date(this.maxDate);
+  }
+
   getsCommitsByFilter(): void {
     this.filteredCommits = this.commits
       .filter(
