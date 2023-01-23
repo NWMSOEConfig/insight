@@ -94,121 +94,20 @@ export const mockCommits = [
       },
     ],
   },
-  {
-    id: 'Commit 4',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 5',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 6',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 7',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 8',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 9',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 10',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 11',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
-  {
-    id: 'Commit 12',
-    timestamp: '2022-01-02T00:00:00.009Z',
-    message: 'Commit Message',
-    user: 'Guy',
-    batch: [
-      {
-        settingName: 'Setting',
-        oldValue: 'Old',
-        newValue: 'New',
-      },
-    ],
-  },
 ];
+
+for (let i = mockCommits.length; i < 30539; i++) {
+  mockCommits.push({
+    id: 'Commit ' + (i + 1),
+    timestamp: '2022-01-02T00:00:00.009Z',
+    message: 'Commit Message',
+    user: 'Guy ' + (i + 1),
+    batch: [
+      {
+        settingName: 'Setting',
+        oldValue: 'Old',
+        newValue: 'New',
+      },
+    ],
+  });
+}
