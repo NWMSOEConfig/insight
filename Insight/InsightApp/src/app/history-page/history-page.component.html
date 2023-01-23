@@ -1,5 +1,5 @@
 <div class="history-page">
-  <form>
+  <form id="top" (ngSubmit)="getsCommitsByFilter()">
     <!-- Date Range -->
     <mat-form-field>
       <mat-label>Date Range</mat-label>
@@ -11,32 +11,56 @@
         <input
           matStartDate
           placeholder="MM/DD/YYY"
-          (dateInput)="this.selectedMinDate = $event.value"
+          (dateChange)="this.selectedMinDate = $event.value"
         />
         <input
           matEndDate
           placeholder="MM/DD/YYY"
-          (dateInput)="this.selectedMaxDate = $event.value"
+          (dateChange)="this.selectedMaxDate = $event.value"
         />
       </mat-date-range-input>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
-    <button mat-icon-button color="accent" (click)="picker.open()">
+    <button
+      mat-icon-button
+      type="button"
+      color="primary"
+      (click)="picker.open()"
+    >
       <mat-icon>calendar_today</mat-icon>
     </button>
 
     <!-- Search by username -->
     <mat-form-field>
       <mat-label>User</mat-label>
-      <input matInput placeholder="" />
+      <input
+        matInput
+        #userInput
+        (selectionchange)="this.searchUser = this.userInput.value"
+      />
     </mat-form-field>
 
     <!-- Search for setting  -->
     <mat-form-field>
       <mat-label>Setting</mat-label>
-      <input matInput placeholder="" />
+      <input
+        matInput
+        #settingInput
+        (selectionchange)="this.searchSetting = this.settingInput.value"
+      />
     </mat-form-field>
+
+    <button id="action" mat-raised-button type="submit" color="primary">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+
+    <button id="action" mat-raised-button type="reset" color="accent">
+      <mat-icon>youtube_searched_for</mat-icon>
+      Clear Filters
+    </button>
   </form>
+
   Showing {{ filteredCommits.length }} out of {{ commits.length }} total commits
 
   <!-- Paginator  -->
@@ -94,4 +118,19 @@
       </mat-list-item>
     </mat-list>
   </mat-expansion-panel>
+
+  <!-- Paginator  -->
+  <mat-paginator
+    *ngIf="pageSize !== pageSizeOptions[0]"
+    [length]="filteredCommits.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="pageIndex"
+    (page)="handlePageEvent($event)"
+  ></mat-paginator>
+
+  <!-- Jump to top -->
+  <a id="jump" href="/history#top" *ngIf="pageSize !== pageSizeOptions[0]">
+    <mat-icon>arrow_upward</mat-icon>Jump to top
+  </a>
 </div>

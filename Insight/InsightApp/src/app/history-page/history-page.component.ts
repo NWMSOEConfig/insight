@@ -14,12 +14,19 @@ export class HistoryPageComponent implements OnInit {
   few = 4; // what "Few" means in getFirstFewFromBatch method
   pageIndex = 0;
   pageSize = 10;
-  pageSizeOptions = [this.pageSize, this.pageSize * 2, this.pageSize * 5];
+  pageSizeOptions = [
+    this.pageSize,
+    this.pageSize * 2,
+    this.pageSize * 5,
+    this.pageSize * 10,
+  ];
   pageEvent: PageEvent = new PageEvent();
   minDate = new Date();
   maxDate = new Date(); // max date is current day
   selectedMinDate = new Date();
   selectedMaxDate = new Date();
+  searchUser: string = '';
+  searchSetting: string = '';
 
   constructor(private apiService: ApiService) {
     this.pageEvent = new PageEvent();
@@ -43,22 +50,55 @@ export class HistoryPageComponent implements OnInit {
     return date;
   }
 
-  /**
-   * paginator to get commits per page
-   */
-  getPage(): any {
-    var startIndex = this.pageIndex * this.pageSize;
+  getsCommitsByFilter(): void {
     this.filteredCommits = this.commits
       .filter(
         (c: { timestamp: number }) =>
           this.resetTime(new Date(c.timestamp)) <=
           this.resetTime(this.selectedMaxDate)
-      )
+      ) // Filter lower half of date range
       .filter(
         (c: { timestamp: number }) =>
           this.resetTime(new Date(c.timestamp)) >=
           this.resetTime(this.selectedMinDate)
-      );
+      ) // Filter upper half of date range
+      .filter((c: { user: string }) =>
+        c.user.toLowerCase().includes(this.searchUser.toLowerCase())
+      ); // Filter username
+
+    var filteredCommitsBySetting = [];
+
+    for (let i = 0; i < this.filteredCommits.length; i++) {
+      var batch = this.filteredCommits.at(i).batch;
+      var filter = false;
+      for (let j = 0; j < batch.length; j++) {
+        var setting = batch.at(j);
+        if (
+          setting.settingName
+            .toLowerCase()
+            .startsWith(this.searchSetting.toLowerCase())
+        ) {
+          filter = true;
+        }
+      }
+      if (filter) {
+        filteredCommitsBySetting.push(this.filteredCommits.at(i));
+      }
+    }
+
+    this.filteredCommits = filteredCommitsBySetting;
+  }
+
+  /**
+   * paginator to get commits per page
+   */
+  getPage(): any {
+    var startIndex = this.pageIndex * this.pageSize;
+
+    if (this.filteredCommits.length <= startIndex) {
+      this.pageIndex = 0;
+      startIndex = 0;
+    }
 
     return this.filteredCommits.slice(startIndex, startIndex + this.pageSize);
   }
