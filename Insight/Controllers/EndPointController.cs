@@ -6,14 +6,15 @@ namespace Insight.Controllers;
 
 [ApiController]
 [Route("api/database")]
-public class UserController : ControllerBase {
+public class UserController : ControllerBase
+{
     private DataServer _dbController;
 
     public UserController(DataServer databaseController) =>
         _dbController = databaseController;
 
     [HttpGet("environments/{environment}")]
-    public async Task<List<DatabaseSetting>> environmentContext(string environment) 
+    public async Task<List<DatabaseSetting>> environmentContext(string environment)
     {
         List<DatabaseSetting> vals = new List<DatabaseSetting>();
 
@@ -43,7 +44,7 @@ public class UserController : ControllerBase {
     {
         return await _dbController.GetSingleSettingAsync(name);
     }
-        
+
 }
 
 [Route("api/[controller]")]
@@ -83,9 +84,9 @@ public class DataController : ControllerBase
 
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
-        new(0, "Subcategory 1", new List<string> { "Foo" }),
-        new(1, "Subcategory 2", new List<string> { "Bar", "ActionItemCaseAssignmentEnabled" }),
-        new(2, "Subcategory 3", new List<string> { "Baz" })
+        new(0, "Subcategory 1", new List<string> { "ActionItemCaseAssignmentEnabled", "ActionItemInvestmentMaterialsDescriptionMaxCharacterLength"}),
+        new(1, "Subcategory 2", new List<string> { "ActionItemListDaysSinceCompletion", "ActivateStudyPlanNoteActivityID" }),
+        new(2, "Subcategory 3", new List<string> { "AllowCaseEditOnExistingActionItems" })
     };
 
     private static readonly IList<Category> _categories = new List<Category>
@@ -102,7 +103,7 @@ public class DataController : ControllerBase
 
     private static readonly List<QueueEntry> _queue = new();
 
-    
+
     /// <summary>
     /// This method will eventually get a setting from the saved queue. It is presently being mocked.
     /// </summary>
@@ -125,14 +126,16 @@ public class DataController : ControllerBase
     [Route("livesetting")]
     public async Task<IActionResult> GetSettingAsync(string name)
     {
-        string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
+        string url = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
         var setting = GetQueuedSetting(name);
-        if(setting == null){
+        if (setting == null)
+        {
             try
             {
                 settings = await httpController.PopulateGetRequest(url);
-            }catch (ArgumentException)
+            }
+            catch (ArgumentException)
             {
                 return BadRequest($"Url {url} is invalid");
             }
