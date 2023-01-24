@@ -20,9 +20,6 @@ public class DatabaseEnvironmentService : ServiceParent<DatabaseEnvironment>
 
     public async Task<DatabaseEnvironment?> GetNameAsync(string name) =>
         await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
-    
-    public async Task<DatabaseEnvironment?> GetCategoryAsync(string name) =>
-        await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
     public async Task UpdateAsync(string id, DatabaseEnvironment updatedEnvironment) =>
         await collection.ReplaceOneAsync(x => x.Id == id, updatedEnvironment);
