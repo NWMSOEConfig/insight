@@ -65,9 +65,9 @@ public class DataServer {
         var tenant = await _tenantService.GetCategoryAsync(tenantName);
         DateTime? lastPulled = environment?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
             ? environment.EnvironmentLastPulled[environmentName] : null;
-        // if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
-        //     return lastPulled.Value;
-        // }
+        if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
+            return lastPulled.Value;
+        }
 
         var dbSettings = await _settingsService.GetAsync();
         var newSettings = new List<DatabaseSetting>();
