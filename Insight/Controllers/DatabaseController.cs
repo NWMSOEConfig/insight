@@ -24,7 +24,6 @@ public class DataServer {
 
     public async Task<List<DatabaseSetting>> GetEnvironmentSettingsAsync(string tenantName)
     {
-        
         return await _settingsService.GetEnvironmentAsync(tenantName);
     }
 
@@ -208,7 +207,6 @@ public class DataServer {
         if(lastPulled.Value != null)
             environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
         await _tenantService.UpdateAsync(tenant.Id, tenant);
-        await _environmentService.UpdateAsync(environment.Id, environment);
 
         return lastPulled.Value;
     }
