@@ -263,8 +263,14 @@ public class DataServer {
                 Tenant = new DatabaseTenant
                 {
                     Name = tenantName,
+                    Environments = new DatabaseEnvironment[]
+                    {
+                        new DatabaseEnvironment
+                        {
+                            Name = environmentName,
+                        },
+                    },
                 },
-                Environment = environmentName,
             };
         }
         else
