@@ -1,0 +1,12 @@
+/* Container */
+.commit-page {
+  margin: auto;
+  max-width: 55vw;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+b {
+  padding: 10px;
+}
