@@ -225,7 +225,7 @@ public class DataController : ControllerBase
             return BadRequest($"Url {url} is invalid");
         }
 
-        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment);
+        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment, url);
 
         return Ok(lastPulled);
     }
@@ -234,7 +234,13 @@ public class DataController : ControllerBase
     [Route("DeleteAllSettings")]
     public Task DeleteSettings() =>
         _dbController.DeleteAllAsync();
+
+    [HttpDelete]
+    [Route("DeleteAllTenants")]
+    public Task DeleteTenants() =>
+        _dbController.DeleteAllTenantsAsync();
 }
+
 
 
 

@@ -20,7 +20,7 @@ public class DatabaseSetting
 
     public string[] TenantNames { get; set; } = null!;
 
-    public string[] EnvironmentNames { get; set; } = null!;
+    public DatabaseEnvironment[] Environments { get; set; } = null!;
 
     public DatabaseTenant[] Tenants { get; set; } = null!;
 }
@@ -30,8 +30,9 @@ public class DatabaseTenant {
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     public string Name { get; set; } = null!;
-    public string[] Environment { get; set; } = null!;
-    public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
+    public DatabaseEnvironment[] Environments { get; set; } = null!;
+    //public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
+    // public string[] Environment { get; set; } = null!;
 }
 
 public class QueuedChange {
@@ -60,6 +61,16 @@ public class Commit {
     public int CommitId { get; set; }
     public double Time { get; set; }
     public QueuedChange QueueChange { get; set; } = null!;
+}
+
+public class DatabaseEnvironment {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+    public string? Name { get; set; }
+    public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
+    public string? Url { get; set; }
+
 }
 
 
