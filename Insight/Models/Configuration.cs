@@ -43,7 +43,6 @@ public class QueuedChange {
     public DatabaseSetting[] OriginalSettings { get; set; } = null!;
     public User User { get; set; } = null!;
     public DatabaseTenant Tenant { get; set; } = null!;
-
 }
 
 public class User {
