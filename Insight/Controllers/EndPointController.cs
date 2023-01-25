@@ -85,7 +85,7 @@ public class DataController : ControllerBase
     /// <returns>the setting, or null if not queued for this tenant/environment/user</returns>
     public async Task<NewWorldSetting?> GetQueuedSetting(string settingName, string userName, string tenantName, string environmentName)
     {
-        var queue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
+        var queue = await _dbController.GetQueue(userName, tenantName, environmentName);
 
         if (queue is null)
             return null;
@@ -168,7 +168,7 @@ public class DataController : ControllerBase
     public async Task<IEnumerable<NewWorldSetting>> GetQueue([FromQuery] string tenantName, [FromQuery] string environmentName)
     {
         var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var dbQueue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
+        var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
 
         if (dbQueue is null)
         {
@@ -195,7 +195,7 @@ public class DataController : ControllerBase
     public async Task<IActionResult> DeleteQueuedSetting([FromQuery] string tenantName, [FromQuery] string environmentName, [FromQuery] string settingName)
     {
         var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var dbQueue = await _dbController.QueuedChangeService.GetAsync(userName, tenantName, environmentName);
+        var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
 
         if (dbQueue is null)
             return NotFound();
@@ -210,7 +210,7 @@ public class DataController : ControllerBase
         success &= oldSettings.RemoveAll(setting => setting.Name == settingName) > 0;
         dbQueue.OriginalSettings = oldSettings.ToArray();
 
-        await _dbController.QueuedChangeService.CreateOrUpdateAsync(dbQueue);
+        await _dbController.CreateOrUpdateQueue(dbQueue);
 
         return success ? NoContent() : NotFound();
     }
@@ -226,94 +226,18 @@ public class DataController : ControllerBase
     [Route("queue")]
     public async Task<IActionResult> PostQueue([FromBody] NewWorldSetting setting, [FromQuery] string tenantName, [FromQuery] string environmentName)
     {
-        var originalSetting = await _dbController.GetSingleSettingAsync(setting.Name);
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-        if (originalSetting is null)
+        try
         {
-            return BadRequest("must have a valid setting name");
+            var queue = await _dbController.EnqueueSetting(setting, tenantName, environmentName, userName);
+            return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {queue.Settings.Count()} setting(s) queued");
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
 
-        if (originalSetting.Parameters is null || originalSetting.Parameters.Length == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
-        {
-            return BadRequest("setting definition must have parameters");
-        }
-
-        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
-        {
-            return BadRequest("all parameters must be part of the setting");
-        }
-
-        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
-        {
-            return BadRequest("cannot have duplicate parameters");
-        }
-
-        var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-        var entry = await _dbController.QueuedChangeService.GetAsync(queuer, tenantName, environmentName);
-
-        if (entry is null)
-        {
-            entry = new QueuedChange
-            {
-                Settings = new DatabaseSetting[]
-                {
-                    new DatabaseSetting
-                    {
-                        Name = setting.Name,
-                        Parameters = setting.Parameters.ToArray(),
-                    }
-                },
-                OriginalSettings = new DatabaseSetting[] { originalSetting },
-                User = new User
-                {
-                    Name = queuer,
-                },
-                Tenant = new DatabaseTenant
-                {
-                    Name = tenantName,
-                },
-                Environment = environmentName,
-            };
-        }
-        else
-        {
-            var settings = entry.Settings.ToList();
-            var oldSettings = entry.OriginalSettings.ToList();
-            var newSetting = new DatabaseSetting
-            {
-                Name = setting.Name,
-                Parameters = setting.Parameters.ToArray(),
-            };
-
-            // If this setting was added to this batch sometime earlier,
-            // don't make a duplicate queue entry.
-            foreach (var s in settings)
-            {
-                if (s.Name == setting.Name)
-                {
-                    settings.Remove(s);
-                    break;
-                }
-            }
-            settings.Add(newSetting);
-            entry.Settings = settings.ToArray();
-
-            foreach (var s in entry.OriginalSettings)
-            {
-                if (s.Name == setting.Name)
-                {
-                    settings.Remove(s);
-                    break;
-                }
-            }
-            oldSettings.Add(originalSetting);
-            entry.OriginalSettings = oldSettings.ToArray();
-        }
-
-        await _dbController.QueuedChangeService.CreateOrUpdateAsync(entry);
-
-        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {entry.Settings.Count()} setting(s) queued");
     }
 
     /// <summary>

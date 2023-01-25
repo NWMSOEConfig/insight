@@ -9,7 +9,7 @@ public class DataServer {
     private readonly DatabaseSettingsService _settingsService;
     private readonly DatabaseCommitService _commitService;
     private readonly DatabaseTenantService _tenantService;
-    public DatabaseQueuedChangeService QueuedChangeService { get; private init; }
+    private readonly DatabaseQueuedChangeService _queuedChangeService;
     private readonly DatabaseUserService _userService;
     private readonly DatabaseEnvironmentService _environmentService;
     public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
@@ -18,7 +18,7 @@ public class DataServer {
         _commitService = commitService;
         _tenantService = tenantService;
         _userService = userService;
-        QueuedChangeService = databaseQueuedChangeService;
+        _queuedChangeService = databaseQueuedChangeService;
         _environmentService = environmentService;
     }
 
@@ -214,4 +214,102 @@ public class DataServer {
 
         return lastPulled.Value;
     }
+
+    /// <summary>
+    /// Add a setting to a queue. If the queue for the specified combination
+    /// of tenant/environment/user doesn't exist, create it.
+    /// </summary>
+    /// <param name="setting">setting to add</param>
+    /// <param name="tenantName">tenant the queue is for</param>
+    /// <param name="environmentName">environment the queue is for</param>
+    /// <param name="userName">user the queue is for</param>
+    /// <returns>the new state of the queue</returns>
+    /// <exception cref="ArgumentException">the queue was not given a valid update</exception>
+    public async Task<QueuedChange> EnqueueSetting(NewWorldSetting setting, string tenantName, string environmentName, string userName)
+    {
+        var originalSetting = await GetSingleSettingAsync(setting.Name);
+
+        if (originalSetting is null)
+            throw new ArgumentException("must have a valid setting name");
+
+        if (originalSetting.Parameters is null || originalSetting.Parameters.Length == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
+            throw new ArgumentException("setting definition must have parameters");
+
+        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
+            throw new ArgumentException("all parameters must be part of the setting");
+
+        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
+            throw new ArgumentException("cannot have duplicate parameters");
+
+        var entry = await _queuedChangeService.GetAsync(userName, tenantName, environmentName);
+
+        if (entry is null)
+        {
+            entry = new QueuedChange
+            {
+                Settings = new DatabaseSetting[]
+                {
+                    new DatabaseSetting
+                    {
+                        Name = setting.Name,
+                        Parameters = setting.Parameters.ToArray(),
+                    }
+                },
+                OriginalSettings = new DatabaseSetting[] { originalSetting },
+                User = new User
+                {
+                    Name = userName,
+                },
+                Tenant = new DatabaseTenant
+                {
+                    Name = tenantName,
+                },
+                Environment = environmentName,
+            };
+        }
+        else
+        {
+            var settings = entry.Settings.ToList();
+            var oldSettings = entry.OriginalSettings.ToList();
+            var newSetting = new DatabaseSetting
+            {
+                Name = setting.Name,
+                Parameters = setting.Parameters.ToArray(),
+            };
+
+            // If this setting was added to this batch sometime earlier,
+            // don't make a duplicate queue entry.
+            foreach (var s in settings)
+            {
+                if (s.Name == setting.Name)
+                {
+                    settings.Remove(s);
+                    break;
+                }
+            }
+            settings.Add(newSetting);
+            entry.Settings = settings.ToArray();
+
+            foreach (var s in entry.OriginalSettings)
+            {
+                if (s.Name == setting.Name)
+                {
+                    settings.Remove(s);
+                    break;
+                }
+            }
+            oldSettings.Add(originalSetting);
+            entry.OriginalSettings = oldSettings.ToArray();
+        }
+
+        await _queuedChangeService.CreateOrUpdateAsync(entry);
+
+        return entry;
+    }
+
+    public Task<QueuedChange?> GetQueue(string userName, string tenantName, string environmentName)
+        => _queuedChangeService.GetAsync(userName, tenantName, environmentName);
+
+    public Task CreateOrUpdateQueue(QueuedChange queue)
+        => _queuedChangeService.CreateOrUpdateAsync(queue);
 }
