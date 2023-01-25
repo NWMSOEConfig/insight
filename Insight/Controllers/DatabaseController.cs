@@ -204,8 +204,12 @@ public class DataServer {
             tenant.Environments = list.ToArray();
         }
 
-        if(lastPulled.Value != null)
+        if(lastPulled.Value != null) {
             environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
+        } else {
+            lastPulled = DateTime.Now;
+            environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
+        }
         await _tenantService.UpdateAsync(tenant.Id, tenant);
 
         return lastPulled.Value;
