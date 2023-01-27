@@ -80,7 +80,13 @@
     </button>
   </form>
 
-  Showing {{ filteredCommits.length }} out of {{ commits.length }} total commits
+  <span>
+    Showing
+    <p id="filteredCommitsCount">{{ filteredCommits.length }}</p>
+    out of
+    <p id="totalCommitsCount">{{ commits.length }}</p>
+    total commits
+  </span>
 
   <!-- Paginator  -->
   <mat-paginator
