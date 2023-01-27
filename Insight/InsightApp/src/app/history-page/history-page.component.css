@@ -20,6 +20,11 @@ b {
   padding: 10px;
 }
 
+a, a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 mat-form-field,
 button#action {
   margin-left: 1vw;

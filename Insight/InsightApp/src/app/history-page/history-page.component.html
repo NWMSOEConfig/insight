@@ -10,12 +10,12 @@
       >
         <input
           matStartDate
-          placeholder="MM/DD/YYY"
+          placeholder="MM/DD/YYYY"
           (dateChange)="this.selectedMinDate = $event.value"
         />
         <input
           matEndDate
-          placeholder="MM/DD/YYY"
+          placeholder="MM/DD/YYYY"
           (dateChange)="this.selectedMaxDate = $event.value"
         />
       </mat-date-range-input>
@@ -57,7 +57,13 @@
       Search
     </button>
 
-    <button id="action" mat-raised-button type="reset" color="accent" (click)="clearFilters()">
+    <button
+      id="action"
+      mat-raised-button
+      type="reset"
+      color="accent"
+      (click)="clearFilters()"
+    >
       <mat-icon>youtube_searched_for</mat-icon>
       Clear Filters
     </button>
@@ -80,9 +86,11 @@
       <div>
         <mat-panel-title>
           <div class="panel-title">
-            <b>
-              {{ commit.id }}
-            </b>
+            <a routerLink="/history/commit/{{ commit.id }}" target="_blank">
+              <b>
+                {{ commit.id }}
+              </b>
+            </a>
             <span>
               {{ commit.message }}
             </span>
