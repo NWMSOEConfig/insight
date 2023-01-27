@@ -30,6 +30,17 @@
       <mat-icon>calendar_today</mat-icon>
     </button>
 
+    <!-- Search by id -->
+    <mat-form-field>
+      <mat-label>Id</mat-label>
+      <input
+        matInput
+        #userInput
+        (selectionchange)="this.searchUser = this.userInput.value"
+        (change)="this.searchUser = this.userInput.value"
+      />
+    </mat-form-field>
+
     <!-- Search by username -->
     <mat-form-field>
       <mat-label>User</mat-label>
