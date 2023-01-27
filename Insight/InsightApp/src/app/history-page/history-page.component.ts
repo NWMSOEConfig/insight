@@ -25,6 +25,7 @@ export class HistoryPageComponent implements OnInit {
   maxDate = new Date(); // max date is current day
   selectedMinDate = new Date();
   selectedMaxDate = new Date();
+  searchId: string = '';
   searchUser: string = '';
   searchSetting: string = '';
 
@@ -67,6 +68,9 @@ export class HistoryPageComponent implements OnInit {
           this.resetTime(new Date(c.timestamp)) >=
           this.resetTime(this.selectedMinDate)
       ) // Filter upper half of date range
+      .filter((c: { id: string }) =>
+        c.id.toLowerCase().includes(this.searchId.toLowerCase())
+      ) // Filter id
       .filter((c: { user: string }) =>
         c.user.toLowerCase().includes(this.searchUser.toLowerCase())
       ); // Filter username
