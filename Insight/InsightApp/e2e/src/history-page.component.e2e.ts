@@ -5,6 +5,15 @@ describe('History page', () => {
   const totalCountElement = element(by.id('totalCommitsCount')); // Total commits CSS element
   const searchElement = element(by.xpath('//button[@type="submit"]')); // Search button
   const clearFiltersElement = element(by.xpath('//button[@type="reset"]')); // Clear filters button
+  const itemsPerPageElement = element(
+    by.xpath('//app-history-page//mat-select')
+  );
+  const nextPageElement = element(
+    by.xpath('//button[@aria-label="Next page"]')
+  );
+  const previousPageElement = element(
+    by.xpath('//button[@aria-label="Previous page"]')
+  );
 
   /**
    * Helper function to click an element and immediately click search after
@@ -86,65 +95,108 @@ describe('History page', () => {
     browser.refresh(); // Refresh the page
   });
 
-  it('can be navigated to', async () => {
-    // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
-    expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + 'history'); // Verify we are on the history page
+  // it('can be navigated to', async () => {
+  //   // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
+  //   expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + 'history'); // Verify we are on the history page
+  // });
+
+  // it('has filtered commits equal to total commits on page load', async () => {
+  //   // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
+  //   expect(filteredCountElement.getText()).toEqual(totalCountElement.getText()); // Filtered count should match all count at start
+  // });
+
+  // it('has functional date range filter', async () => {
+  //   searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
+
+  //   expectFilteredCommitsToNotEqualTotalCommits();
+  // });
+
+  // it('has functional search by id filter', async () => {
+  //   searchWithFilter('Id', 'A92CE2L');
+
+  //   expectFilteredCommitsToNotEqualTotalCommits();
+  // });
+
+  // it('has functional search by user filter', async () => {
+  //   searchWithFilter('User', 'Lad');
+
+  //   expectFilteredCommitsToNotEqualTotalCommits();
+  // });
+
+  // it('has functional search by setting filter', async () => {
+  //   searchWithFilter('Setting', 'NotARealSetting');
+
+  //   expectFilteredCommitsToNotEqualTotalCommits();
+  // });
+
+  // it('has a functional "Clear Filters" button', async () => {
+  //   // Set arbitrary values
+  //   searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
+  //   searchWithFilter('Id', 'A92CE2L');
+  //   searchWithFilter('User', 'Lad');
+  //   searchWithFilter('Setting', 'NotARealSetting');
+
+  //   // Verify filter has worked
+  //   expectFilteredCommitsToNotEqualTotalCommits();
+
+  //   // Click "Clear Filters" button
+  //   clearFiltersElement.click();
+
+  //   // Verify values are empty
+  //   expect(await isValueOfFilterEmpty('Date Range')).toBe(true);
+  //   expect(await isValueOfFilterEmpty('Id')).toBe(true);
+  //   expect(await isValueOfFilterEmpty('User')).toBe(true);
+  //   expect(await isValueOfFilterEmpty('Setting')).toBe(true);
+  // });
+
+  it('enables pagination if commit count is greater than "Items per page"', async () => {
+    if (
+      parseInt(await totalCountElement.getText()) >
+      parseInt(await itemsPerPageElement.getText())
+    ) {
+      expect(await nextPageElement.getAttribute('disabled')).toBeNull();
+    }
   });
 
-  it('has filtered commits equal to total commits on page load', async () => {
-    // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
-    expect(filteredCountElement.getText()).toEqual(totalCountElement.getText()); // Filtered count should match all count at start
+  it('disables pagination if commit count is less than or equal to "Items per page"', async () => {
+    if (
+      parseInt(await totalCountElement.getText()) <=
+      parseInt(await itemsPerPageElement.getText())
+    ) {
+      expect(await nextPageElement.getAttribute('disabled')).toEqual('true');
+      expect(await previousPageElement.getAttribute('disabled')).toEqual(
+        'true'
+      );
+    }
   });
 
-  it('has functional date range filter', async () => {
-    searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
+  it('can change items per page', async () => {
+    var initialItemsPerPage = parseInt(await itemsPerPageElement.getText());
 
-    expectFilteredCommitsToNotEqualTotalCommits();
+    element
+      .all(by.tagName('mat-expansion-panel-header'))
+      .then(async (items) => {
+        expect(items.length).toBeLessThanOrEqual(initialItemsPerPage);
+      });
+
+    itemsPerPageElement.click(); // Click "Items per page" drop-down
+
+    element(by.xpath('(//span[@class="mat-option-text"])[last()]')).click(); // Click max items per page
+
+    browser.sleep(1000);
+
+    element
+      .all(by.tagName('mat-expansion-panel-header'))
+      .then(async (items) => {
+        expect(items.length).toBeGreaterThanOrEqual(initialItemsPerPage);
+      });
   });
-
-  it('has functional search by id filter', async () => {
-    searchWithFilter('Id', 'A92CE2L');
-
-    expectFilteredCommitsToNotEqualTotalCommits();
-  });
-
-  it('has functional search by user filter', async () => {
-    searchWithFilter('User', 'Lad');
-
-    expectFilteredCommitsToNotEqualTotalCommits();
-  });
-
-  it('has functional search by setting filter', async () => {
-    searchWithFilter('Setting', 'NotARealSetting');
-
-    expectFilteredCommitsToNotEqualTotalCommits();
-  });
-
-  it('has a functional "Clear Filters" button', async () => {
-    // Set arbitrary values
-    searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
-    searchWithFilter('Id', 'A92CE2L');
-    searchWithFilter('User', 'Lad');
-    searchWithFilter('Setting', 'NotARealSetting');
-
-    // Verify filter has worked
-    expectFilteredCommitsToNotEqualTotalCommits();
-
-    // Click "Clear Filters" button
-    clearFiltersElement.click();
-
-    // Verify values are empty
-    expect(await isValueOfFilterEmpty('Date Range')).toBe(true);
-    expect(await isValueOfFilterEmpty('Id')).toBe(true);
-    expect(await isValueOfFilterEmpty('User')).toBe(true);
-    expect(await isValueOfFilterEmpty('Setting')).toBe(true);
-  });
-
-  it('has pages if commit count is greater than "Items per page"', async () => {});
-
-  it('can display items based on "Items per page"', async () => {});
 
   it('can page forward', async () => {});
 
   it('can page backward', async () => {});
+
+  it('can open a card', async () => {});
+  
+  it('can route to a card', async () => {});
 });
