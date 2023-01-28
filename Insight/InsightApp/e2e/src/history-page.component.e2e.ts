@@ -139,4 +139,12 @@ describe('History page', () => {
     expect(await isValueOfFilterEmpty('User')).toBe(true);
     expect(await isValueOfFilterEmpty('Setting')).toBe(true);
   });
+
+  it('has pages if commit count is greater than "Items per page"', async () => {});
+
+  it('can display items based on "Items per page"', async () => {});
+
+  it('can page forward', async () => {});
+
+  it('can page backward', async () => {});
 });
