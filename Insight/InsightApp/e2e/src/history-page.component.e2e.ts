@@ -6,6 +6,77 @@ describe('History page', () => {
   const searchElement = element(by.xpath('//button[@type="submit"]')); // Search button
   const clearFiltersElement = element(by.xpath('//button[@type="reset"]')); // Clear filters button
 
+  /**
+   * Helper function to click an element and immediately click search after
+   * @param filter Filter we would like to utilize (Date Range, Id, User, Setting)
+   * @param value1 Primary value we want to set
+   * @param value2 Secondary value we want to set. Useful for daterange
+   */
+  function searchWithFilter(filter: string, value1: string, value2?: string) {
+    var filterElement = element(
+      by.xpath('//mat-form-field[contains(., "' + filter + '")]')
+    );
+
+    filterElement.click(); // Click filter element
+
+    if (value2 !== undefined) {
+      // If value2
+      var startElement = element(
+        by.xpath('//input[contains(@class, "mat-start-date")]')
+      );
+
+      startElement.click(); // Click start range input
+      startElement.sendKeys(value1); // Send some input
+
+      var endElement = element(
+        by.xpath('//input[contains(@class, "mat-end-date")]')
+      );
+
+      endElement.click(); // Click end range input
+      endElement.sendKeys(value1); // Send some input
+    } else {
+      var inputElement = element(
+        by.xpath('//mat-form-field[contains(., "' + filter + '")]//input')
+      );
+
+      inputElement.sendKeys(value1); // Input a commit id
+    }
+
+    searchElement.click(); // Click search
+
+    browser.sleep(1000); // Let browser wait for 1 second
+  }
+
+  async function isValueOfFilterEmpty(filter: string): Promise<boolean> {
+    if (filter === 'Date Range') {
+      var start = await element(
+        by.xpath('//input[contains(@class, "mat-start-date")]')
+      ).getAttribute('value');
+
+      var end = await element(
+        by.xpath('//input[contains(@class, "mat-end-date")]')
+      ).getAttribute('value');
+
+      return start === '' && start === end;
+    } else {
+      var input = await element(
+        by.xpath('//mat-form-field[contains(., "' + filter + '")]//input')
+      ).getAttribute('value');
+
+      return input === '';
+    }
+  }
+
+  /**
+   * Helper function to verify that a filter has been applied
+   * by checking if filtered count does not equal total count
+   */
+  async function expectFilteredCommitsToNotEqualTotalCommits() {
+    expect(await totalCountElement.getText()).not.toEqual(
+      await filteredCountElement.getText()
+    );
+  }
+
   beforeEach(() => {
     browser.get(browser.baseUrl + 'history'); // Navigate to history page
   });
@@ -16,141 +87,56 @@ describe('History page', () => {
   });
 
   it('can be navigated to', async () => {
-    // Navigation is in the beforeEach method above
-    // Browser routing tests are done in app-routing.module.e2e.ts
+    // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
     expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + 'history'); // Verify we are on the history page
+  });
 
+  it('has filtered commits equal to total commits on page load', async () => {
+    // Navigation is in the beforeEach method above and browser routing tests are done in app-routing.module.e2e.ts
     expect(filteredCountElement.getText()).toEqual(totalCountElement.getText()); // Filtered count should match all count at start
   });
 
-  it('has a functional "Clear Filters" button', async () => {
-    
-  });
-
-  it('has a functional "Search" button', async () => {
-    expect(await totalCountElement.getText()).toEqual(
-      await filteredCountElement.getText()
-    ); // Verify that initially, there is no filter applied
-
-    var filterElement = element(
-      by.xpath('//mat-form-field[contains(., "Id")]')
-    );
-    filterElement.click(); // Click id filter
-    filterElement.sendKeys('A92CE2L'); // Input a commit id
-
-    // Check that total count is zero - determine if it's worthwhile to even compare numbers
-    if ((await totalCountElement.getText()) !== '0') {
-      expect(await totalCountElement.getText()).not.toEqual(
-        await filteredCountElement.getText()
-      ); // Verify that a filter has been applied
-    }
-  });
-
   it('has functional date range filter', async () => {
-    // For this test, we are going going to ignore the date range button as that is not necessary to functionality.
-    // Instead, we'll use the underlying text input.
+    searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
 
-    expect(await totalCountElement.getText()).toEqual(
-      await filteredCountElement.getText()
-    ); // Verify that initially, there is no filter applied
-
-    element(by.tagName('mat-date-range-input')).click(); // Click date range element
-
-    var startElement = element(
-      by.xpath('//input[contains(@class, "mat-start-date")]')
-    );
-
-    startElement.click(); // Click start range input
-    startElement.sendKeys('01/01/2000'); // Send some input
-
-    var endElement = element(
-      by.xpath('//input[contains(@class, "mat-end-date")]')
-    );
-
-    endElement.click(); // Click end range input
-    endElement.sendKeys('01/01/2000'); // Send some input
-
-    searchElement.click(); // Trigger search
-
-    browser.sleep(1000);
-
-    // Check that total count is zero - determine if it's worthwhile to even compare numbers
-    if ((await totalCountElement.getText()) !== '0') {
-      expect(await totalCountElement.getText()).not.toEqual(
-        await filteredCountElement.getText()
-      ); // Verify that a filter has been applied
-    }
+    expectFilteredCommitsToNotEqualTotalCommits();
   });
 
   it('has functional search by id filter', async () => {
-    expect(await totalCountElement.getText()).toEqual(
-      await filteredCountElement.getText()
-    ); // Verify that initially, there is no filter applied
+    searchWithFilter('Id', 'A92CE2L');
 
-    var filterElement = element(
-      by.xpath('//mat-form-field[contains(., "Id")]')
-    );
-
-    filterElement.click(); // Click id filter
-    filterElement.sendKeys('Lad'); // Input a username
-
-    searchElement.click(); // Trigger search
-
-    browser.sleep(1000);
-
-    // Check that total count is zero - determine if it's worthwhile to even compare numbers
-    if ((await totalCountElement.getText()) !== '0') {
-      expect(await totalCountElement.getText()).not.toEqual(
-        await filteredCountElement.getText()
-      ); // Verify that a filter has been applied
-    }
+    expectFilteredCommitsToNotEqualTotalCommits();
   });
 
   it('has functional search by user filter', async () => {
-    expect(await totalCountElement.getText()).toEqual(
-      await filteredCountElement.getText()
-    ); // Verify that initially, there is no filter applied
+    searchWithFilter('User', 'Lad');
 
-    var filterElement = element(
-      by.xpath('//mat-form-field[contains(., "User")]')
-    );
-
-    filterElement.click(); // Click id filter
-    filterElement.sendKeys('Lad'); // Input a username
-
-    searchElement.click(); // Trigger search
-
-    browser.sleep(1000);
-
-    // Check that total count is zero - determine if it's worthwhile to even compare numbers
-    if ((await totalCountElement.getText()) !== '0') {
-      expect(await totalCountElement.getText()).not.toEqual(
-        await filteredCountElement.getText()
-      ); // Verify that a filter has been applied
-    }
+    expectFilteredCommitsToNotEqualTotalCommits();
   });
 
   it('has functional search by setting filter', async () => {
-    expect(await totalCountElement.getText()).toEqual(
-      await filteredCountElement.getText()
-    ); // Verify that initially, there is no filter applied
+    searchWithFilter('Setting', 'NotARealSetting');
 
-    var filterElement = element(
-      by.xpath('//mat-form-field[contains(., "Search")]')
-    );
+    expectFilteredCommitsToNotEqualTotalCommits();
+  });
 
-    filterElement.click(); // Click id filter
-    filterElement.sendKeys('Action'); // Input a username
+  it('has a functional "Clear Filters" button', async () => {
+    // Set arbitrary values
+    searchWithFilter('Date Range', '01/01/2000', '01/01/2000');
+    searchWithFilter('Id', 'A92CE2L');
+    searchWithFilter('User', 'Lad');
+    searchWithFilter('Setting', 'NotARealSetting');
 
-    searchElement.click(); // Trigger search
+    // Verify filter has worked
+    expectFilteredCommitsToNotEqualTotalCommits();
 
-    browser.sleep(1000);
+    // Click "Clear Filters" button
+    clearFiltersElement.click();
 
-    // Check that total count is zero - determine if it's worthwhile to even compare numbers
-    if ((await totalCountElement.getText()) !== '0') {
-      expect(await totalCountElement.getText()).not.toEqual(
-        await filteredCountElement.getText()
-      ); // Verify that a filter has been applied
-    }
+    // Verify values are empty
+    expect(await isValueOfFilterEmpty('Date Range')).toBe(true);
+    expect(await isValueOfFilterEmpty('Id')).toBe(true);
+    expect(await isValueOfFilterEmpty('User')).toBe(true);
+    expect(await isValueOfFilterEmpty('Setting')).toBe(true);
   });
 });
