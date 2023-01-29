@@ -22,13 +22,13 @@ public class CommitServiceTests
     [Test]
     public void TestGet()
     {
-        Assert.NotNull(service.GetAsync("0")); // will fail
+        Assert.NotNull(service.GetAsync("0"));
     }
 
      [Test]
     public void TestGetTime()
     {
-           
+       
     }
 
     [Test]
@@ -42,4 +42,11 @@ public class CommitServiceTests
     {
            
     }
+
+    [Test]
+    public void TestFail()
+    {
+        Assert.Fail();
+    }
+
 }
