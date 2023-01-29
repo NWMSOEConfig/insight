@@ -101,30 +101,38 @@
   <mat-expansion-panel *ngFor="let commit of getPage()">
     <mat-expansion-panel-header>
       <div>
-        <mat-panel-title>
+        <mat-panel-title id="commitHeader">
           <div class="panel-title">
             <a routerLink="/history/commit/{{ commit.id }}" target="_blank">
-              <b>
+              <b id="commitId">
                 {{ commit.id }}
               </b>
             </a>
-            <span>
+            <span id="commitMessage">
               {{ commit.message }}
             </span>
           </div>
         </mat-panel-title>
-        <mat-panel-description>
-          {{ commit.user }}
-          committed on
-          {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
-          at
-          {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+        <mat-panel-description id="commitSubtitle">
+          <div>
+            <span id="commitUser">
+              {{ commit.user }}
+            </span>
+            committed on
+            <span id="commitDate">
+              {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
+            </span>
+            at
+            <span id="commitTime">
+              {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+            </span>
+          </div>
         </mat-panel-description>
       </div>
     </mat-expansion-panel-header>
     {{ commit.batch.length }}
     {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
-    <mat-list>
+    <mat-list id="commitDescription">
       <mat-list-item *ngFor="let change of getFirstFewFromBatch(commit.batch)">
         <mat-icon>arrow_right</mat-icon>
         {{ change.settingName }}
