@@ -10,12 +10,12 @@
       >
         <input
           matStartDate
-          placeholder="MM/DD/YYY"
+          placeholder="MM/DD/YYYY"
           (dateChange)="this.selectedMinDate = $event.value"
         />
         <input
           matEndDate
-          placeholder="MM/DD/YYY"
+          placeholder="MM/DD/YYYY"
           (dateChange)="this.selectedMaxDate = $event.value"
         />
       </mat-date-range-input>
@@ -29,6 +29,17 @@
     >
       <mat-icon>calendar_today</mat-icon>
     </button>
+
+    <!-- Search by id -->
+    <mat-form-field>
+      <mat-label>Id</mat-label>
+      <input
+        matInput
+        #idInput
+        (selectionchange)="this.searchId = this.idInput.value"
+        (change)="this.searchId = this.idInput.value"
+      />
+    </mat-form-field>
 
     <!-- Search by username -->
     <mat-form-field>
@@ -57,13 +68,25 @@
       Search
     </button>
 
-    <button id="action" mat-raised-button type="reset" color="accent" (click)="clearFilters()">
+    <button
+      id="action"
+      mat-raised-button
+      type="reset"
+      color="accent"
+      (click)="clearFilters()"
+    >
       <mat-icon>youtube_searched_for</mat-icon>
       Clear Filters
     </button>
   </form>
 
-  Showing {{ filteredCommits.length }} out of {{ commits.length }} total commits
+  <div>
+    Showing
+    <span id="filteredCommitsCount">{{ filteredCommits.length }}</span>
+    out of
+    <span id="totalCommitsCount">{{ commits.length }}</span>
+    total commits
+  </div>
 
   <!-- Paginator  -->
   <mat-paginator
@@ -78,28 +101,38 @@
   <mat-expansion-panel *ngFor="let commit of getPage()">
     <mat-expansion-panel-header>
       <div>
-        <mat-panel-title>
+        <mat-panel-title id="commitHeader">
           <div class="panel-title">
-            <b>
-              {{ commit.id }}
-            </b>
-            <span>
+            <a routerLink="/history/commit/{{ commit.id }}" target="_blank">
+              <b id="commitId">
+                {{ commit.id }}
+              </b>
+            </a>
+            <span id="commitMessage">
               {{ commit.message }}
             </span>
           </div>
         </mat-panel-title>
-        <mat-panel-description>
-          {{ commit.user }}
-          committed on
-          {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
-          at
-          {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+        <mat-panel-description id="commitSubtitle">
+          <div>
+            <span id="commitUser">
+              {{ commit.user }}
+            </span>
+            committed on
+            <span id="commitDate">
+              {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
+            </span>
+            at
+            <span id="commitTime">
+              {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+            </span>
+          </div>
         </mat-panel-description>
       </div>
     </mat-expansion-panel-header>
     {{ commit.batch.length }}
     {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
-    <mat-list>
+    <mat-list id="commitDescription">
       <mat-list-item *ngFor="let change of getFirstFewFromBatch(commit.batch)">
         <mat-icon>arrow_right</mat-icon>
         {{ change.settingName }}
