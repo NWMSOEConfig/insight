@@ -218,7 +218,7 @@ public class DataServer {
     
     public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName ){
         Commit myCommit = new Commit();
-        QueuedChange? queuedChange = await QueuedChangeService.GetAsync(user, tenantName, environmentName);
+        QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
         if(queuedChange!=null){
             myCommit.QueueChange = queuedChange;
             myCommit.Time = DateTime.UtcNow;

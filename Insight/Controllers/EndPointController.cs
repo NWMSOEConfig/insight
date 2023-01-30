@@ -141,8 +141,13 @@ public class DataController : ControllerBase
     public async void PublishSettingsAsync(string user, string tenantName, string environmentName)
     {
         string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
-        httpController.MakePostRequest(new QueuedChange(), url);
-        await _dbController.CreateCommitFromQueue(user, tenantName, environmentName);
+        QueuedChange? change = await _dbController.GetQueue(user, tenantName, environmentName);
+        if(change!= null){
+            httpController.MakePostRequest(change, url);
+            await _dbController.CreateCommitFromQueue(user, tenantName, environmentName);
+        }else{
+            Console.WriteLine("Queue not found");
+        }
 
     }
 
