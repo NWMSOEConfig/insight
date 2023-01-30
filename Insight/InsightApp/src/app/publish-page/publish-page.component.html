@@ -6,7 +6,7 @@
         The following settings have been changed:
       </mat-card-subtitle>
     </mat-card-header>
-    <ng-container *ngIf="!settingQueue">
+    <ng-container *ngIf="settingQueue">
       <!-- Table -->
       <mat-card-content>
         <!-- List -->
@@ -45,14 +45,18 @@
 
       <!-- Reference ID input -->
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Reference ID:</mat-label>
-        <input type="text" [formControl]="publishForm.controls.referenceId">
+        <mat-form-field>
+          <mat-label>Reference ID:</mat-label>
+          <input matInput type="text" [formControl]="publishForm.controls.referenceId">
+        </mat-form-field>
       </mat-form-field>
 
       <!-- Description Text Area -->
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Write description of changes...</mat-label>
-        <input type="number" [formControl]="publishForm.controls.commitMessage">
+        <mat-form-field>
+          <mat-label>Write description of changes...</mat-label>
+          <textarea matInput [formControl]="publishForm.controls.commitMessage"></textarea>
+        </mat-form-field>
       </mat-form-field>
 
       <!-- Publish Button -->

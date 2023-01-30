@@ -5,8 +5,6 @@ export class PublishForm {
   public controls = PublishForm.generateControls();
   public validationGroup = new UntypedFormGroup(this.controls);
 
-
-
   private static generateControls = (): { [key: string]: FormControl } => {
     const controls = {
       commitMessage: new FormControl<string>(""),
