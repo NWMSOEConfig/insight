@@ -136,6 +136,23 @@ public class DataController : ControllerBase
         return setting is null ? BadRequest() : Ok(setting);
     }
 
+    [HttpPost]
+    [Route("publish")]
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant,  [FromQuery] string environment)
+    {
+        string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
+        Commit? commit;
+        QueuedChange? change = await _dbController.GetQueue(user, tenant, environment);
+        if(change!= null){
+            httpController.MakePostRequest(change, url);
+        }else{
+            Console.WriteLine("Queue not found");
+        }
+        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
+        return commit;
+
+    }
+
     [HttpGet]
     [Route("subcategory")]
     public IActionResult GetSubcategory(int id)

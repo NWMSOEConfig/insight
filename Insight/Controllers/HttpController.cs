@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json; 
 using Insight.Models;
+using System.Text;
 
 class HttpController
 {
@@ -50,6 +51,17 @@ class HttpController
         {
             throw new ArgumentException("Url is Invalid");
         }
+    }
+
+    public void MakePostRequest(QueuedChange changes, string url)
+    {
+
+        string jsonString = JsonConvert.SerializeObject(changes.Settings);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        Console.WriteLine(jsonString);
+
+        //var request = await httpClient.PostAsync(url, content);
+
     }
 
     /// <summary>
