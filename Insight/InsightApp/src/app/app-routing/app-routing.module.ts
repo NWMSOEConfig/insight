@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
-import { HistoryPageComponent } from './history-page/history-page.component';
-import { PublishPageComponent } from './publish-page/publish-page.component';
+import { AppComponent } from '../app.component';
+import { CommitPageComponent } from '../commit-page/commit-page.component';
+import { ConfigurationPageComponent } from '../configuration-page/configuration-page.component';
+import { HistoryPageComponent } from '../history-page/history-page.component';
+import { PublishPageComponent } from '../publish-page/publish-page.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'history',
     component: HistoryPageComponent,
+  },
+  {
+    path: 'history/commit/:id',
+    component: CommitPageComponent,
   },
 ];
 

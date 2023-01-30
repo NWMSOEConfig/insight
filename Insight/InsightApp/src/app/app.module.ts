@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './app-routing/app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
 import { PublishPageComponent } from './publish-page/publish-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
+import { CommitPageComponent } from './commit-page/commit-page.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -55,6 +56,7 @@ import { HttpClientModule } from '@angular/common/http';
     ConfigurationPageComponent,
     PublishPageComponent,
     HistoryPageComponent,
+    CommitPageComponent
   ],
   imports: [
     BrowserModule,

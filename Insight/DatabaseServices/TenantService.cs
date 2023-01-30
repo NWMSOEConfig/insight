@@ -32,4 +32,7 @@ public class DatabaseTenantService : ServiceParent<DatabaseTenant>
 
     public async Task RemoveAsync(string id) =>
         await collection.DeleteOneAsync(x => x.Id == id);
+
+    public async Task DeleteAllAsync() =>
+        await collection.DeleteManyAsync(_ => true);
 }

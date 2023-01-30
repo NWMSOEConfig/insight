@@ -4,7 +4,7 @@ import { Parameter } from '../../models/parameter';
 @Component({
   selector: 'app-parameter',
   templateUrl: './parameter.component.html',
-  styleUrls: ['./parameter.component.css']
+  styleUrls: ['./parameter.component.css'],
 })
 export class ParameterComponent implements OnInit {
   @Input() parameter!: Parameter;
@@ -12,14 +12,28 @@ export class ParameterComponent implements OnInit {
   initialValue: any;
   type!: string;
   modified = false;
+  inputLabel: string = 'Value';
+  initialBrowser: any;
+
+  createInputLabel(): void {
+    const paramName = this.parameter.name.toLowerCase();
+
+    if (paramName.includes('maxcharacterlength')) {
+      this.inputLabel = 'Max character length';
+    } else if (paramName.includes('enabled')) {
+      this.inputLabel = 'Is enabled';
+    } else if (paramName.includes('dayssincecompletion')) {
+      this.inputLabel = 'Days since completion';
+    }
+  }
 
   ngOnInit(): void {
     this.initialValue = this.parameter.value;
-    this.type = typeof this.parameter.value;
+    this.initialBrowser = this.parameter.isBrowserVisible;
+    this.createInputLabel();
   }
 
   change(): void {
-    this.modified = this.parameter.value !== this.initialValue;
     this.dataChange.emit(this.parameter);
   }
 }

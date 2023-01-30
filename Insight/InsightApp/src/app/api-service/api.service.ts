@@ -5,6 +5,7 @@ import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
+import { getTenant } from '../tenant-singleton';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,9 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   public getSetting(name: string) {
+    const context = getTenant();
     return this.httpClient.get<Setting>(
-      `${this.apiURL}/data/livesetting?name=${name}`
+      `${this.apiURL}/data/livesetting?settingName=${name}&tenantName=${context.site}&environmentName=${context.environment}`
     );
   }
 
@@ -37,7 +39,8 @@ export class ApiService {
   }
 
   public postQueue(setting: Setting) {
-    return this.httpClient.post(`${this.apiURL}/data/queue`, setting, {
+    const context = getTenant();
+    return this.httpClient.post(`${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`, setting, {
       responseType: 'text',
     });
   }
