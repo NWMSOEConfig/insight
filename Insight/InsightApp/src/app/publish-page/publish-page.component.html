@@ -2,11 +2,11 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Publish</mat-card-title>
-      <mat-card-subtitle *ngIf="settingQueue">
+      <mat-card-subtitle *ngIf="!settingQueue">
         The following settings have been changed:
       </mat-card-subtitle>
     </mat-card-header>
-    <ng-container *ngIf="settingQueue">
+    <ng-container *ngIf="!settingQueue">
       <!-- Table -->
       <mat-card-content>
         <!-- List -->
@@ -45,17 +45,21 @@
 
       <!-- Reference ID input -->
       <mat-form-field appearance="outline" color="primary">
-        <mat-form-field>
+        <mat-form-field hintLabel="Max 20 characters">
           <mat-label>Reference ID:</mat-label>
-          <input matInput type="text" [formControl]="publishForm.controls.referenceId">
+          <input matInput type="text" maxlength="20" [formControl]="publishForm.controls.referenceId">
+          <mat-error *ngIf="publishForm.controls.referenceId.errors">ID must be a positive number</mat-error>
+          <mat-hint align="end">{{publishForm.controls.referenceId.value.length}}/20</mat-hint>
         </mat-form-field>
       </mat-form-field>
 
       <!-- Description Text Area -->
       <mat-form-field appearance="outline" color="primary">
-        <mat-form-field>
+        <mat-form-field hintLabel="Max 250 characters">
           <mat-label>Write description of changes...</mat-label>
-          <textarea matInput [formControl]="publishForm.controls.commitMessage"></textarea>
+          <textarea matInput maxlength="250" [formControl]="publishForm.controls.commitMessage"></textarea>
+          <mat-error *ngIf="publishForm.controls.commitMessage.errors"></mat-error>
+          <mat-hint align="end">{{publishForm.controls.commitMessage.value.length}}/250</mat-hint>
         </mat-form-field>
       </mat-form-field>
 
