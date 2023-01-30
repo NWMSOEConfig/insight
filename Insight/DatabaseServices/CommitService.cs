@@ -19,7 +19,7 @@ public class DatabaseCommitService : ServiceParent<Commit>
     public async Task<Commit?> GetAsync(string id) =>
         await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-    public async Task<Commit?> GetTimeAsync(int time) =>
+    public async Task<Commit?> GetTimeAsync(DateTime time) =>
         await collection.Find(x => x.Time == time).FirstOrDefaultAsync();
 
     public async Task UpdateAsync(string id, Commit updatedCommit) =>

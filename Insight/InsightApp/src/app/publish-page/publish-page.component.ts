@@ -1,4 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { QueueEntry } from '../../models/queueEntry';
+import { ApiService } from '../api-service/api.service';
+import { PublishForm } from './publish-page.form';
+import { getTenant } from '../tenant-singleton';
+
 
 @Component({
   selector: 'app-publish-page',
@@ -6,38 +11,24 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./publish-page.component.css'],
 })
 export class PublishPageComponent implements OnInit {
-  //organize settings changed by their category?
-  errorMessage: string | undefined;
-  commitMessage: string | undefined;
-  canPublish = true;
-  canEdit = false;
-  settings: any[] = [
-    {
-      name: 'setting one',
-      newvalue: 'value one',
-      oldvalue: 'value old one',
-    },
-    {
-      name: 'setting two',
-      newvalue: 'value two',
-      oldvalue: 'value old two',
-    },
-    {
-      name: 'setting three',
-      newvalue: 'value three',
-      oldvalue: 'value old three',
-    },
-  ];
-  selected: any;
 
-  constructor() {}
+  selected: any;
+  showProgressBar = false;
+  tenant = getTenant();
+
+  settingQueue: QueueEntry[] | null = null;
+  publishForm: PublishForm;
+
+  constructor(private apiService: ApiService) {
+    this.publishForm = new PublishForm();
+  }
 
   onPublishClicked() {
-    this.canPublish = false;
+    this.showProgressBar = true;
+    //this.apiService.postQueue(this.tenant.site ?? "", this.tenant.environment ?? "");
   }
 
   onEditClicked() {
-    this.canEdit = true;
     console.log('Edit TODO');
   }
 
@@ -51,15 +42,16 @@ export class PublishPageComponent implements OnInit {
   }
 
   onSaveClicked() {
-    this.canEdit = false;
     console.log('Save TODO');
   }
 
-  GetSettings(): void {
-    //this.apiService?.getQueue;
+  GetSettingQueue(): void {
+    this.apiService.getQueue(this.tenant.site ?? "", this.tenant.environment ?? "").subscribe((x) => {
+      this.settingQueue = x;
+    });
   }
 
   ngOnInit(): void {
-    this.GetSettings();
+    this.GetSettingQueue();
   }
 }

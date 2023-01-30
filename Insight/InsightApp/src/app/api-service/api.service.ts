@@ -5,6 +5,7 @@ import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
+import { QueueEntry } from '../../models/queueEntry';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,10 @@ export class ApiService {
     return this.httpClient.post(`${this.apiURL}/data/queue`, setting, {
       responseType: 'text',
     });
+  }
+
+  public getQueue(tenant: string, environment: string) {
+    return this.httpClient.get<QueueEntry[]>(`${this.apiURL}/data/queue`);
   }
 
   public postPopulate(url: string, tenant: string, environment: string) {

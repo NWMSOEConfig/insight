@@ -6,14 +6,15 @@ namespace Insight.Controllers;
 
 [ApiController]
 [Route("api/database")]
-public class UserController : ControllerBase {
+public class UserController : ControllerBase
+{
     private DataServer _dbController;
 
     public UserController(DataServer databaseController) =>
         _dbController = databaseController;
 
     [HttpGet("environments/{environment}")]
-    public async Task<List<DatabaseSetting>> environmentContext(string environment) 
+    public async Task<List<DatabaseSetting>> environmentContext(string environment)
     {
         List<DatabaseSetting> vals = new List<DatabaseSetting>();
 
@@ -43,7 +44,7 @@ public class UserController : ControllerBase {
     {
         return await _dbController.GetSingleSettingAsync(name);
     }
-        
+
 }
 
 [Route("api/[controller]")]
@@ -55,37 +56,11 @@ public class DataController : ControllerBase
     public DataController(DataServer databaseController) =>
         _dbController = databaseController;
 
-    private static readonly IList<NewWorldSetting> _settings = new List<NewWorldSetting>
-    {
-        new("Foo")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Enabled", "true", true),
-                new("Foo", "123", true),
-            },
-        },
-        new("Bar")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Bar", "Text", true),
-            },
-        },
-        new("Baz")
-        {
-            Parameters = new List<Parameter>
-            {
-                new("Baz", "a@b.com", true),
-            },
-        },
-    };
-
     private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
     {
-        new(0, "Subcategory 1", new List<string> { "Foo" }),
-        new(1, "Subcategory 2", new List<string> { "Bar", "ActionItemCaseAssignmentEnabled" }),
-        new(2, "Subcategory 3", new List<string> { "Baz" })
+        new(0, "Subcategory 1", new List<string> { "ActionItemCaseAssignmentEnabled", "ActionItemInvestmentMaterialsDescriptionMaxCharacterLength"}),
+        new(1, "Subcategory 2", new List<string> { "ActionItemListDaysSinceCompletion", "ActivateStudyPlanNoteActivityID" }),
+        new(2, "Subcategory 3", new List<string> { "AllowCaseEditOnExistingActionItems" })
     };
 
     private static readonly IList<Category> _categories = new List<Category>
@@ -100,20 +75,36 @@ public class DataController : ControllerBase
         new(0, "State", new List<int> { 0, 1, 2 }),
     };
 
-    private static readonly List<QueueEntry> _queue = new();
-
-    
     /// <summary>
-    /// This method will eventually get a setting from the saved queue. It is presently being mocked.
+    /// Attempt to fetch a setting from the saved queue for this tenant/environment/user combination.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    public NewWorldSetting GetQueuedSetting(string name)
+    /// <param name="settingName">name of the setting</param>
+    /// <param name="userName">name of the user</param>
+    /// <param name="tenantName">name of the tenant</param>
+    /// <param name="environmentName">name of the environment</param>
+    /// <returns>the setting, or null if not queued for this tenant/environment/user</returns>
+    public async Task<NewWorldSetting?> GetQueuedSetting(string settingName, string userName, string tenantName, string environmentName)
     {
-        var setting = _settings.FirstOrDefault(s => s.Name == name);
+        var queue = await _dbController.GetQueue(userName, tenantName, environmentName);
+
+        if (queue is null)
+            return null;
+
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == settingName);
+
+        if (dbSetting is null)
+            return null;
+
+        var setting = new NewWorldSetting(dbSetting.Name)
+        {
+            Parameters = dbSetting.Parameters?.ToList(),
+            Category = null,
+            Tenant = null, // TODO
+        };
 
         return setting;
     }
+
     /// <summary>
     /// This method retrieves setting information to display to the editor.
     /// If the setting has been modified it gets queued information instead.
@@ -123,23 +114,46 @@ public class DataController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("livesetting")]
-    public async Task<IActionResult> GetSettingAsync(string name)
+    public async Task<IActionResult> GetSettingAsync(string settingName, string tenantName, string environmentName)
     {
-        string url="https://pauat.newworldnow.com/v7/api/applicationsettings/";
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        string url = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
-        var setting = GetQueuedSetting(name);
-        if(setting == null){
+        var setting = await GetQueuedSetting(settingName, userName, tenantName, environmentName);
+        if (setting == null)
+        {
             try
             {
                 settings = await httpController.PopulateGetRequest(url);
-            }catch (ArgumentException)
+            }
+            catch (ArgumentException)
             {
                 return BadRequest($"Url {url} is invalid");
             }
-            setting = settings.FirstOrDefault(s => s.Name == name);
+            setting = settings.FirstOrDefault(s => s.Name == settingName);
         }
 
         return setting is null ? BadRequest() : Ok(setting);
+    }
+
+    [HttpPost]
+    [Route("publish")]
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment)
+    {
+        string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
+        Commit? commit;
+        QueuedChange? change = await _dbController.GetQueue(user, tenant, environment);
+        if (change != null)
+        {
+            httpController.MakePostRequest(change, url);
+        }
+        else
+        {
+            Console.WriteLine("Queue not found");
+        }
+        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
+        return commit;
+
     }
 
     [HttpGet]
@@ -164,41 +178,79 @@ public class DataController : ControllerBase
     }
 
     /// <summary>
+    /// Get the user's current setting queue.
+    /// </summary>
+    /// <param name="tenantName">the tenant the queue is for</param>
+    /// <param name="environmentName">the environment the queue is for</param>
+    /// <returns>the current setting queue</returns>
+    [HttpGet]
+    [Route("queue")]
+    public async Task<IEnumerable<QueueEntry>> GetQueue([FromQuery] string tenantName, [FromQuery] string environmentName)
+    {
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
+
+        if (dbQueue is null)
+            return null;
+        else
+            return dbQueue;
+    }
+
+    /// <summary>
+    /// Delete a setting from a user's queue.
+    /// </summary>
+    /// <param name="tenantName">the tenant the queue is for</param>
+    /// <param name="environmentName">the environment the queue is for</param>
+    /// <param name="settingName">the setting to remove from the queue</param>
+    /// <returns>204 No Content if removed, else 404 Not Found if setting not in queue</returns>
+    [HttpDelete]
+    [Route("queue")]
+    public async Task<IActionResult> DeleteQueuedSetting([FromQuery] string tenantName, [FromQuery] string environmentName, [FromQuery] string settingName)
+    {
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
+
+        if (dbQueue is null)
+            return NotFound();
+
+        bool success;
+
+        var settings = dbQueue.Settings.ToList();
+        success = settings.RemoveAll(setting => setting.Name == settingName) > 0;
+        dbQueue.Settings = settings.ToArray();
+
+        var oldSettings = dbQueue.OriginalSettings.ToList();
+        success &= oldSettings.RemoveAll(setting => setting.Name == settingName) > 0;
+        dbQueue.OriginalSettings = oldSettings.ToArray();
+
+        await _dbController.CreateOrUpdateQueue(dbQueue);
+
+        return success ? NoContent() : NotFound();
+    }
+
+        /// <summary>
     /// Add a modified setting to the batch of queued setting changes.
     /// </summary>
     /// <param name="setting">the setting to add to the batch</param>
+    /// <param name="tenantName">the tenant to queue for</param>
+    /// <param name="environmentName">the environment to queue for</param>
     /// <returns>400 Bad Request if passed setting is invalid, else 200 OK</returns>
     [HttpPost]
     [Route("queue")]
-    public IActionResult PostQueue([FromBody] NewWorldSetting setting)
+    public async Task<IActionResult> PostQueue([FromBody] NewWorldSetting setting, [FromQuery] string tenantName, [FromQuery] string environmentName)
     {
-        var originalSetting = _settings.FirstOrDefault(s => s.Name == setting.Name);
+        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-        if (originalSetting is null)
+        try
         {
-            return BadRequest("must have a valid setting name");
+            var queue = await _dbController.EnqueueSetting(setting, tenantName, environmentName, userName);
+            return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {queue.Settings.Count()} setting(s) queued");
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
 
-        if (originalSetting.Parameters is null || originalSetting.Parameters.Count == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
-        {
-            return BadRequest("setting definition must have parameters");
-        }
-
-        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
-        {
-            return BadRequest("all parameters must be part of the setting");
-        }
-
-        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
-        {
-            return BadRequest("cannot have duplicate parameters");
-        }
-
-        var queuer = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        var entry = new QueueEntry(setting.Name, originalSetting.Parameters, setting.Parameters, queuer);
-        _queue.Add(entry);
-
-        return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {_queue.Count} setting(s) queued");
     }
 
     /// <summary>
@@ -222,7 +274,7 @@ public class DataController : ControllerBase
             return BadRequest($"Url {url} is invalid");
         }
 
-        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment);
+        var lastPulled = await _dbController.PopulateHierarchy(settings, tenant, environment, url);
 
         return Ok(lastPulled);
     }
@@ -231,6 +283,11 @@ public class DataController : ControllerBase
     [Route("DeleteAllSettings")]
     public Task DeleteSettings() =>
         _dbController.DeleteAllAsync();
+
+    [HttpDelete]
+    [Route("DeleteAllTenants")]
+    public Task DeleteTenants() =>
+        _dbController.DeleteAllTenantsAsync();
 }
 
 

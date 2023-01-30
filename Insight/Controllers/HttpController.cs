@@ -5,8 +5,9 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 using Insight.Models;
+using System.Text;
 
 class HttpController
 {
@@ -52,6 +53,17 @@ class HttpController
         }
     }
 
+    public void MakePostRequest(QueuedChange changes, string url)
+    {
+
+        string jsonString = JsonConvert.SerializeObject(changes.Settings);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        Console.WriteLine(jsonString);
+
+        //var request = await httpClient.PostAsync(url, content);
+
+    }
+
     /// <summary>
     /// ValidPopulateUrl determines if a url matches our regex standards
     /// </summary>
@@ -60,14 +72,14 @@ class HttpController
     {
         bool valid = false;
         //Removing any extraneous white space
-        url=url.Replace(" ", "");
+        url = url.Replace(" ", "");
         //Replace annoying characters with spaces so we can use a simpler pattern
-        url=url.Replace(".", " ").Replace("/", " ");
+        url = url.Replace(".", " ").Replace("/", " ");
 
         //pattern to match against
-        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com v7 api applicationsettings ";  
+        string pattern = "(?:https:  )?[a-zA-Z] newworldnow com v7 api applicationsettings ";
         //Create a Regex  
-        Regex rg = new Regex(pattern);  
+        Regex rg = new Regex(pattern);
 
         //Match pattern against url    
         Match m = Regex.Match(url, pattern, RegexOptions.IgnoreCase);
@@ -79,8 +91,7 @@ class HttpController
         {
             valid = false;
         }
-    return valid;
+        return valid;
     }
 
 }
-

@@ -34,7 +34,8 @@ public class DatabaseTenant {
     public Dictionary<string, DateTime>? EnvironmentLastPulled { get; set; }
 }
 
-public class QueuedChange {
+public class QueuedChange
+{
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
@@ -42,7 +43,7 @@ public class QueuedChange {
     public DatabaseSetting[] OriginalSettings { get; set; } = null!;
     public User User { get; set; } = null!;
     public DatabaseTenant Tenant { get; set; } = null!;
-
+    public string Environment { get; set; } = null!;
 }
 
 public class User {
