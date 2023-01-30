@@ -138,16 +138,19 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async void PublishSettingsAsync(string user, string tenantName, string environmentName)
+    public async Task<Commit?> PublishSettingsAsync(string user, string tenantName, string environmentName)
     {
         string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
+        Commit? commit;
         QueuedChange? change = await _dbController.GetQueue(user, tenantName, environmentName);
         if(change!= null){
             httpController.MakePostRequest(change, url);
-            await _dbController.CreateCommitFromQueue(user, tenantName, environmentName);
         }else{
             Console.WriteLine("Queue not found");
         }
+        commit = await _dbController.CreateCommitFromQueue(user, tenantName, environmentName);
+
+        return commit;
 
     }
 
