@@ -11,6 +11,7 @@ using Insight.Models;
 class HttpController
 {
 
+    public record ParameterWithName(string Name, string Value);
     private HttpClient httpClient;
 
     public HttpController()
@@ -30,10 +31,10 @@ class HttpController
             response.EnsureSuccessStatusCode();
             //Console.WriteLine(await response.Content.ReadAsStringAsync());
 
-            List<Parameter>? parameters = await response.Content.ReadFromJsonAsync<List<Parameter>>();
+            List<ParameterWithName>? parameters = await response.Content.ReadFromJsonAsync<List<ParameterWithName>>();
             List<NewWorldSetting>? settings = parameters?.Select(parameter => new NewWorldSetting(parameter.Name)
             {
-                Parameters = new() { parameter },
+                Parameters = new() { new Parameter(parameter.Value) },
             }).ToList();
 
             if (settings != null)
