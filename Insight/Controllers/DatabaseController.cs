@@ -235,10 +235,10 @@ public class DataServer {
         if (originalSetting.Parameters is null || originalSetting.Parameters.Length == 0 || setting.Parameters is null || setting.Parameters.Count == 0)
             throw new ArgumentException("setting definition must have parameters");
 
-        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => p.Name == parameter.Name)))
+        if (setting.Parameters.Any(parameter => !originalSetting.Parameters.Any(p => originalSetting.Name == setting.Name)))
             throw new ArgumentException("all parameters must be part of the setting");
 
-        if (setting.Parameters.GroupBy(parameter => parameter.Name).Any(group => group.Count() > 1))
+        if (setting.Parameters.GroupBy(parameter => setting.Name).Any(group => group.Count() > 1))
             throw new ArgumentException("cannot have duplicate parameters");
 
         var entry = await _queuedChangeService.GetAsync(userName, tenantName, environmentName);
