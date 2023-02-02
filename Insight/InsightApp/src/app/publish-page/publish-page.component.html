@@ -14,9 +14,9 @@
       <!-- List -->
       <mat-action-list disableRipple="true">
         <mat-divider></mat-divider>
-        <i *ngIf="settings.length === 0">No queued changes could be found.</i>
+        <i *ngIf="settings.length === 0" id="noQueue">No queued changes could be found.</i>
         <mat-list-item
-          id="noQueue"
+          id="yesQueue"
           *ngIf="settings.length !== 0"
           class="header"
           color="primary"
