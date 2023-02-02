@@ -18,7 +18,7 @@
         </mat-list-item>
         <mat-divider></mat-divider>
         <div *ngFor="let setting of settings">
-          <mat-list-item (mouseover)="selected = setting">
+          <mat-list-item id="settingEntry" (mouseover)="selected = setting">
             <span id="settingName">{{ setting.name }}</span>
             <span id="oldValue">{{ setting.oldvalue }}</span>
             <span id="newValue">{{ setting.newvalue }}</span>
