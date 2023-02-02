@@ -19,9 +19,9 @@
         <mat-divider></mat-divider>
         <div *ngFor="let setting of settings">
           <mat-list-item (mouseover)="selected = setting">
-            <span>{{ setting.name }}</span>
-            <span>{{ setting.oldvalue }}</span>
-            <span>{{ setting.newvalue }}</span>
+            <span id="settingName">{{ setting.name }}</span>
+            <span id="oldValue">{{ setting.oldvalue }}</span>
+            <span id="newValue">{{ setting.newvalue }}</span>
             <button
               mat-icon-button
               [matMenuTriggerFor]="menu"
