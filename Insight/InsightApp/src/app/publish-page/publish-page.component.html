@@ -3,7 +3,10 @@
     <mat-card-header>
       <mat-card-title>Publish</mat-card-title>
       <mat-card-subtitle>
-        The following settings have been changed:
+        <div>
+          <span id="settingsCount">{{ settings.length }}</span> settings have
+          been changed
+        </div>
       </mat-card-subtitle>
     </mat-card-header>
     <!-- Table -->
@@ -12,7 +15,13 @@
       <mat-action-list disableRipple="true">
         <mat-divider></mat-divider>
         <i *ngIf="settings.length === 0">No queued changes could be found.</i>
-        <mat-list-item id="noQueue" *ngIf="settings.length !== 0" class="header" color="primary" (mouseover)="selected = null">
+        <mat-list-item
+          id="noQueue"
+          *ngIf="settings.length !== 0"
+          class="header"
+          color="primary"
+          (mouseover)="selected = null"
+        >
           <span>Setting Name</span>
           <span>Current Value</span>
           <span>New Value</span>
