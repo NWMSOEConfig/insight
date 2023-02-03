@@ -34,7 +34,7 @@
   {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
   <mat-list id="commitDescription">
     <mat-list-item *ngFor="let change of getFirstFewFromBatch(commit.batch)">
-      <mat-icon>arrow_right</mat-icon>
+      <mat-icon>keyboard_arrow_right</mat-icon>
       {{ change.settingName }}
       changed from
       {{ change.oldValue }}
