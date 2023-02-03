@@ -12,28 +12,9 @@
   margin: 2px;
 }
 
-.mat-expansion-panel-header {
-  min-height: 7.2vh;
-}
-
-b {
-  padding: 10px;
-}
-
-a, a:hover {
-  text-decoration: none;
-  color: inherit;
-}
-
 mat-form-field,
 button#action {
   margin-left: 1vw;
-}
-
-a#jump,
-a#jump:hover {
-  color: inherit;
-  text-decoration: none;
 }
 
 form {
