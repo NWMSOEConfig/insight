@@ -4,8 +4,8 @@
       <mat-card-title>Publish</mat-card-title>
       <mat-card-subtitle>
         <div>
-          <span id="settingsCount">{{ settings.length }}</span> settings have
-          been modified
+          <span id="settingsCount">{{ settings.length }}</span>
+          {{ settings.length === 1 ? "setting was" : "settings were" }} modified
         </div>
       </mat-card-subtitle>
     </mat-card-header>
@@ -14,7 +14,9 @@
       <!-- List -->
       <mat-action-list disableRipple="true">
         <mat-divider></mat-divider>
-        <i *ngIf="settings.length === 0" id="noQueue">No queued changes could be found.</i>
+        <i *ngIf="settings.length === 0" id="noQueue"
+          >No queued changes could be found.</i
+        >
         <mat-list-item
           id="yesQueue"
           *ngIf="settings.length !== 0"
