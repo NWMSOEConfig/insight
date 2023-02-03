@@ -12,21 +12,21 @@ export class PublishPageComponent implements OnInit {
   canPublish = true;
   canEdit = false;
   settings: any[] = [
-    // {
-    //   name: 'setting one',
-    //   newvalue: 'value one',
-    //   oldvalue: 'value old one',
-    // },
-    // {
-    //   name: 'setting two',
-    //   newvalue: 'value two',
-    //   oldvalue: 'value old two',
-    // },
-    // {
-    //   name: 'setting three',
-    //   newvalue: 'value three',
-    //   oldvalue: 'value old three',
-    // },
+    {
+      name: 'setting one',
+      newvalue: 'value one',
+      oldvalue: 'value old one',
+    },
+    {
+      name: 'setting two',
+      newvalue: 'value two',
+      oldvalue: 'value old two',
+    },
+    {
+      name: 'setting three',
+      newvalue: 'value three',
+      oldvalue: 'value old three',
+    },
   ];
   selected: any;
 
