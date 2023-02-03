@@ -6,9 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./history-card.component.css'],
 })
 export class HistoryCardComponent {
-  few = 4; // what "Few" means in getFirstFewFromBatch method
   @Input() commit: any;
-  
+  @Input() numberOfSettingsToDisplay: any = 4; // Have 4 settings deplayed by default
+
   getTimestamp(dateTime: any): Date {
     return new Date(dateTime);
   }
@@ -18,7 +18,11 @@ export class HistoryCardComponent {
    * @returns first few entries
    */
   getFirstFewFromBatch(batch: any): any {
-    return batch.slice(0, this.few);
+    if (batch.length > this.numberOfSettingsToDisplay) {
+      return batch.slice(0, this.numberOfSettingsToDisplay);
+    } else {
+      return batch;
+    }
   }
 
   getRemainingBatchCount(batch: any): any {
