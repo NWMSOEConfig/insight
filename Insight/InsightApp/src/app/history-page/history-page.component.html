@@ -98,61 +98,9 @@
   ></mat-paginator>
 
   <!-- Commits -->
-  <mat-expansion-panel *ngFor="let commit of getPage()">
-    <mat-expansion-panel-header>
-      <div>
-        <mat-panel-title id="commitHeader">
-          <div class="panel-title">
-            <a routerLink="/history/commit/{{ commit.id }}" target="_blank">
-              <b id="commitId">
-                {{ commit.id }}
-              </b>
-            </a>
-            <span id="commitMessage">
-              {{ commit.message }}
-            </span>
-          </div>
-        </mat-panel-title>
-        <mat-panel-description id="commitSubtitle">
-          <div>
-            <span id="commitUser">
-              {{ commit.user }}
-            </span>
-            committed on
-            <span id="commitDate">
-              {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
-            </span>
-            at
-            <span id="commitTime">
-              {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
-            </span>
-          </div>
-        </mat-panel-description>
-      </div>
-    </mat-expansion-panel-header>
-    {{ commit.batch.length }}
-    {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
-    <mat-list id="commitDescription">
-      <mat-list-item *ngFor="let change of getFirstFewFromBatch(commit.batch)">
-        <mat-icon>arrow_right</mat-icon>
-        {{ change.settingName }}
-        changed from
-        {{ change.oldValue }}
-        to
-        {{ change.newValue }}
-      </mat-list-item>
-      <mat-list-item *ngIf="getRemainingBatchCount(commit.batch) !== 0">
-        <a routerLink="/history/commit/{{ commit.id }}" target="_blank">
-          <button mat-button>
-            View {{ getRemainingBatchCount(commit.batch) }} more
-            {{
-              getRemainingBatchCount(commit.batch) === 1 ? "change" : "changes"
-            }}
-          </button>
-        </a>
-      </mat-list-item>
-    </mat-list>
-  </mat-expansion-panel>
+  <div *ngFor="let commit of getPage()">
+    <app-history-card [commit]="commit"></app-history-card>
+  </div>
 
   <!-- Paginator  -->
   <mat-paginator

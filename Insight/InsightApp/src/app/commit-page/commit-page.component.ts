@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mockCommits } from '../history-page/mock-commits';
-import { HistoryPageComponent } from '../history-page/history-page.component';
 
 @Component({
   selector: 'app-commit-page',
