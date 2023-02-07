@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
 import { PageEvent } from '@angular/material/paginator';
 import { mockCommits } from './mock-commits';
+import { HistoryCardComponent } from '../history-card/history-card.component';
 
 @Component({
   selector: 'app-history-page',
@@ -11,7 +12,6 @@ import { mockCommits } from './mock-commits';
 export class HistoryPageComponent implements OnInit {
   commits: any;
   filteredCommits: any;
-  few = 4; // what "Few" means in getFirstFewFromBatch method
   pageIndex = 0;
   pageSize = 10;
   pageSizeOptions = [
@@ -112,18 +112,6 @@ export class HistoryPageComponent implements OnInit {
     return this.filteredCommits.slice(startIndex, startIndex + this.pageSize);
   }
 
-  /**
-   * Get the first few (defined above) entries from a list of settings
-   * @param batch
-   * @returns first few entries
-   */
-  getFirstFewFromBatch(batch: any): any {
-    return batch.slice(0, this.few);
-  }
-
-  getRemainingBatchCount(batch: any): any {
-    return batch.length - this.getFirstFewFromBatch(batch).length;
-  }
 
   ngOnInit() {
     this.commits = mockCommits.sort(

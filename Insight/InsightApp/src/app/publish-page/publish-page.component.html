@@ -3,7 +3,10 @@
     <mat-card-header>
       <mat-card-title>Publish</mat-card-title>
       <mat-card-subtitle>
-        The following settings have been changed:
+        <div>
+          <span id="settingsCount">{{ settings.length }}</span>
+          {{ settings.length === 1 ? "setting was" : "settings were" }} modified
+        </div>
       </mat-card-subtitle>
     </mat-card-header>
     <!-- Table -->
@@ -11,17 +14,26 @@
       <!-- List -->
       <mat-action-list disableRipple="true">
         <mat-divider></mat-divider>
-        <mat-list-item class="header" color="primary" (mouseover)="selected = null">
+        <i *ngIf="settings.length === 0" id="noQueue"
+          >No queued changes could be found.</i
+        >
+        <mat-list-item
+          id="yesQueue"
+          *ngIf="settings.length !== 0"
+          class="header"
+          color="primary"
+          (mouseover)="selected = null"
+        >
           <span>Setting Name</span>
           <span>Current Value</span>
           <span>New Value</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <div *ngFor="let setting of settings">
-          <mat-list-item (mouseover)="selected = setting">
-            <span>{{ setting.name }}</span>
-            <span>{{ setting.oldvalue }}</span>
-            <span>{{ setting.newvalue }}</span>
+          <mat-list-item id="settingEntry" (mouseover)="selected = setting">
+            <span id="settingName">{{ setting.name }}</span>
+            <span id="oldValue">{{ setting.oldvalue }}</span>
+            <span id="newValue">{{ setting.newvalue }}</span>
             <button
               mat-icon-button
               [matMenuTriggerFor]="menu"
