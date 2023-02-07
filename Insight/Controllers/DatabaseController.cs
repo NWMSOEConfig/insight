@@ -130,6 +130,7 @@ public class DataServer {
                     });
                     dbSetting.Tenants = list.ToArray();
                 }
+                dbSetting.Category = dbSetting.Name.Substring(0, 1);
             }
             else
             {
@@ -137,6 +138,7 @@ public class DataServer {
                 var newSetting = new DatabaseSetting
                 {
                     Name = setting.Name,
+                    Category = setting.Name.Substring(0, 1),
                     Parameters = setting.Parameters?.ToArray(),
                     TenantNames = new string[] { tenantName },
                     Tenants = new DatabaseTenant[]

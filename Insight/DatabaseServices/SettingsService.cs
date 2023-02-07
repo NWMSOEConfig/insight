@@ -35,6 +35,7 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
             if(environments.Any(environment => environment.Name == environmentName))
                 matched_settings.Add(setting);
         });
+        matched_settings.OrderBy(setting => setting.Category).ToList();
         return matched_settings;
     }
 
@@ -65,7 +66,7 @@ public class DatabaseSettingsService : ServiceParent<DatabaseSetting>
                 });
             });
         });
-
+        matched_settings.OrderBy(setting => setting.Category).ToList();
         return matched_settings;
     }
 
