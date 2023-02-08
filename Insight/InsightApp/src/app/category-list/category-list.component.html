@@ -1,4 +1,4 @@
-<div class="category-list">
+<div class="category-list" id="category-list">
   <span id="breadcrumb" *ngFor="let breadcrumb of breadcrumbs">
     &gt;
     <button mat-button (click)="clickBreadcrumb(breadcrumb)">
@@ -17,7 +17,7 @@
     ></mat-progress-spinner>
     <mat-divider></mat-divider>
     <div *ngFor="let child of children">
-      <a href="/#breadcrumb">
+      <a href="/#top">
         <button mat-list-item (click)="clickChild(child)">
           {{ child.Name }}
         </button>
