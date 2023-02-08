@@ -7,7 +7,7 @@ import { ApiService } from '../api-service/api.service';
 enum DbObjects {
   Tenant,
   Category,
-  Subcategory,
+  // Subcategory,
   Setting,
   Parameter,
 }
@@ -24,15 +24,18 @@ export class CategoryListComponent implements OnInit {
   level: DbObjects;
   parent: any;
   breadcrumbs: any;
+  settings: any;
 
   constructor(private apiService: ApiService) {
+    this.settingName = JSON.parse(localStorage.getItem('settingName')!);
+
     this.parent = JSON.parse(localStorage.getItem('parent')!);
 
     this.level = parseInt(
       localStorage.getItem('level') || String(DbObjects.Tenant)
     );
 
-    const noCrumbs = JSON.stringify([{ name: 'Root', level: this.level }]);
+    const noCrumbs = JSON.stringify([{ Name: 'Root', level: this.level }]);
     this.breadcrumbs = JSON.parse(
       localStorage.getItem('breadcrumbs') || noCrumbs
     );
@@ -47,51 +50,59 @@ export class CategoryListComponent implements OnInit {
     this.children = []; // Clear out children
     this.level = target; // Update our current level
 
+    // console.log(this.level);
+
+    console.log(this.breadcrumbs);
+
     if (target == DbObjects.Tenant) {
-      this.apiService.getTenant(0).subscribe((data) => {
-        this.parent = data;
-        this.parent.categoryIds.forEach((id: number) => {
-          this.apiService.getCategory(id).subscribe((data) => {
-            this.children.push(data);
-          });
-        });
-      });
+      this.parent = this.settings;
+
+      // Get distinct categories
+      var categories = ([] = this.parent.filter(
+        (s0: any, i: number, arr: any) =>
+          arr.findIndex(
+            (s1: { Category: string }) => s0.Category === s1.Category
+          ) === i
+      ));
+
+      // Sort categories alphabetically
+      categories = categories.sort((a: any, b: any) =>
+        a.Category.localeCompare(b.Category)
+      );
+
+      // Insert categories to be visible
+      categories.forEach((setting: any) =>
+        this.children.push({ Name: setting.Category })
+      );
     } else if (target == DbObjects.Category) {
-      this.apiService.getCategory(this.parent.id).subscribe((data) => {
-        this.parent = data;
-        this.parent.subcategoryIds.forEach((id: number) => {
-          this.apiService.getSubcategory(id).subscribe((data) => {
-            this.children.push(data);
-          });
-        });
-      });
-    } else if (target == DbObjects.Subcategory) {
-      this.apiService.getSubcategory(this.parent.id).subscribe((data) => {
-        this.parent = data;
-        data.settingNames.forEach((name: string) => {
-          this.settingName = name;
-          this.apiService.getSetting(name).subscribe((data) => {
-            this.children.push(data);
-          });
-        });
-      });
+      var settings = ([] = this.settings.filter(
+        (setting: any) => setting.Category == this.parent.Name
+      ));
+
+      // Insert categories to be visible
+      settings.forEach((setting: any) =>
+        this.children.push({ Name: setting.Name })
+      );
     } else {
-      // we've gone too far!!! 😲😲😲
       this.settingClicked = true;
-      this.settingName = this.parent.name;
     }
 
     this.updateLocalStorage();
   }
 
   ngOnInit(): void {
-    this.requestDbTarget(this.level);
+    this.apiService.getAllSettings().subscribe((data) => {
+      this.settings = data;
+      this.requestDbTarget(this.level);
+    });
   }
 
   clickChild(child: any) {
     this.parent = child;
+    this.settingName = this.parent.Name;
     this.level++;
-    this.breadcrumbs.push({ name: this.parent.name, level: this.level });
+    this.breadcrumbs.push({ Name: this.parent.Name, level: this.level });
+    console.log(this.breadcrumbs);
     this.requestDbTarget(this.level);
   }
 
@@ -105,10 +116,12 @@ export class CategoryListComponent implements OnInit {
     const index = this.breadcrumbs.indexOf(breadcrumb);
     this.breadcrumbs.length = index + 1;
     this.settingClicked = false;
+    this.parent = this.breadcrumbs[index];
     this.requestDbTarget(breadcrumb.level);
   }
 
   updateLocalStorage(): void {
+    localStorage.setItem('settingName', JSON.stringify(this.settingName));
     localStorage.setItem('parent', JSON.stringify(this.parent));
     localStorage.setItem('level', String(this.level));
     localStorage.setItem('breadcrumbs', JSON.stringify(this.breadcrumbs));
