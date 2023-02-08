@@ -70,13 +70,13 @@ export class CategoryListComponent implements OnInit {
         this.children.push({ Name: setting.Category })
       );
     } else if (target == DbObjects.Category) {
-      var settings = ([] = this.settings.filter(
+      var categorySettings = ([] = this.settings.filter(
         (setting: any) => setting.Category == this.parent.Name
       ));
 
       // Insert categories to be visible
-      settings.forEach((setting: any) =>
-        this.children.push({ Name: setting.Name })
+      categorySettings.forEach((categorySetting: any) =>
+        this.children.push({ Name: categorySetting.Name })
       );
     } else {
       this.settingClicked = true;
@@ -86,8 +86,13 @@ export class CategoryListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getAllSettings().subscribe((data) => {
-      this.settings = data;
+    // Get all settings
+    this.apiService.getAllSettings().subscribe((data: any) => {
+      // Sort settings alphabetically just in case
+      this.settings = data.sort((a: any, b: any) =>
+        a.Category.localeCompare(b.Category)
+      );
+
       this.requestDbTarget(this.level);
     });
   }
