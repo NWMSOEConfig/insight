@@ -27,7 +27,7 @@ export class ApiService {
 
   public getAllSettings() {
     const context = getTenant();
-    return this.httpClient.get<Settings>(`${this.apiURL}/data/livesettings`);
+    return this.httpClient.get<Settings>(`${this.apiURL}/data/dbsettings`);
   }
 
   public getCategory(id: number) {
