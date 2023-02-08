@@ -217,6 +217,20 @@ public class DataServer {
         return lastPulled.Value;
     }
 
+    
+    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName ){
+        Commit myCommit = new Commit();
+        QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
+        if(queuedChange!=null){
+            myCommit.QueueChange = queuedChange;
+            myCommit.Time = DateTime.UtcNow;
+            await _commitService.CreateAsync(myCommit);
+            return myCommit;
+        }
+
+        return null;
+    }    
+
     /// <summary>
     /// Add a setting to a queue. If the queue for the specified combination
     /// of tenant/environment/user doesn't exist, create it.

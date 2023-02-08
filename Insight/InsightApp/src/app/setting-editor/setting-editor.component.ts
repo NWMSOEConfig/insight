@@ -2,22 +2,22 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
 import { Parameter } from '../../models/parameter';
 import { Setting } from 'src/models/setting';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-setting-editor',
   templateUrl: './setting-editor.component.html',
-  styleUrls: ['./setting-editor.component.css']
+  styleUrls: ['./setting-editor.component.css'],
 })
 export class SettingEditorComponent implements OnInit {
   @Input() settingName = '';
   @Output() cancel = new EventEmitter();
   setting: Setting | null = null;
 
-  constructor(private apiService: ApiService) {
-  }
+  constructor(private apiService: ApiService, public snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.apiService.getSetting(this.settingName).subscribe(setting => {
+    this.apiService.getSetting(this.settingName).subscribe((setting) => {
       this.setting = setting;
     });
   }
@@ -27,8 +27,10 @@ export class SettingEditorComponent implements OnInit {
   }
 
   queue(): void {
-    this.apiService.postQueue(this.setting!).subscribe(message => {
-      alert(message);
+    this.apiService.postQueue(this.setting!).subscribe((message) => {
+      this.snackBar.open(message, "Dismiss", {
+        duration: 5000
+      });
     });
   }
 

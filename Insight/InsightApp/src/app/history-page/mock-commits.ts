@@ -94,6 +94,19 @@ export const mockCommits = [
       },
     ],
   },
+  {
+    id: 'C7C8L3Y-1',
+    timestamp: '2022-12-15T18:27:56.209Z',
+    message: 'Modified again because I messed up',
+    user: 'Man',
+    batch: [
+      {
+        settingName: 'ConsultantRequiresCurrentEndorsement',
+        oldValue: 'true',
+        newValue: 'FALSE',
+      }
+    ],
+  },
 ];
 
 for (let i = mockCommits.length; i < 30539; i++) {
