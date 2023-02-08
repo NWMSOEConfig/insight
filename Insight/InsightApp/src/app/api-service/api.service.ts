@@ -7,6 +7,9 @@ import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { getTenant } from '../tenant-singleton';
 
+
+interface Settings {};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,6 +23,11 @@ export class ApiService {
     return this.httpClient.get<Setting>(
       `${this.apiURL}/data/livesetting?settingName=${name}&tenantName=${context.site}&environmentName=${context.environment}`
     );
+  }
+
+  public getAllSettings() {
+    const context = getTenant();
+    return this.httpClient.get<Settings>(`${this.apiURL}/data/livesettings`);
   }
 
   public getCategory(id: number) {
