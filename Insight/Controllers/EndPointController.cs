@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Insight.Models;
+using System.Text.Json;
 
 namespace Insight.Controllers;
 
@@ -137,6 +138,13 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
+    [Route("livesettings")]
+    public async Task<IActionResult> GetAllSettingsAsync(string tenantName, string environmentName)
+    {
+        return Ok(JsonSerializer.Serialize((await _dbController.GetSettingsAsync())));
+    }
+
+    [HttpGet]
     [Route("subcategory")]
     public IActionResult GetSubcategory(int id)
     {
@@ -172,7 +180,7 @@ public class DataController : ControllerBase
 
         if (dbQueue is null)
         {
-            return new NewWorldSetting[] {};
+            return new NewWorldSetting[] { };
         }
         else
         {
