@@ -57,24 +57,11 @@ public class DataController : ControllerBase
     public DataController(DataServer databaseController) =>
         _dbController = databaseController;
 
-    private static readonly IList<Subcategory> _subcategories = new List<Subcategory>
-    {
-        new(0, "Subcategory 1", new List<string> { "ActionItemCaseAssignmentEnabled", "ActionItemInvestmentMaterialsDescriptionMaxCharacterLength"}),
-        new(1, "Subcategory 2", new List<string> { "ActionItemListDaysSinceCompletion", "ActivateStudyPlanNoteActivityID" }),
-        new(2, "Subcategory 3", new List<string> { "AllowCaseEditOnExistingActionItems" })
-    };
+    private static readonly IList<Subcategory> _subcategories = new List<Subcategory> { };
 
-    private static readonly IList<Category> _categories = new List<Category>
-    {
-        new(0, "Category A", new List<int> { 0 }),
-        new(1, "Category B", new List<int> { 1 }),
-        new(2, "Category C", new List<int> { 2 })
-    };
+    private static readonly IList<Category> _categories = new List<Category> { };
 
-    private static readonly IList<Tenant> _tenants = new List<Tenant>
-    {
-        new(0, "State", new List<int> { 0, 1, 2 }),
-    };
+    private static readonly IList<Tenant> _tenants = new List<Tenant> { };
 
     /// <summary>
     /// Attempt to fetch a setting from the saved queue for this tenant/environment/user combination.
@@ -139,14 +126,17 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant,  [FromQuery] string environment)
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment)
     {
-        string url="https://pauat.newworldnow.com/v7/api/updatesetting/";
+        string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
         Commit? commit;
         QueuedChange? change = await _dbController.GetQueue(user, tenant, environment);
-        if(change!= null){
+        if (change != null)
+        {
             httpController.MakePostRequest(change, url);
-        }else{
+        }
+        else
+        {
             Console.WriteLine("Queue not found");
         }
         commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
