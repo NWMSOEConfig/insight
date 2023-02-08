@@ -1,6 +1,9 @@
 <div class="category-list">
-  <span *ngFor="let breadcrumb of breadcrumbs">
-    &gt; <button mat-button (click)="clickBreadcrumb(breadcrumb)">{{breadcrumb.Name}}</button>
+  <span id="breadcrumb" *ngFor="let breadcrumb of breadcrumbs">
+    &gt;
+    <button mat-button (click)="clickBreadcrumb(breadcrumb)">
+      {{ breadcrumb.Name }}
+    </button>
   </span>
   <form *ngIf="!settingClicked">
     <mat-form-field>
@@ -8,12 +11,23 @@
     </mat-form-field>
   </form>
   <mat-action-list *ngIf="!settingClicked">
-    <mat-progress-spinner *ngIf="children.length==0" mode="indeterminate"></mat-progress-spinner>
+    <mat-progress-spinner
+      *ngIf="children.length == 0"
+      mode="indeterminate"
+    ></mat-progress-spinner>
     <mat-divider></mat-divider>
     <div *ngFor="let child of children">
-      <button mat-list-item (click)="clickChild(child)">{{child.Name}}</button>
+      <a href="/#breadcrumb">
+        <button mat-list-item (click)="clickChild(child)">
+          {{ child.Name }}
+        </button>
+      </a>
       <mat-divider></mat-divider>
     </div>
   </mat-action-list>
-  <app-setting-editor *ngIf="settingClicked" [settingName]="settingName" (cancel)="cancel()"></app-setting-editor>
+  <app-setting-editor
+    *ngIf="settingClicked"
+    [settingName]="settingName"
+    (cancel)="cancel()"
+  ></app-setting-editor>
 </div>
