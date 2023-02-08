@@ -7,7 +7,6 @@ import { ApiService } from '../api-service/api.service';
 enum DbObjects {
   Tenant,
   Category,
-  // Subcategory,
   Setting,
   Parameter,
 }
@@ -49,10 +48,6 @@ export class CategoryListComponent implements OnInit {
   requestDbTarget(target: DbObjects) {
     this.children = []; // Clear out children
     this.level = target; // Update our current level
-
-    // console.log(this.level);
-
-    console.log(this.breadcrumbs);
 
     if (target == DbObjects.Tenant) {
       this.parent = this.settings;
