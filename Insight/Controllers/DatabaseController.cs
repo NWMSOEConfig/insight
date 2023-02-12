@@ -5,7 +5,7 @@ using Insight.Models;
 
 namespace Insight.Controllers;
 
-public class DataServer {
+public class DataServer:IDataServer {
     private readonly DatabaseSettingsService _settingsService;
     private readonly DatabaseCommitService _commitService;
     private readonly DatabaseTenantService _tenantService;

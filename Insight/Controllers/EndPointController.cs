@@ -8,9 +8,9 @@ namespace Insight.Controllers;
 [Route("api/database")]
 public class UserController : ControllerBase
 {
-    private DataServer _dbController;
+    private IDataServer _dbController;
 
-    public UserController(DataServer databaseController) =>
+    public UserController(IDataServer databaseController) =>
         _dbController = databaseController;
 
     [HttpGet("environments/{environment}")]
