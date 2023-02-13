@@ -163,6 +163,9 @@ public class DataServer {
             }
         });
 
+        dbSettings.OrderBy(setting => setting.Category);
+        newSettings.OrderBy(setting => setting.Category);
+
         if (dbSettings.Count > 0)
             await _settingsService.UpdateManyAsync(dbSettings);
         if (newSettings.Count > 0)
