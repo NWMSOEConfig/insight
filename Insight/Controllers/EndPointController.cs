@@ -152,6 +152,13 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
+    [Route("dbtenants")]
+    public async Task<IActionResult> GetAllTenantsAync(string tenantName, string environmentName)
+    {
+        return Ok(JsonSerializer.Serialize((await _dbController.GetAllTenantsAsync())));
+    }
+
+    [HttpGet]
     [Route("subcategory")]
     public IActionResult GetSubcategory(int id)
     {

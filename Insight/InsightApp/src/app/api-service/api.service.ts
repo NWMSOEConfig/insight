@@ -30,6 +30,13 @@ export class ApiService {
     );
   }
 
+  public getAllTenants() {
+    const context = getTenant();
+    return this.httpClient.get<DatabaseSetting[]>(
+      `${this.apiURL}/data/dbtenants`
+    );
+  }
+
   public getCategory(id: number) {
     return this.httpClient.get<Category>(
       `${this.apiURL}/data/category?id=${id}`
