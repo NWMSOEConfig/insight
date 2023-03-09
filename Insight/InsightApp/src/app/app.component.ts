@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { setTenant } from './tenant-singleton';
 import { environment } from 'src/environments/environment';
+import { ApiService } from './api-service/api.service';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +20,21 @@ export class AppComponent {
   ];
   selectedTenant: any = {};
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private apiService: ApiService) {
     setTenant(this.getTenant());
     this.toggleDirection =
       localStorage.getItem('toggleDirection') || 'keyboard_arrow_left';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.tenants = this.apiService.getAllTenants();
+    // console.log(this.apiService.getAllTenants());
+
+    this.apiService.getAllTenants().subscribe((tenants) => {
+      this.tenants = tenants;
+      console.log(this.tenants);
+    });
+  }
 
   changeTenant(site: string, environment: string): void {
     this.selectedTenant = { site: site, environment: environment };

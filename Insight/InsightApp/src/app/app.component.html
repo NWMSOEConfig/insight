@@ -20,15 +20,15 @@
   <mat-menu #site="matMenu">
     <div *ngFor="let tenant of tenants">
       <button mat-menu-item [matMenuTriggerFor]="environment">
-        {{ tenant.site }}
+        {{ tenant.Name }}
       </button>
       <mat-menu #environment="matMenu">
         <button
           mat-menu-item
-          *ngFor="let environment of tenant.environments"
-          (click)="changeTenant(tenant.site, environment)"
+          *ngFor="let environment of tenant.Environments"
+          (click)="changeTenant(tenant.Name, environment.Name)"
         >
-          {{ environment }}
+          {{ environment.Name }}
         </button>
       </mat-menu>
     </div>
