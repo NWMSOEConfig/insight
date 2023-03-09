@@ -11,13 +11,7 @@ import { ApiService } from './api-service/api.service';
 })
 export class AppComponent {
   toggleDirection: string;
-  tenants: any = [
-    { site: 'WI', environments: ['Dev', 'UAT', 'Test', 'Alt', 'Prod'] },
-    { site: 'MN', environments: ['Prod'] },
-    { site: 'IN', environments: ['Dev', 'Test', 'Prod'] },
-    { site: 'OH', environments: ['Test', 'Alt', 'Prod'] },
-    { site: 'MI', environments: ['UAT', 'Prod'] },
-  ];
+  tenants: any = [];
   selectedTenant: any = {};
 
   constructor(private http: HttpClient, private apiService: ApiService) {
