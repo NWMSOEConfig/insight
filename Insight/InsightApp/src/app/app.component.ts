@@ -28,6 +28,7 @@ export class AppComponent {
   ngOnInit(): void {}
 
   changeTenant(site: string, environment: string): void {
+    this.selectedTenant = { site: site, environment: environment };
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
     setTenant(this.getTenant());
     this.selectedTenant = {};

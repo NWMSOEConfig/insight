@@ -7,6 +7,20 @@
   font-size: 14px;
 }
 
+/* Tenant Selector */
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -2px;
+  z-index: 100;
+  opacity: 0;
+}
+
+.mat-menu-item-submenu-trigger {
+  width: 300px;
+}
+
 /* Toolbar & Side Navigation Consistency*/
 .mat-toolbar,
 .mat-drawer {
@@ -69,6 +83,6 @@
 }
 
 /* Remove scrolling from tenant selection */
-::ng-deep .mat-select-panel{
-  max-height: none!important;
+::ng-deep .mat-select-panel {
+  max-height: none !important;
 }

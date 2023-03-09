@@ -2,7 +2,11 @@
 <mat-toolbar color="primary">
   <span>New World</span>
   <span class="spacer"></span>
-  <mat-form-field id="tenantForm" (mouseout)="selectedTenant = {}">
+
+  <!-- <button mat-button [matMenuTriggerFor]="site">Select a tenant</button> -->
+
+  <mat-form-field >
+    <button class="overlay" [matMenuTriggerFor]="site"></button>
     <mat-label>
       {{
         getTenant().environment == null
@@ -10,28 +14,26 @@
           : getTenant().site + " (" + getTenant().environment + ")"
       }}
     </mat-label>
+    <mat-select></mat-select>
+  </mat-form-field>
 
-    <mat-select #selector>
-      <div *ngIf="selectedTenant.site == null">
-        <mat-option
-          *ngFor="let tenant of tenants"
-          (click)="selector.open()"
-          (onSelectionChange)="selectedTenant = tenant"
-        >
-          {{ tenant.site }}
-        </mat-option>
-      </div>
-      <div *ngIf="selectedTenant.environment == null">
-        <mat-option
-          *ngFor="let environment of selectedTenant.environments"
-          (onSelectionChange)="selectedTenant.environment = environment"
-          (click)="changeTenant(selectedTenant.site, environment)"
+  <mat-menu #site="matMenu">
+    <div *ngFor="let tenant of tenants">
+      <button mat-menu-item [matMenuTriggerFor]="environment">
+        {{ tenant.site }}
+      </button>
+      <mat-menu #environment="matMenu">
+        <button
+          mat-menu-item
+          *ngFor="let environment of tenant.environments"
+          (click)="changeTenant(tenant.site, environment)"
         >
           {{ environment }}
-        </mat-option>
-      </div>
-    </mat-select>
-  </mat-form-field>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-menu>
+
   <span class="spacer"></span>
   <button mat-icon-button>
     <mat-icon>person</mat-icon>
