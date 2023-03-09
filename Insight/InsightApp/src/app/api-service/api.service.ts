@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { getTenant } from '../tenant-singleton';
 /* Models */
 import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
-import { getTenant } from '../tenant-singleton';
-
-
-interface Settings {};
+import { DatabaseSetting } from '../../models/databaseSetting';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +25,9 @@ export class ApiService {
 
   public getAllSettings() {
     const context = getTenant();
-    return this.httpClient.get<Settings>(`${this.apiURL}/data/dbsettings`);
+    return this.httpClient.get<DatabaseSetting[]>(
+      `${this.apiURL}/data/dbsettings`
+    );
   }
 
   public getCategory(id: number) {
@@ -48,16 +48,24 @@ export class ApiService {
 
   public postQueue(setting: Setting) {
     const context = getTenant();
-    return this.httpClient.post(`${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`, setting, {
-      responseType: 'text',
-    });
+    return this.httpClient.post(
+      `${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`,
+      setting,
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   public postPopulate(url: string, tenant: string, environment: string) {
-    return this.httpClient.post(`${this.apiURL}/data/populate?tenant=${tenant}&environment=${environment}`, JSON.stringify(url), {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return this.httpClient.post(
+      `${this.apiURL}/data/populate?tenant=${tenant}&environment=${environment}`,
+      JSON.stringify(url),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
 }
