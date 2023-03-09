@@ -43,7 +43,7 @@
 <!-- Main Container -->
 <mat-drawer-container>
   <!-- Side Navigation -->
-  <mat-drawer #drawer mode="side" [opened]="isSidebarToggled()" id="sideNav">
+  <mat-drawer mode="side" [opened]="isSidebarToggled()" id="sideNav">
     <button mat-button routerLink="configuration" id="configuration">
       <mat-icon>settings</mat-icon>
       <span>Configuration</span>
@@ -63,7 +63,7 @@
     mat-mini-fab
     matTooltip="Toggle sidebar"
     matTooltipPosition="right"
-    (click)="toggleSidebar(this.drawer)"
+    (click)="toggleSidebar()"
     color="accent"
     id="sideNavToggle"
   >

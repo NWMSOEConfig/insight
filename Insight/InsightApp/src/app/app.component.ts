@@ -21,8 +21,11 @@ export class AppComponent {
 
   constructor(private http: HttpClient) {
     setTenant(this.getTenant());
-    this.toggleDirection = localStorage.getItem('toggleDirection') || 'keyboard_arrow_left'; 
+    this.toggleDirection =
+      localStorage.getItem('toggleDirection') || 'keyboard_arrow_left';
   }
+
+  ngOnInit(): void {}
 
   changeTenant(site: string, environment: string): void {
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
@@ -39,12 +42,12 @@ export class AppComponent {
     return JSON.parse(localStorage.getItem('tenant') || noTenant);
   }
 
-  toggleSidebar(sidebar: any): void {
+  toggleSidebar(): void {
     this.toggleDirection === 'keyboard_arrow_right'
       ? (this.toggleDirection = 'keyboard_arrow_left')
       : (this.toggleDirection = 'keyboard_arrow_right');
 
-    localStorage.setItem('toggleDirection', this.toggleDirection)
+    localStorage.setItem('toggleDirection', this.toggleDirection);
   }
 
   isSidebarToggled(): boolean {
