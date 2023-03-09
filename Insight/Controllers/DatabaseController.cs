@@ -130,6 +130,7 @@ public class DataServer {
                     });
                     dbSetting.Tenants = list.ToArray();
                 }
+                dbSetting.Category = dbSetting.Name.Substring(0, 1);
             }
             else
             {
@@ -137,6 +138,7 @@ public class DataServer {
                 var newSetting = new DatabaseSetting
                 {
                     Name = setting.Name,
+                    Category = setting.Name.Substring(0, 1),
                     Parameters = setting.Parameters?.ToArray(),
                     TenantNames = new string[] { tenantName },
                     Tenants = new DatabaseTenant[]
@@ -160,6 +162,9 @@ public class DataServer {
                 newSettings.Add(newSetting);
             }
         });
+
+        dbSettings.OrderBy(setting => setting.Category);
+        newSettings.OrderBy(setting => setting.Category);
 
         if (dbSettings.Count > 0)
             await _settingsService.UpdateManyAsync(dbSettings);
