@@ -1,4 +1,8 @@
+export interface DatabaseEnvironment {
+    Name: string
+}
+
 export interface DatabaseTenant {
-    name: string,
-    environments: []
+    Name: string,
+    Environments: DatabaseEnvironment[]
 }

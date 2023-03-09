@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { setTenant } from './tenant-singleton';
 import { environment } from 'src/environments/environment';
 import { ApiService } from './api-service/api.service';
+import { DatabaseTenant } from 'src/models/databaseTenant';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { ApiService } from './api-service/api.service';
 })
 export class AppComponent {
   toggleDirection: string;
-  tenants: any = [];
+  tenants!: DatabaseTenant[];
   selectedTenant: any = {};
 
   constructor(private http: HttpClient, private apiService: ApiService) {
@@ -21,12 +22,8 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    // this.tenants = this.apiService.getAllTenants();
-    // console.log(this.apiService.getAllTenants());
-
     this.apiService.getAllTenants().subscribe((tenants) => {
       this.tenants = tenants;
-      console.log(this.tenants);
     });
   }
 
