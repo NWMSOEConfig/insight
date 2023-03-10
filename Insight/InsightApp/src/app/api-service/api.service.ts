@@ -27,7 +27,7 @@ export class ApiService {
   public getAllSettings() {
     const context = getTenant();
     return this.httpClient.get<DatabaseSetting[]>(
-      `${this.apiURL}/data/dbsettings`
+      `${this.apiURL}/data/dbsettings?tenantName=${context.site}&environmentName=${context.environment}`
     );
   }
 
