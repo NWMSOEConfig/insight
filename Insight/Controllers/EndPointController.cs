@@ -148,7 +148,7 @@ public class DataController : ControllerBase
     [Route("dbsettings")]
     public async Task<IActionResult> GetAllSettingsAsync(string tenantName, string environmentName)
     {
-        return Ok(JsonSerializer.Serialize((await _dbController.GetSettingsAsync())));
+        return Ok(JsonSerializer.Serialize((await _dbController.GetTenantSettingsAsync(tenantName, environmentName))));
     }
 
     [HttpGet]
