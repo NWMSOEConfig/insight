@@ -32,6 +32,7 @@ export class AppComponent {
     localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
     setTenant(this.getTenant());
     this.selectedTenant = {};
+    window.location.reload(); // 
   }
 
   /**
