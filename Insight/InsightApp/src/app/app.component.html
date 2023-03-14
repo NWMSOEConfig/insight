@@ -3,8 +3,7 @@
   <span>New World</span>
   <span class="spacer"></span>
 
-  <!-- <button mat-button [matMenuTriggerFor]="site">Select a tenant</button> -->
-
+  <!-- Tenant Selector -->
   <mat-form-field >
     <button class="selectOverlay" [matMenuTriggerFor]="site"></button>
     <mat-label>
@@ -16,7 +15,6 @@
     </mat-label>
     <mat-select></mat-select>
   </mat-form-field>
-
   <mat-menu #site="matMenu">
     <div *ngFor="let tenant of tenants">
       <button mat-menu-item [matMenuTriggerFor]="environment">
@@ -33,7 +31,7 @@
       </mat-menu>
     </div>
   </mat-menu>
-
+  <!-- Remainder of Toolbar -->
   <span class="spacer"></span>
   <button mat-icon-button>
     <mat-icon>person</mat-icon>
