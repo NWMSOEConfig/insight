@@ -16,7 +16,10 @@ export class TenantSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiService.getAllTenants().subscribe((tenants) => {
-      this.tenants = tenants;
+      // Sort and set tenants alphabetically
+      this.tenants = tenants.sort((a: any, b: any) =>
+        a.Name.localeCompare(b.Name)
+      );
     });
   }
 
