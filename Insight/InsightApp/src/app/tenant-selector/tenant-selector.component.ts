@@ -4,7 +4,7 @@ import { ApiService } from '../api-service/api.service';
 import { getTenant, setTenant, Tenant } from '../tenant-singleton';
 
 @Component({
-  selector: 'tenant-selector',
+  selector: 'app-tenant-selector',
   templateUrl: './tenant-selector.component.html',
   styleUrls: ['./tenant-selector.component.css'],
 })
