@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { setTenant } from './tenant-singleton';
+import { getTenant, setTenant, Tenant } from './tenant-singleton';
 import { environment } from 'src/environments/environment';
 import { ApiService } from './api-service/api.service';
 import { DatabaseTenant } from 'src/models/databaseTenant';
+import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
 
 @Component({
   selector: 'app-root',
@@ -12,37 +13,14 @@ import { DatabaseTenant } from 'src/models/databaseTenant';
 })
 export class AppComponent {
   toggleDirection: string;
-  tenants!: DatabaseTenant[];
-  selectedTenant: any = {};
 
   constructor(private http: HttpClient, private apiService: ApiService) {
-    setTenant(this.getTenant());
+    setTenant(getTenant());
     this.toggleDirection =
       localStorage.getItem('toggleDirection') || 'keyboard_arrow_left';
   }
 
-  ngOnInit(): void {
-    this.apiService.getAllTenants().subscribe((tenants) => {
-      this.tenants = tenants;
-    });
-  }
-
-  changeTenant(site: string, environment: string): void {
-    this.selectedTenant = { site: site, environment: environment };
-    localStorage.setItem('tenant', JSON.stringify(this.selectedTenant));
-    setTenant(this.getTenant());
-    this.selectedTenant = {};
-    window.location.reload(); // 
-  }
-
-  /**
-   * Get the tenant a client has previously selected to persist data despite browser refreshes
-   * @returns client's local storage of Tenant selection (site and environment)
-   */
-  getTenant(): any {
-    const noTenant = JSON.stringify({ site: null, environment: null });
-    return JSON.parse(localStorage.getItem('tenant') || noTenant);
-  }
+  ngOnInit(): void {}
 
   toggleSidebar(): void {
     this.toggleDirection === 'keyboard_arrow_right'

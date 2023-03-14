@@ -9,7 +9,8 @@ let tenant: Tenant = {
 };
 
 export function getTenant(): Tenant {
-  return tenant;
+  const noTenant = JSON.stringify({ site: null, environment: null });
+  return JSON.parse(localStorage.getItem('tenant') || noTenant);
 }
 
 export function setTenant(newTenant: Tenant) {
