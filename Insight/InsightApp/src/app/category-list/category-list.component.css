@@ -2,3 +2,7 @@
   margin: auto;
   max-width: 640px;
 }
+
+a, a:hover {
+  text-decoration: none;
+}
