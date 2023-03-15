@@ -48,6 +48,9 @@ public class DataServer {
     public async Task DeleteAllTenantsAsync() =>
         await _tenantService.DeleteAllAsync();
 
+    public async Task DeleteAllQueuedChangesAsync() =>
+        await _queuedChangeService.DeleteAllAsync();
+
     /// <summary>
     /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
     /// If a setting already exists, all relevant data is copied before updating.
@@ -261,15 +264,14 @@ public class DataServer {
         {
             entry = new QueuedChange
             {
-                Settings = new DatabaseSetting[]
-                {
-                    new DatabaseSetting
+                Settings = new List<(DatabaseSetting old, DatabaseSetting update)>
+                {(new DatabaseSetting
                     {
                         Name = setting.Name,
                         Parameters = setting.Parameters.ToArray(),
-                    }
+                    }, originalSetting )
                 },
-                OriginalSettings = new DatabaseSetting[] { originalSetting },
+                // OriginalSettings = new DatabaseSetting[] { originalSetting },
                 User = new User
                 {
                     Name = userName,
@@ -290,7 +292,6 @@ public class DataServer {
         else
         {
             var settings = entry.Settings.ToList();
-            var oldSettings = entry.OriginalSettings.ToList();
             var newSetting = new DatabaseSetting
             {
                 Name = setting.Name,
@@ -301,25 +302,24 @@ public class DataServer {
             // don't make a duplicate queue entry.
             foreach (var s in settings)
             {
-                if (s.Name == setting.Name)
+                if (s.update.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            settings.Add(newSetting);
-            entry.Settings = settings.ToArray();
+            settings.Add((originalSetting, newSetting));
+            entry.Settings = settings;
 
-            foreach (var s in entry.OriginalSettings)
+            foreach (var s in settings)
             {
-                if (s.Name == setting.Name)
+                if (s.old.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            oldSettings.Add(originalSetting);
-            entry.OriginalSettings = oldSettings.ToArray();
+            settings.Add((originalSetting, newSetting));
         }
 
         await _queuedChangeService.CreateOrUpdateAsync(entry);
