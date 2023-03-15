@@ -103,7 +103,6 @@ export class CategoryListComponent implements OnInit {
     this.settingName = this.parent.Name;
     this.level++;
     this.breadcrumbs.push({ Name: this.parent.Name, level: this.level });
-    console.log(this.breadcrumbs);
     this.requestDbTarget(this.level);
   }
 
