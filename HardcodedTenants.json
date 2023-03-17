@@ -1,0 +1,317 @@
+[
+  {
+    "Name": "MI",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "MN",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "MO",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "MT",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "ND",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "NY",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT2",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "OK",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "PA",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "PB",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "SC",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "WA",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "WI",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Prod",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "ZTT",
+    "Environments": [
+      {
+        "Name": "Alt",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      },
+      {
+        "Name": "UAT",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  },
+  {
+    "Name": "MSOE",
+    "Environments": [
+      {
+        "Name": "Test",
+        "EnvironmentLastPulled": null,
+        "Url": "https://pauat.newworldnow.com/v7/api/applicationsettings/"
+      }
+    ]
+  }
+]

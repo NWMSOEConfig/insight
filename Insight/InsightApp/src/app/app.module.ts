@@ -25,6 +25,7 @@ import { ConfigurationPageComponent } from './configuration-page/configuration-p
 import { PublishPageComponent } from './publish-page/publish-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
 import { HistoryCardComponent } from './history-card/history-card.component';
+import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
 import { CommitPageComponent } from './commit-page/commit-page.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -58,6 +59,7 @@ import { HttpClientModule } from '@angular/common/http';
     PublishPageComponent,
     HistoryPageComponent,
     HistoryCardComponent,
+    TenantSelectorComponent,
     CommitPageComponent
   ],
   imports: [
