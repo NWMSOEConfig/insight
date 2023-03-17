@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatabaseSetting } from 'src/models/databaseSetting';
 import { ApiService } from '../api-service/api.service';
 
 /**
@@ -23,7 +24,7 @@ export class CategoryListComponent implements OnInit {
   level: DbObjects;
   parent: any;
   breadcrumbs: any;
-  settings: any;
+  settings!: DatabaseSetting[];
 
   constructor(private apiService: ApiService) {
     this.settingName = JSON.parse(localStorage.getItem('settingName')!);
@@ -102,7 +103,6 @@ export class CategoryListComponent implements OnInit {
     this.settingName = this.parent.Name;
     this.level++;
     this.breadcrumbs.push({ Name: this.parent.Name, level: this.level });
-    console.log(this.breadcrumbs);
     this.requestDbTarget(this.level);
   }
 

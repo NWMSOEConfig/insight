@@ -7,6 +7,7 @@ import { Category } from '../../models/category';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
+import { DatabaseTenant } from '../../models/databaseTenant';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,14 @@ export class ApiService {
   public getAllSettings() {
     const context = getTenant();
     return this.httpClient.get<DatabaseSetting[]>(
-      `${this.apiURL}/data/dbsettings`
+      `${this.apiURL}/data/dbsettings?tenantName=${context.site}&environmentName=${context.environment}`
+    );
+  }
+
+  public getAllTenants() {
+    const context = getTenant();
+    return this.httpClient.get<DatabaseTenant[]>(
+      `${this.apiURL}/data/dbtenants`
     );
   }
 
