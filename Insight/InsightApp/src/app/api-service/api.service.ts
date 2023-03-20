@@ -76,4 +76,11 @@ export class ApiService {
       }
     );
   }
+
+  public getCommits() {
+    const context = getTenant();
+    return this.httpClient.get<DatabaseTenant[]>(
+      `${this.apiURL}/data/commits?tenantName=${context.site}&environmentName=${context.environment}`
+    );
+  }
 }
