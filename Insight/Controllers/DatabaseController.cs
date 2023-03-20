@@ -237,7 +237,9 @@ public class DataServer {
         }
 
         return null;
-    }    
+    }
+    public async Task<List<Commit>> GetCommitsAsync(string tenantName, string environmentName)
+        => await _commitService.GetCommitsAsync(tenantName, environmentName);
 
     /// <summary>
     /// Add a setting to a queue. If the queue for the specified combination
