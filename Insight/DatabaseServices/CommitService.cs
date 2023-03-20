@@ -27,4 +27,26 @@ public class DatabaseCommitService : ServiceParent<Commit>
 
     public async Task RemoveAsync(string id) =>
         await collection.DeleteOneAsync(x => x.Id == id);
+
+    public async Task<List<Commit>> GetCommitsAsync(string tenantName, string environmentName)
+    {
+        List<Commit> commits = new List<Commit>();
+        List<Commit> matchedCommits = new List<Commit>();
+
+        // get all commits
+        commits = await GetAsync();
+
+        commits.ForEach(commit =>
+        {
+            if(commit.QueueChange != null) {
+                QueuedChange queuedChange = commit.QueueChange;
+                
+                if (queuedChange.Tenant.Name == tenantName && queuedChange.Tenant.Environments.Any(env => env.Name == environmentName)) 
+                    matchedCommits.Add(commit);
+            }
+        });
+
+        matchedCommits.OrderBy(commit => commit.CommitId).ToList();
+        return matchedCommits;
+    }
 }
