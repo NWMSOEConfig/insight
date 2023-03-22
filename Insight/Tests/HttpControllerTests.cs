@@ -27,6 +27,30 @@ public class HttpControllerTests
         Assert.ThrowsAsync<HttpRequestException>(async () => await httpController.PopulateGetRequest(URL));
     }
 
+    [Test]
+    public void TestPopulateGetRequestRequiresValidUrl()
+    {
+        SetupRequestOutput(string.Empty);
+        Assert.ThrowsAsync<ArgumentException>(async () => await httpController.PopulateGetRequest("abc"));
+    }
+
+    [Test]
+    public void TestPopulateGetRequestRequiresValidResponse()
+    {
+        SetupRequestOutput("null");
+        Assert.ThrowsAsync<NullReferenceException>(async () => await httpController.PopulateGetRequest(URL));
+    }
+
+    [Test]
+    public async Task TestPopulateGetRequestReturnsData()
+    {
+        SetupRequestOutput(@"[{""Name"":""Foo"",""Value"":""Test""}]");
+        var result = await httpController.PopulateGetRequest(URL);
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("Foo", result[0].Name);
+        Assert.AreEqual("Test", result[0].Parameters[0].Value);
+    }
+
     private void SetupRequestOutput(string response, HttpStatusCode status = HttpStatusCode.OK)
     {
         // based on https://stackoverflow.com/a/44028625
