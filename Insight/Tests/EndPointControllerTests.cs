@@ -25,7 +25,7 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>();
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new DatabaseSetting[] { },
+            Settings = new List<(DatabaseSetting, DatabaseSetting)>(),
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
@@ -38,16 +38,19 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>();
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new DatabaseSetting[]
+            Settings = new List<(DatabaseSetting, DatabaseSetting)>
             {
-                new DatabaseSetting
-                {
-                    Name = "Foo",
-                    Parameters = new Parameter[]
+                (
+                    null!, // test only concerns new setting
+                    new DatabaseSetting
                     {
-                        new Parameter("Bar"),
-                    },
-                },
+                        Name = "Foo",
+                        Parameters = new Parameter[]
+                        {
+                            new Parameter("Bar"),
+                        },
+                    }
+                ),
             },
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
@@ -76,16 +79,19 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>();
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new DatabaseSetting[]
+            Settings = new List<(DatabaseSetting, DatabaseSetting)>
             {
-                new DatabaseSetting
-                {
-                    Name = "Foo",
-                    Parameters = new Parameter[]
+                (
+                    null!, // test only concerns new setting
+                    new DatabaseSetting
                     {
-                        new Parameter("Bar"),
-                    },
-                },
+                        Name = "Foo",
+                        Parameters = new Parameter[]
+                        {
+                            new Parameter("Bar"),
+                        },
+                    }
+                ),
             },
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
