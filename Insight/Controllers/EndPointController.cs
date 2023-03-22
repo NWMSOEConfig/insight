@@ -126,7 +126,7 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment)
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment, [FromQuery] string commitMessage, [FromQuery] int referenceId)
     {
         string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
         Commit? commit;
@@ -139,7 +139,7 @@ public class DataController : ControllerBase
         {
             Console.WriteLine("Queue not found");
         }
-        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
+        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment, commitMessage, referenceId);
         return commit;
 
     }
