@@ -3,6 +3,7 @@ namespace Tests;
 using Insight.Controllers;
 using Insight.Models;
 using Insight.Services;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 
@@ -57,5 +58,38 @@ public class EndPointControllerTests
         Assert.AreEqual(null, setting.Tenant);
         Assert.AreEqual(1, setting.Parameters.Count);
         Assert.AreEqual("Bar", setting.Parameters[0].Value);
+    }
+
+    [Test]
+    public async Task TestGetSettingAsyncNullSetting()
+    {
+        var mockService = new Mock<DatabaseQueuedChangeService>();
+        mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((QueuedChange?)null);
+        var database = new DataServer(null, null, null, mockService.Object, null, null);
+        var controller = new DataController(database);
+        Assert.IsInstanceOf<BadRequestResult>(await controller.GetSettingAsync("a", "b", "c"));
+    }
+
+    [Test]
+    public async Task TestGetSettingAsync()
+    {
+        var mockService = new Mock<DatabaseQueuedChangeService>();
+        mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
+        {
+            Settings = new DatabaseSetting[]
+            {
+                new DatabaseSetting
+                {
+                    Name = "Foo",
+                    Parameters = new Parameter[]
+                    {
+                        new Parameter("Bar"),
+                    },
+                },
+            },
+        });
+        var database = new DataServer(null, null, null, mockService.Object, null, null);
+        var controller = new DataController(database);
+        Assert.IsInstanceOf<OkObjectResult>(await controller.GetSettingAsync("Foo", "b", "c"));
     }
 }

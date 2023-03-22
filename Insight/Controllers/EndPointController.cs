@@ -104,7 +104,7 @@ public class DataController : ControllerBase
     [Route("livesetting")]
     public async Task<IActionResult> GetSettingAsync(string settingName, string tenantName, string environmentName)
     {
-        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var userName = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
         string url = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
         List<NewWorldSetting> settings;
         var setting = await GetQueuedSetting(settingName, userName, tenantName, environmentName);
