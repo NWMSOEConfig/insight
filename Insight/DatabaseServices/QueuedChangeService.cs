@@ -15,7 +15,7 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
         collection = mongoDatabase.GetCollection<QueuedChange>("Queued Changes");
     }
 
-    public async Task<QueuedChange?> GetAsync(string userName, string tenantName, string environmentName) =>
+    public virtual async Task<QueuedChange?> GetAsync(string userName, string tenantName, string environmentName) =>
         await collection.Find(x => x.User.Name == userName
                                    && x.Tenant.Name == tenantName
                                    && x.Tenant.Environments.Any(env => env.Name == environmentName))

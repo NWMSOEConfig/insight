@@ -6,6 +6,15 @@ public class ServiceParent<T>
 {
     protected IMongoCollection<T> collection;
 
+    protected ServiceParent()
+    {
+    }
+
+    public ServiceParent(IMongoCollection<T> collection)
+    {
+        this.collection = collection;
+    }
+
     public async Task<List<T>> GetAsync() =>
         await collection.Find(_ => true).ToListAsync();
 
