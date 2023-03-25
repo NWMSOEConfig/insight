@@ -199,9 +199,10 @@ public class DataController : ControllerBase
         else
         {
             List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
-            for(int i = 0; i < dbQueue.Settings.Count; i++) {
-                updatedSettings.Add(new NewWorldSetting(dbQueue.Settings[i].update.Name) {
-                    Parameters = dbQueue.Settings[i].update.Parameters?.ToList(),
+
+            foreach(var setting in dbQueue.Settings) {
+                updatedSettings.Add(new NewWorldSetting(setting.update.Name) {
+                    Parameters = setting.update.Parameters?.ToList(),
                 });
             }
             return updatedSettings;
