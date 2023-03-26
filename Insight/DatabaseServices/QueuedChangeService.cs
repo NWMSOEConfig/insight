@@ -41,4 +41,8 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
         else
             await collection.InsertOneAsync(change);
     }
+
+    public async Task DeleteAllAsync() {
+        await collection.DeleteManyAsync(_ => true);
+    }
 }

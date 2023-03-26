@@ -78,14 +78,14 @@ public class DataController : ControllerBase
         if (queue is null)
             return null;
 
-        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == settingName);
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.update.Name == settingName);
 
-        if (dbSetting is null)
+        if (dbSetting.update is null)
             return null;
 
-        var setting = new NewWorldSetting(dbSetting.Name)
+        var setting = new NewWorldSetting(dbSetting.update.Name)
         {
-            Parameters = dbSetting.Parameters?.ToList(),
+            Parameters = dbSetting.update.Parameters?.ToList(),
             Category = null,
             Tenant = null, // TODO
         };
@@ -213,10 +213,13 @@ public class DataController : ControllerBase
         }
         else
         {
-            return dbQueue.Settings.Select(setting => new NewWorldSetting(setting.Name)
-            {
-                Parameters = setting.Parameters?.ToList(),
-            });
+            List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
+            foreach(var setting in dbQueue.Settings) {
+                updatedSettings.Add(new NewWorldSetting(setting.update.Name) {
+                    Parameters = setting.update.Parameters?.ToList(),
+                });
+            }
+            return updatedSettings;
         }
     }
 
@@ -239,13 +242,16 @@ public class DataController : ControllerBase
 
         bool success;
 
-        var settings = dbQueue.Settings.ToList();
-        success = settings.RemoveAll(setting => setting.Name == settingName) > 0;
-        dbQueue.Settings = settings.ToArray();
+        var settings = dbQueue.Settings;
+        success = settings.RemoveAll(setting => setting.update.Name == settingName) > 0;
+        for(int i = 0; i < settings.Count; i++) {
+            if(settings[i].update.Name == settingName) {
+                settings[i] = (null!, null!);
+                success = true;
+            }
+        }
 
-        var oldSettings = dbQueue.OriginalSettings.ToList();
-        success &= oldSettings.RemoveAll(setting => setting.Name == settingName) > 0;
-        dbQueue.OriginalSettings = oldSettings.ToArray();
+        dbQueue.Settings = settings;
 
         await _dbController.CreateOrUpdateQueue(dbQueue);
 
@@ -312,6 +318,11 @@ public class DataController : ControllerBase
     [Route("DeleteAllTenants")]
     public Task DeleteTenants() =>
         _dbController.DeleteAllTenantsAsync();
+
+    [HttpDelete]
+    [Route("DeleteAllQueuedChanges")]
+    public Task DeleteQueuedChanges() =>
+        _dbController.DeleteAllQueuedChangesAsync();
 }
 
 
