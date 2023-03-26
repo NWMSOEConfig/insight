@@ -10,5 +10,5 @@ export interface Commit {
   Message: "hiad",
   CommitId: number,
   Time: Date,
-  QueueChange: QueueChange[]
+  QueueChange: QueueChange
 }
