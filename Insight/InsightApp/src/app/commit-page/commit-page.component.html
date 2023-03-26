@@ -3,29 +3,37 @@
     <mat-card-header>
       <mat-card-title>
         <b>
-          {{ commit.id }}
+          {{ commit.CommitId }}
         </b>
-        {{ commit.message }}
+        <!-- {{ commit.Message }} -->
+        {{ "Placeholder for message field" }}
       </mat-card-title>
       <mat-card-subtitle>
-        {{ commit.user }}
+        {{ commit.QueueChange.User.Name }}
         committed on
-        {{ getTimestamp(commit.timestamp) | date : "mediumDate" }}
+        {{ getTimestamp(commit.Time) | date : "mediumDate" }}
         at
-        {{ getTimestamp(commit.timestamp) | date : "shortTime" }}
+        {{ getTimestamp(commit.Time) | date : "shortTime" }}
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      {{ commit.batch.length }}
-      {{ commit.batch.length === 1 ? "setting was" : "settings were" }} modified
+      {{ commit.QueueChange.Settings.length }}
+      {{
+        commit.QueueChange.Settings.length === 1
+          ? "setting was"
+          : "settings were"
+      }}
+      modified
       <mat-list>
-        <mat-list-item *ngFor="let change of commit.batch">
-          <mat-icon>arrow_right</mat-icon>
-          {{ change.settingName }}
+        <mat-list-item
+          *ngFor="let change of commit.QueueChange.Settings; index as i"
+        >
+          <mat-icon>keyboard_arrow_right</mat-icon>
+          {{ change.Name }}
           changed from
-          {{ change.oldValue }}
+          {{ commit.QueueChange.OriginalSettings.at(i).Parameters.at(0).Value }}
           to
-          {{ change.newValue }}
+          {{ change.Parameters.at(0).Value }}
         </mat-list-item>
       </mat-list>
     </mat-card-content>

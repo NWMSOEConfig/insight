@@ -1,14 +1,14 @@
-import { Setting } from "./setting"
+import { Setting } from './setting';
 
 export interface QueueChange {
-  Settings: Setting[],
-  OriginalSettings: Setting[],
-  User: any
+  Settings: any;
+  OriginalSettings: any;
+  User: any;
 }
 
 export interface Commit {
-  Message: "hiad",
-  CommitId: number,
-  Time: Date,
-  QueueChange: QueueChange
+  Message: 'hiad';
+  CommitId: number;
+  Time: Date;
+  QueueChange: QueueChange;
 }
