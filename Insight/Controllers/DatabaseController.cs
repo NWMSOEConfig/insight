@@ -5,7 +5,8 @@ using Insight.Models;
 
 namespace Insight.Controllers;
 
-public class DataServer {
+public class DataServer
+{
     private readonly DatabaseSettingsService _settingsService;
     private readonly DatabaseCommitService _commitService;
     private readonly DatabaseTenantService _tenantService;
@@ -13,7 +14,8 @@ public class DataServer {
     private readonly DatabaseUserService _userService;
     private readonly DatabaseEnvironmentService _environmentService;
     public DataServer(DatabaseSettingsService settingsService, DatabaseTenantService tenantService, DatabaseCommitService commitService,
-        DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService, DatabaseEnvironmentService environmentService) {
+        DatabaseQueuedChangeService databaseQueuedChangeService, DatabaseUserService userService, DatabaseEnvironmentService environmentService)
+    {
         _settingsService = settingsService;
         _commitService = commitService;
         _tenantService = tenantService;
@@ -69,7 +71,8 @@ public class DataServer {
         var tenant = await _tenantService.GetCategoryAsync(tenantName);
         DateTime? lastPulled = environment?.EnvironmentLastPulled?.ContainsKey(environmentName) ?? false
             ? environment.EnvironmentLastPulled[environmentName] : null;
-        if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow) {
+        if (lastPulled is not null && lastPulled.Value.AddSeconds(300) > DateTime.UtcNow)
+        {
             return lastPulled.Value;
         }
 
@@ -91,12 +94,12 @@ public class DataServer {
                     dbSetting.TenantNames = new string[] { tenantName };
                 else if (!dbSetting.TenantNames.Contains(tenantName))
                     dbSetting.TenantNames.Append(tenantName);
-                
-                if(dbSetting.Environments is null)
+
+                if (dbSetting.Environments is null)
                 {
                     dbSetting.Environments = new DatabaseEnvironment[]
                     {
-                        new DatabaseEnvironment 
+                        new DatabaseEnvironment
                         {
                             Name = environmentName,
                             Url = url
@@ -131,7 +134,7 @@ public class DataServer {
                     list.Add(new DatabaseTenant
                     {
                         Name = tenantName,
-                        Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url }},
+                        Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url } },
                     });
                     dbSetting.Tenants = list.ToArray();
                 }
@@ -162,7 +165,7 @@ public class DataServer {
                             Url = url,
                         }
                     }
-            };
+                };
 
                 newSettings.Add(newSetting);
             }
@@ -183,12 +186,12 @@ public class DataServer {
             tenant = new DatabaseTenant
             {
                 Name = tenantName,
-                Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}},
+                Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url } },
             };
             await _tenantService.CreateAsync(tenant);
         }
 
-        if(environment is null)
+        if (environment is null)
         {
             environment = new DatabaseEnvironment
             {
@@ -203,20 +206,23 @@ public class DataServer {
             environment.EnvironmentLastPulled = new();
         }
 
-        if ( tenant.Environments is null)
+        if (tenant.Environments is null)
         {
-            tenant.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url}};
+            tenant.Environments = new DatabaseEnvironment[] { new DatabaseEnvironment { Name = environmentName, Url = url } };
         }
         else if (!tenant.Environments.Any(environment => environment.Name == environmentName))
         {
             var list = tenant.Environments.ToList();
-            list.Add(new DatabaseEnvironment{ Name = environmentName, Url = url});
+            list.Add(new DatabaseEnvironment { Name = environmentName, Url = url });
             tenant.Environments = list.ToArray();
         }
 
-        if(lastPulled.Value != null) {
+        if (lastPulled.Value != null)
+        {
             environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
-        } else {
+        }
+        else
+        {
             lastPulled = DateTime.Now;
             environment.EnvironmentLastPulled[environmentName] = lastPulled.Value;
         }
@@ -225,11 +231,13 @@ public class DataServer {
         return lastPulled.Value;
     }
 
-    
-    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName ){
+
+    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName)
+    {
         Commit myCommit = new Commit();
         QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
-        if(queuedChange!=null){
+        if (queuedChange != null)
+        {
             myCommit.QueueChange = queuedChange;
             myCommit.Time = DateTime.UtcNow;
             await _commitService.CreateAsync(myCommit);
@@ -344,4 +352,7 @@ public class DataServer {
 
     public Task CreateOrUpdateQueue(QueuedChange queue)
         => _queuedChangeService.CreateOrUpdateAsync(queue);
+
+    public async Task<Commit> GetCommit(string tenantName, string environmentName, int id)
+        => await _commitService.GetCommitAsync(tenantName, environmentName, id);
 }

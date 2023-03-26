@@ -148,7 +148,7 @@ public class DataController : ControllerBase
     [Route("commits")]
     public async Task<IActionResult> GetCommitsAsync(string tenantName, string environmentName)
     {
-        
+
         return Ok(JsonSerializer.Serialize((await _dbController.GetCommitsAsync(tenantName, environmentName))));
     }
 
@@ -185,6 +185,13 @@ public class DataController : ControllerBase
     public IActionResult GetTenant(int id)
     {
         return id < 0 || id >= _tenants.Count ? BadRequest() : Ok(_tenants[id]);
+    }
+
+    [HttpGet]
+    [Route("commit")]
+    public async Task<IActionResult> GetCommitAsync([FromQuery] string tenantName, [FromQuery] string environmentName, [FromQuery] int id)
+    {
+        return Ok(JsonSerializer.Serialize((await _dbController.GetCommit(tenantName, environmentName, id))));
     }
 
     /// <summary>

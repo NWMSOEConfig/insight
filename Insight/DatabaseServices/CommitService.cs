@@ -38,15 +38,21 @@ public class DatabaseCommitService : ServiceParent<Commit>
 
         commits.ForEach(commit =>
         {
-            if(commit.QueueChange != null) {
+            if (commit.QueueChange != null)
+            {
                 QueuedChange queuedChange = commit.QueueChange;
-                
-                if (queuedChange.Tenant.Name == tenantName && queuedChange.Tenant.Environments.Any(env => env.Name == environmentName)) 
+
+                if (queuedChange.Tenant.Name == tenantName && queuedChange.Tenant.Environments.Any(env => env.Name == environmentName))
                     matchedCommits.Add(commit);
             }
         });
 
         matchedCommits.OrderBy(commit => commit.CommitId).ToList();
         return matchedCommits;
+    }
+    public async Task<Commit?> GetCommitAsync(string tenantName, string environmentName, int id)
+    {
+        List<Commit> commits = await GetAsync();
+        return commits.Find(x => x.CommitId == id && x.QueueChange.Tenant.Name == tenantName && x.QueueChange.Tenant.Environments.Any(env => env.Name == environmentName));
     }
 }

@@ -78,10 +78,17 @@ export class ApiService {
     );
   }
 
-  public getCommits() {
+  public getAllCommits() {
     const context = getTenant();
     return this.httpClient.get<Commit[]>(
       `${this.apiURL}/data/commits?tenantName=${context.site}&environmentName=${context.environment}`
+    );
+  }
+
+  public getCommit(id: number) {
+    const context = getTenant();
+    return this.httpClient.get<Commit[]>(
+      `${this.apiURL}/data/commit?tenantName=${context.site}&environmentName=${context.environment}&id=${id}`
     );
   }
 }
