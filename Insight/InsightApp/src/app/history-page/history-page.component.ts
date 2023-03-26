@@ -97,7 +97,7 @@ export class HistoryPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.getCommits().subscribe((data: Commit[]) => {
+    this.apiService.getAllCommits().subscribe((data: Commit[]) => {
       this.commits = data;
 
       this.commits = data.sort(
