@@ -12,7 +12,7 @@ public class EndPointControllerTests
     [Test]
     public async Task TestGetQueuedSettingNullQueue()
     {
-        var mockService = new Mock<DatabaseQueuedChangeService>();
+        var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((QueuedChange?)null);
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
@@ -22,7 +22,7 @@ public class EndPointControllerTests
     [Test]
     public async Task TestGetQueuedSettingNullSetting()
     {
-        var mockService = new Mock<DatabaseQueuedChangeService>();
+        var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
             Settings = new List<(DatabaseSetting, DatabaseSetting)>(),
@@ -35,7 +35,7 @@ public class EndPointControllerTests
     [Test]
     public async Task TestGetQueuedSetting()
     {
-        var mockService = new Mock<DatabaseQueuedChangeService>();
+        var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
             Settings = new List<(DatabaseSetting, DatabaseSetting)>
@@ -66,7 +66,7 @@ public class EndPointControllerTests
     [Test]
     public async Task TestGetSettingAsyncNullSetting()
     {
-        var mockService = new Mock<DatabaseQueuedChangeService>();
+        var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((QueuedChange?)null);
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
@@ -76,7 +76,7 @@ public class EndPointControllerTests
     [Test]
     public async Task TestGetSettingAsync()
     {
-        var mockService = new Mock<DatabaseQueuedChangeService>();
+        var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
             Settings = new List<(DatabaseSetting, DatabaseSetting)>
