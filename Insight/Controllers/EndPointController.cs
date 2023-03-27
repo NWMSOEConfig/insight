@@ -78,14 +78,14 @@ public class DataController : ControllerBase
         if (queue is null)
             return null;
 
-        var dbSetting = queue.Settings.FirstOrDefault(s => s.Name == settingName);
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.update.Name == settingName);
 
-        if (dbSetting is null)
+        if (dbSetting.update is null)
             return null;
 
-        var setting = new NewWorldSetting(dbSetting.Name)
+        var setting = new NewWorldSetting(dbSetting.update.Name)
         {
-            Parameters = dbSetting.Parameters?.ToList(),
+            Parameters = dbSetting.update.Parameters?.ToList(),
             Category = null,
             Tenant = null, // TODO
         };
@@ -104,8 +104,8 @@ public class DataController : ControllerBase
     [Route("livesetting")]
     public async Task<IActionResult> GetSettingAsync(string settingName, string tenantName, string environmentName)
     {
-        var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-        string url = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
+        var userName = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        string? url = await _dbController.GetUrlFromTenant(tenantName, environmentName);
         List<NewWorldSetting> settings;
         var setting = await GetQueuedSetting(settingName, userName, tenantName, environmentName);
         if (setting == null)
@@ -126,7 +126,7 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment)
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment, [FromQuery] string commitMessage, [FromQuery] int referenceId)
     {
         string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
         Commit? commit;
@@ -139,7 +139,7 @@ public class DataController : ControllerBase
         {
             Console.WriteLine("Queue not found");
         }
-        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
+        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment, commitMessage, referenceId);
         return commit;
 
     }
@@ -213,10 +213,14 @@ public class DataController : ControllerBase
         }
         else
         {
-            return dbQueue.Settings.Select(setting => new NewWorldSetting(setting.Name)
-            {
-                Parameters = setting.Parameters?.ToList(),
-            });
+            List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
+
+            foreach(var setting in dbQueue.Settings) {
+                updatedSettings.Add(new NewWorldSetting(setting.update.Name) {
+                    Parameters = setting.update.Parameters?.ToList(),
+                });
+            }
+            return updatedSettings;
         }
     }
 
@@ -239,13 +243,16 @@ public class DataController : ControllerBase
 
         bool success;
 
-        var settings = dbQueue.Settings.ToList();
-        success = settings.RemoveAll(setting => setting.Name == settingName) > 0;
-        dbQueue.Settings = settings.ToArray();
+        var settings = dbQueue.Settings;
+        success = settings.RemoveAll(setting => setting.update.Name == settingName) > 0;
+        for(int i = 0; i < settings.Count; i++) {
+            if(settings[i].update.Name == settingName) {
+                settings[i] = (null!, null!);
+                success = true;
+            }
+        }
 
-        var oldSettings = dbQueue.OriginalSettings.ToList();
-        success &= oldSettings.RemoveAll(setting => setting.Name == settingName) > 0;
-        dbQueue.OriginalSettings = oldSettings.ToArray();
+        dbQueue.Settings = settings;
 
         await _dbController.CreateOrUpdateQueue(dbQueue);
 
@@ -312,6 +319,11 @@ public class DataController : ControllerBase
     [Route("DeleteAllTenants")]
     public Task DeleteTenants() =>
         _dbController.DeleteAllTenantsAsync();
+
+    [HttpDelete]
+    [Route("DeleteAllQueuedChanges")]
+    public Task DeleteQueuedChanges() =>
+        _dbController.DeleteAllQueuedChangesAsync();
 }
 
 

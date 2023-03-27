@@ -15,7 +15,12 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
         collection = mongoDatabase.GetCollection<QueuedChange>("Queued Changes");
     }
 
-    public async Task<QueuedChange?> GetAsync(string userName, string tenantName, string environmentName) =>
+    public DatabaseQueuedChangeService(IMongoCollection<QueuedChange> collection)
+    {
+        this.collection = collection;
+    }
+
+    public virtual async Task<QueuedChange?> GetAsync(string userName, string tenantName, string environmentName) =>
         await collection.Find(x => x.User.Name == userName
                                    && x.Tenant.Name == tenantName
                                    && x.Tenant.Environments.Any(env => env.Name == environmentName))
@@ -40,5 +45,9 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
                                              && x.Tenant.Environments == change.Tenant.Environments, change);
         else
             await collection.InsertOneAsync(change);
+    }
+
+    public async Task DeleteAllAsync() {
+        await collection.DeleteManyAsync(_ => true);
     }
 }

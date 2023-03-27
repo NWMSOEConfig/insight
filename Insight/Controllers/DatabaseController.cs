@@ -55,6 +55,9 @@ public class DataServer
     public async Task DeleteAllTenantsAsync() =>
         await _tenantService.DeleteAllAsync();
 
+    public async Task DeleteAllQueuedChangesAsync() =>
+        await _queuedChangeService.DeleteAllAsync();
+
     /// <summary>
     /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
     /// If a setting already exists, all relevant data is copied before updating.
@@ -89,13 +92,8 @@ public class DataServer
             {
                 // Update setting
                 dbSetting.Parameters = setting.Parameters?.ToArray();
-
-                if (dbSetting.TenantNames is null)
-                    dbSetting.TenantNames = new string[] { tenantName };
-                else if (!dbSetting.TenantNames.Contains(tenantName))
-                    dbSetting.TenantNames.Append(tenantName);
-
-                if (dbSetting.Environments is null)
+                
+                if(dbSetting.Environments is null)
                 {
                     dbSetting.Environments = new DatabaseEnvironment[]
                     {
@@ -148,7 +146,6 @@ public class DataServer
                     Name = setting.Name,
                     Category = setting.Name.Substring(0, 1),
                     Parameters = setting.Parameters?.ToArray(),
-                    TenantNames = new string[] { tenantName },
                     Tenants = new DatabaseTenant[]
                     {
                         new DatabaseTenant
@@ -231,15 +228,16 @@ public class DataServer
         return lastPulled.Value;
     }
 
-
-    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName)
-    {
+    
+    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName, string commitMessage, int ReferenceId) {
         Commit myCommit = new Commit();
         QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
         if (queuedChange != null)
         {
             myCommit.QueueChange = queuedChange;
             myCommit.Time = DateTime.UtcNow;
+            myCommit.ReferenceId = ReferenceId;
+            myCommit.CommitMessage = commitMessage;
             await _commitService.CreateAsync(myCommit);
             return myCommit;
         }
@@ -281,15 +279,14 @@ public class DataServer
         {
             entry = new QueuedChange
             {
-                Settings = new DatabaseSetting[]
-                {
-                    new DatabaseSetting
+                Settings = new List<(DatabaseSetting old, DatabaseSetting update)>
+                {(new DatabaseSetting
                     {
                         Name = setting.Name,
                         Parameters = setting.Parameters.ToArray(),
-                    }
+                    }, originalSetting )
                 },
-                OriginalSettings = new DatabaseSetting[] { originalSetting },
+                // OriginalSettings = new DatabaseSetting[] { originalSetting },
                 User = new User
                 {
                     Name = userName,
@@ -310,7 +307,6 @@ public class DataServer
         else
         {
             var settings = entry.Settings.ToList();
-            var oldSettings = entry.OriginalSettings.ToList();
             var newSetting = new DatabaseSetting
             {
                 Name = setting.Name,
@@ -321,25 +317,24 @@ public class DataServer
             // don't make a duplicate queue entry.
             foreach (var s in settings)
             {
-                if (s.Name == setting.Name)
+                if (s.update.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            settings.Add(newSetting);
-            entry.Settings = settings.ToArray();
+            settings.Add((originalSetting, newSetting));
+            entry.Settings = settings;
 
-            foreach (var s in entry.OriginalSettings)
+            foreach (var s in settings)
             {
-                if (s.Name == setting.Name)
+                if (s.old.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            oldSettings.Add(originalSetting);
-            entry.OriginalSettings = oldSettings.ToArray();
+            settings.Add((originalSetting, newSetting));
         }
 
         await _queuedChangeService.CreateOrUpdateAsync(entry);
@@ -350,6 +345,21 @@ public class DataServer
     public Task<QueuedChange?> GetQueue(string userName, string tenantName, string environmentName)
         => _queuedChangeService.GetAsync(userName, tenantName, environmentName);
 
+    public async Task<string?> GetUrlFromTenant(string tenantName, string environmentName){
+        DatabaseTenant? tenant = await _tenantService.GetByNameAsync(tenantName);
+
+        if(tenant==null){
+            throw new ArgumentException("No such tenant exists");
+        }
+
+        foreach (DatabaseEnvironment e in tenant.Environments){
+            if(e.Name == environmentName){
+                return e.Url;
+            }
+        }
+
+        throw new ArgumentException("No such environment exists");
+    }
     public Task CreateOrUpdateQueue(QueuedChange queue)
         => _queuedChangeService.CreateOrUpdateAsync(queue);
 
