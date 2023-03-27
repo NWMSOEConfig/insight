@@ -27,7 +27,7 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>(),
+            Settings = new List<ChangedSetting>(),
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
@@ -40,19 +40,19 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>
+            Settings = new List<ChangedSetting>
             {
-                (
-                    null!, // test only concerns new setting
-                    new DatabaseSetting
+                new ChangedSetting {
+                oldSetting = null!,
+                newSetting = new DatabaseSetting
                     {
                         Name = "Foo",
                         Parameters = new Parameter[]
                         {
                             new Parameter("Bar"),
                         },
-                    }
-                ),
+                    },
+            }
             },
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
@@ -96,19 +96,18 @@ public class EndPointControllerTests
         var mockTenant = new Mock<DatabaseTenantService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>
-            {
-                (
-                    null!, // test only concerns new setting
-                    new DatabaseSetting
+            Settings = new List<ChangedSetting>
+            {new ChangedSetting {
+                oldSetting = null!,
+                newSetting = new DatabaseSetting
                     {
                         Name = "Foo",
                         Parameters = new Parameter[]
                         {
                             new Parameter("Bar"),
                         },
-                    }
-                ),
+                    },
+            }
             },
         });
         mockTenant.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(

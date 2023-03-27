@@ -4,6 +4,7 @@ import { getTenant } from '../tenant-singleton';
 /* Models */
 import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
+import { Commit } from '../../models/commit';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
@@ -74,6 +75,20 @@ export class ApiService {
           'Content-Type': 'application/json',
         },
       }
+    );
+  }
+
+  public getAllCommits() {
+    const context = getTenant();
+    return this.httpClient.get<Commit[]>(
+      `${this.apiURL}/data/commits?tenantName=${context.site}&environmentName=${context.environment}`
+    );
+  }
+
+  public getCommit(id: number) {
+    const context = getTenant();
+    return this.httpClient.get<Commit>(
+      `${this.apiURL}/data/commit?tenantName=${context.site}&environmentName=${context.environment}&id=${id}`
     );
   }
 }

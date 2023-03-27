@@ -53,7 +53,7 @@ class HttpController
     public void MakePostRequest(QueuedChange changes, string url)
     {
 
-        string jsonString = JsonConvert.SerializeObject(changes.Settings);
+        string jsonString = JsonConvert.SerializeObject(changes.Settings.ToString());
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
         Console.WriteLine(jsonString);
 

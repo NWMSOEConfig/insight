@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Commit } from 'src/models/commit';
+import { ApiService } from '../api-service/api.service';
 import { mockCommits } from '../history-page/mock-commits';
 
 @Component({
@@ -8,12 +10,15 @@ import { mockCommits } from '../history-page/mock-commits';
   styleUrls: ['./commit-page.component.css'],
 })
 export class CommitPageComponent implements OnInit {
-  commit: any;
+  commit!: Commit;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private apiService: ApiService) {
     var id = this.route.snapshot.paramMap.get('id'); // get commit ID via URL
-    this.commit = mockCommits.filter((c) => c.id == id).at(0); // get commit from mockCommits via ID
+    this.apiService.getCommit(parseInt(id!)).subscribe((data: Commit) => {
+      this.commit = data;
+    });
   }
+
   ngOnInit() {}
 
   getTimestamp(dateTime: any): Date {
