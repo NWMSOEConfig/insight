@@ -106,6 +106,8 @@ public class DataController : ControllerBase
     {
         var userName = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
         string url = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
+        var userName = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        string? url = await _dbController.GetUrlFromTenant(tenantName, environmentName);
         List<NewWorldSetting> settings;
         var setting = await GetQueuedSetting(settingName, userName, tenantName, environmentName);
         if (setting == null)
@@ -126,7 +128,7 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment)
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment, [FromQuery] string commitMessage, [FromQuery] int referenceId)
     {
         string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
         Commit? commit;
@@ -139,7 +141,7 @@ public class DataController : ControllerBase
         {
             Console.WriteLine("Queue not found");
         }
-        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment);
+        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment, commitMessage, referenceId);
         return commit;
 
     }
@@ -199,6 +201,7 @@ public class DataController : ControllerBase
         else
         {
             List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
+
             foreach(var setting in dbQueue.Settings) {
                 updatedSettings.Add(new NewWorldSetting(setting.update.Name) {
                     Parameters = setting.update.Parameters?.ToList(),

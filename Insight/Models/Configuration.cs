@@ -18,8 +18,6 @@ public class DatabaseSetting
 
     public bool Enabled { get; set; }
 
-    public string[] TenantNames { get; set; } = null!;
-
     public DatabaseEnvironment[] Environments { get; set; } = null!;
 
     public DatabaseTenant[] Tenants { get; set; } = null!;
@@ -57,6 +55,8 @@ public class Commit {
     public int CommitId { get; set; }
     public DateTime Time { get; set; }
     public QueuedChange QueueChange { get; set; } = null!;
+    public int ReferenceId { get; set; }
+    public string CommitMessage { get; set; } = null!;
 }
 
 public class DatabaseEnvironment {
