@@ -17,17 +17,19 @@ steps:
 
 - script: |
     npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+    cd Insight
+    dotnet publish -o publish
+  displayName: 'Install Angular CLI and publish'
 
 - task: CopyFiles@2
   inputs:
+    sourceFolder: $(Build.SourcesDirectory)
+    contents: 'Insight/publish'
     targetFolder: $(Build.ArtifactStagingDirectory)
-  displayName: 'Copy npm package'
+  displayName: 'Copy package'
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     artifact: 'drop'
-  displayName: 'Publish npm artifact'  
+  displayName: 'Publish artifact'  
