@@ -89,11 +89,6 @@ public class DataServer {
             {
                 // Update setting
                 dbSetting.Parameters = setting.Parameters?.ToArray();
-
-                if (dbSetting.TenantNames is null)
-                    dbSetting.TenantNames = new string[] { tenantName };
-                else if (!dbSetting.TenantNames.Contains(tenantName))
-                    dbSetting.TenantNames.Append(tenantName);
                 
                 if(dbSetting.Environments is null)
                 {
@@ -148,7 +143,6 @@ public class DataServer {
                     Name = setting.Name,
                     Category = setting.Name.Substring(0, 1),
                     Parameters = setting.Parameters?.ToArray(),
-                    TenantNames = new string[] { tenantName },
                     Tenants = new DatabaseTenant[]
                     {
                         new DatabaseTenant
@@ -229,12 +223,14 @@ public class DataServer {
     }
 
     
-    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName ){
+    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName, string commitMessage, int ReferenceId) {
         Commit myCommit = new Commit();
         QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
         if(queuedChange!=null){
             myCommit.QueueChange = queuedChange;
             myCommit.Time = DateTime.UtcNow;
+            myCommit.ReferenceId = ReferenceId;
+            myCommit.CommitMessage = commitMessage;
             await _commitService.CreateAsync(myCommit);
             return myCommit;
         }
