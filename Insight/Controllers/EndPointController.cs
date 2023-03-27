@@ -78,14 +78,14 @@ public class DataController : ControllerBase
         if (queue is null)
             return null;
 
-        var dbSetting = queue.Settings.FirstOrDefault(s => s.update.Name == settingName);
+        var dbSetting = queue.Settings.FirstOrDefault(s => s.newSetting.Name == settingName);
 
-        if (dbSetting.update is null)
+        if (dbSetting?.newSetting is null)
             return null;
 
-        var setting = new NewWorldSetting(dbSetting.update.Name)
+        var setting = new NewWorldSetting(dbSetting.newSetting.Name)
         {
-            Parameters = dbSetting.update.Parameters?.ToList(),
+            Parameters = dbSetting.newSetting.Parameters?.ToList(),
             Category = null,
             Tenant = null, // TODO
         };
@@ -215,8 +215,8 @@ public class DataController : ControllerBase
         {
             List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
             foreach(var setting in dbQueue.Settings) {
-                updatedSettings.Add(new NewWorldSetting(setting.update.Name) {
-                    Parameters = setting.update.Parameters?.ToList(),
+                updatedSettings.Add(new NewWorldSetting(setting.newSetting.Name) {
+                    Parameters = setting.newSetting.Parameters?.ToList(),
                 });
             }
             return updatedSettings;
@@ -243,10 +243,10 @@ public class DataController : ControllerBase
         bool success;
 
         var settings = dbQueue.Settings;
-        success = settings.RemoveAll(setting => setting.update.Name == settingName) > 0;
+        success = settings.RemoveAll(setting => setting.newSetting.Name == settingName) > 0;
         for(int i = 0; i < settings.Count; i++) {
-            if(settings[i].update.Name == settingName) {
-                settings[i] = (null!, null!);
+            if(settings[i].newSetting.Name == settingName) {
+                settings[i] = new ChangedSetting { };
                 success = true;
             }
         }
@@ -274,7 +274,7 @@ public class DataController : ControllerBase
         try
         {
             var queue = await _dbController.EnqueueSetting(setting, tenantName, environmentName, userName);
-            return Ok($"queued {setting.Parameters.Count} parameter(s) for this change, now at {queue.Settings.Count()} setting(s) queued");
+            return Ok($"queued {setting.Parameters?.Count} parameter(s) for this change, now at {queue.Settings.Count()} setting(s) queued");
         }
         catch (ArgumentException e)
         {

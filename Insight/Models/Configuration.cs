@@ -37,7 +37,7 @@ public class QueuedChange {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
-    public List<(DatabaseSetting old, DatabaseSetting update)> Settings { get; set; } = null!;
+    public List<ChangedSetting> Settings { get; set; } = null!;
     public User User { get; set; } = null!;
     public DatabaseTenant Tenant { get; set; } = null!;
 }
@@ -49,6 +49,11 @@ public class User {
     public string Name { get; set; } = null!;
     public int UserId { get; set; }
 }
+
+public class ChangedSetting {
+    public DatabaseSetting oldSetting { get; set; } = null!;
+    public DatabaseSetting newSetting { get; set; } = null!;
+ }
 
 public class Commit {
     [BsonId]
