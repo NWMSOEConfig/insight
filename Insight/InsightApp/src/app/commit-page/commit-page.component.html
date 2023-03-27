@@ -5,8 +5,7 @@
         <b>
           {{ commit.CommitId }}
         </b>
-        <!-- {{ commit.Message }} -->
-        {{ "Placeholder for message field" }}
+        {{ commit.CommitMessage }}
       </mat-card-title>
       <mat-card-subtitle>
         {{ commit.QueueChange.User.Name }}
@@ -17,23 +16,28 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      {{ commit.QueueChange.Settings.length }}
-      {{
-        commit.QueueChange.Settings.length === 1
-          ? "setting was"
-          : "settings were"
-      }}
-      modified
+      <div>
+        {{ "Reference Id: " + commit.ReferenceId }}
+      </div>
+      <div>
+        {{ commit.QueueChange.Settings.length }}
+        {{
+          commit.QueueChange.Settings.length === 1
+            ? "setting was"
+            : "settings were"
+        }}
+        modified
+      </div>
       <mat-list>
         <mat-list-item
           *ngFor="let change of commit.QueueChange.Settings; index as i"
         >
           <mat-icon>keyboard_arrow_right</mat-icon>
-          {{ change.Name }}
+          {{ change.oldSetting.Name }}
           changed from
-          {{ commit.QueueChange.OriginalSettings.at(i).Parameters.at(0).Value }}
+          {{ change.oldSetting.Parameters.at(0).Value }}
           to
-          {{ change.Parameters.at(0).Value }}
+          {{ change.newSetting.Parameters.at(0).Value }}
         </mat-list-item>
       </mat-list>
     </mat-card-content>

@@ -80,6 +80,28 @@ export class HistoryPageComponent implements OnInit {
           this.searchUser.toLowerCase()
         )
       ); // Filter username
+
+    var filteredCommitsBySetting: Commit[] = [];
+
+    for (let i = 0; i < this.filteredCommits.length; i++) {
+      var batch = this.filteredCommits.at(i)?.QueueChange.Settings;
+      var filter = false;
+      for (let j = 0; j < batch.length; j++) {
+        var setting = batch.at(j);
+        if (
+          setting.oldSetting.Name.toLowerCase().startsWith(
+            this.searchSetting.toLowerCase()
+          )
+        ) {
+          filter = true;
+        }
+      }
+      if (filter) {
+        filteredCommitsBySetting.push(this.filteredCommits.at(i)!);
+      }
+    }
+
+    this.filteredCommits = filteredCommitsBySetting;
   }
 
   /**

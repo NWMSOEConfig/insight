@@ -9,8 +9,7 @@
             </b>
           </a>
           <span id="commitMessage">
-            <!-- {{ commit.Message }} -->
-            {{ "Placeholder for message field" }}
+            {{ commit.CommitMessage }}
           </span>
         </div>
       </mat-panel-title>
@@ -31,11 +30,16 @@
       </mat-panel-description>
     </div>
   </mat-expansion-panel-header>
-  {{ commit.QueueChange.Settings.length }}
-  {{
-    commit.QueueChange.Settings.length === 1 ? "setting was" : "settings were"
-  }}
-  modified
+  <div>
+    {{ "Reference Id: " + commit.ReferenceId }}
+  </div>
+  <div>
+    {{ commit.QueueChange.Settings.length }}
+    {{
+      commit.QueueChange.Settings.length === 1 ? "setting was" : "settings were"
+    }}
+    modified
+  </div>
   <mat-list id="commitDescription">
     <mat-list-item
       *ngFor="
@@ -44,11 +48,11 @@
       "
     >
       <mat-icon>keyboard_arrow_right</mat-icon>
-      {{ change.Name }}
+      {{ change.oldSetting.Name }}
       changed from
-      {{ commit.QueueChange.OriginalSettings.at(i).Parameters.at(0).Value }}
+      {{ change.oldSetting.Parameters.at(0).Value }}
       to
-      {{ change.Parameters.at(0).Value }}
+      {{ change.newSetting.Parameters.at(0).Value }}
     </mat-list-item>
 
     <mat-list-item

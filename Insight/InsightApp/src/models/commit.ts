@@ -7,7 +7,8 @@ export interface QueueChange {
 }
 
 export interface Commit {
-  Message: 'hiad';
+  CommitMessage: string;
+  ReferenceId: number;
   CommitId: number;
   Time: Date;
   QueueChange: QueueChange;
