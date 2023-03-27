@@ -1,23 +1,19 @@
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Net.Http.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 using Insight.Models;
 using System.Text;
 
 class HttpController
 {
-
     public record ParameterWithName(string Name, string Value);
     private HttpClient httpClient;
 
-    public HttpController()
+    public HttpController(HttpMessageHandler? handler = null)
     {
-        httpClient = new HttpClient();
+        if (handler is null)
+            httpClient = new HttpClient();
+        else
+            httpClient = new HttpClient(handler); // for mocks
     }
 
     /// <summary>
