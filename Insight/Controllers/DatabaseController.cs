@@ -270,12 +270,21 @@ public class DataServer {
         {
             entry = new QueuedChange
             {
-                Settings = new List<(DatabaseSetting old, DatabaseSetting update)>
-                {(new DatabaseSetting
-                    {
-                        Name = setting.Name,
-                        Parameters = setting.Parameters.ToArray(),
-                    }, originalSetting )
+                Settings = new List<ChangedSetting>
+                {
+                    new ChangedSetting {
+                        oldSetting = new DatabaseSetting {
+                            Name = originalSetting.Name,
+                            Parameters = originalSetting.Parameters.ToArray(),
+                            Tenants = originalSetting.Tenants,
+                            Environments = originalSetting.Environments
+                        },
+
+                        newSetting = new DatabaseSetting {
+                            Name = setting.Name,
+                            Parameters = setting.Parameters.ToArray(),
+                        }
+                    }
                 },
                 // OriginalSettings = new DatabaseSetting[] { originalSetting },
                 User = new User
@@ -308,24 +317,30 @@ public class DataServer {
             // don't make a duplicate queue entry.
             foreach (var s in settings)
             {
-                if (s.update.Name == setting.Name)
+                if (s.newSetting.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            settings.Add((originalSetting, newSetting));
+            settings.Add(new ChangedSetting {
+                oldSetting = originalSetting,
+                newSetting = newSetting,
+            });
             entry.Settings = settings;
 
             foreach (var s in settings)
             {
-                if (s.old.Name == setting.Name)
+                if (s.oldSetting.Name == setting.Name)
                 {
                     settings.Remove(s);
                     break;
                 }
             }
-            settings.Add((originalSetting, newSetting));
+            settings.Add(new ChangedSetting {
+                oldSetting = originalSetting,
+                newSetting = newSetting,
+            });
         }
 
         await _queuedChangeService.CreateOrUpdateAsync(entry);
