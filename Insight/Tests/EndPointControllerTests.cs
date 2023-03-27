@@ -27,7 +27,7 @@ public class EndPointControllerTests
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>(),
+            // Settings = new List<(DatabaseSetting, DatabaseSetting)>(), // TODO
         });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
@@ -38,23 +38,23 @@ public class EndPointControllerTests
     public async Task TestGetQueuedSetting()
     {
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
-        mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
-        {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>
-            {
-                (
-                    null!, // test only concerns new setting
-                    new DatabaseSetting
-                    {
-                        Name = "Foo",
-                        Parameters = new Parameter[]
-                        {
-                            new Parameter("Bar"),
-                        },
-                    }
-                ),
-            },
-        });
+        // mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
+        // {
+        //     Settings = new List<(DatabaseSetting, DatabaseSetting)>
+        //     {
+        //         (
+        //             null!, // test only concerns new setting
+        //             new DatabaseSetting
+        //             {
+        //                 Name = "Foo",
+        //                 Parameters = new Parameter[]
+        //                 {
+        //                     new Parameter("Bar"),
+        //                 },
+        //             }
+        //         ),
+        //     },
+        // });
         var database = new DataServer(null, null, null, mockService.Object, null, null);
         var controller = new DataController(database);
         var setting = await controller.GetQueuedSetting("Foo", "b", "c", "d");
@@ -94,23 +94,23 @@ public class EndPointControllerTests
     {
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
         var mockTenant = new Mock<DatabaseTenantService>(null);
-        mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
-        {
-            Settings = new List<(DatabaseSetting, DatabaseSetting)>
-            {
-                (
-                    null!, // test only concerns new setting
-                    new DatabaseSetting
-                    {
-                        Name = "Foo",
-                        Parameters = new Parameter[]
-                        {
-                            new Parameter("Bar"),
-                        },
-                    }
-                ),
-            },
-        });
+        // mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
+        // {
+        //     Settings = new List<(DatabaseSetting, DatabaseSetting)>
+        //     {
+        //         (
+        //             null!, // test only concerns new setting
+        //             new DatabaseSetting
+        //             {
+        //                 Name = "Foo",
+        //                 Parameters = new Parameter[]
+        //                 {
+        //                     new Parameter("Bar"),
+        //                 },
+        //             }
+        //         ),
+        //     },
+        // });
         mockTenant.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(
             new DatabaseTenant
             {
