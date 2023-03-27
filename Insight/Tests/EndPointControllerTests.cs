@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 public class EndPointControllerTests
 {
+    const string URL = "https://pauat.newworldnow.com/v7/api/applicationsettings/";
+
     [Test]
     public async Task TestGetQueuedSettingNullQueue()
     {
@@ -67,8 +69,22 @@ public class EndPointControllerTests
     public async Task TestGetSettingAsyncNullSetting()
     {
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
+        var mockTenant = new Mock<DatabaseTenantService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((QueuedChange?)null);
-        var database = new DataServer(null, null, null, mockService.Object, null, null);
+        mockTenant.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(
+            new DatabaseTenant
+            {
+                Environments = new DatabaseEnvironment[]
+                {
+                    new DatabaseEnvironment
+                    {
+                        Name = "c",
+                        Url = URL,
+                    }
+                }
+            }
+        );
+        var database = new DataServer(null, mockTenant.Object, null, mockService.Object, null, null);
         var controller = new DataController(database);
         Assert.IsInstanceOf<BadRequestResult>(await controller.GetSettingAsync("a", "b", "c"));
     }
@@ -77,6 +93,7 @@ public class EndPointControllerTests
     public async Task TestGetSettingAsync()
     {
         var mockService = new Mock<DatabaseQueuedChangeService>(null);
+        var mockTenant = new Mock<DatabaseTenantService>(null);
         mockService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new QueuedChange
         {
             Settings = new List<(DatabaseSetting, DatabaseSetting)>
@@ -94,7 +111,20 @@ public class EndPointControllerTests
                 ),
             },
         });
-        var database = new DataServer(null, null, null, mockService.Object, null, null);
+        mockTenant.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(
+            new DatabaseTenant
+            {
+                Environments = new DatabaseEnvironment[]
+                {
+                    new DatabaseEnvironment
+                    {
+                        Name = "c",
+                        Url = URL,
+                    }
+                }
+            }
+        );
+        var database = new DataServer(null, mockTenant.Object, null, mockService.Object, null, null);
         var controller = new DataController(database);
         Assert.IsInstanceOf<OkObjectResult>(await controller.GetSettingAsync("Foo", "b", "c"));
     }

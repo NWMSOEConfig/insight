@@ -15,10 +15,15 @@ public class DatabaseTenantService : ServiceParent<DatabaseTenant>
         collection = mongoDatabase.GetCollection<DatabaseTenant>("DatabaseTenants");
     }
 
+    public DatabaseTenantService(IMongoCollection<DatabaseTenant> collection)
+    {
+        this.collection = collection;
+    }
+
     public async Task<DatabaseTenant?> GetAsync(string id) =>
         await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-    public async Task<DatabaseTenant?> GetByNameAsync(string name) =>
+    public virtual async Task<DatabaseTenant?> GetByNameAsync(string name) =>
         await collection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
     public async Task<DatabaseTenant?> GetCategoryAsync(string name) =>
