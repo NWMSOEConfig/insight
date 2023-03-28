@@ -21,6 +21,8 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
+    zipAfterPublish: true
+    
     
 - task: CopyFiles@2
   inputs:
