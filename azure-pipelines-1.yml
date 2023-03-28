@@ -22,8 +22,14 @@ steps:
     command: 'publish'
     publishWebProjects: true
     
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**.zip'
+    TargetFolder: ''
+
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+    PathtoPublish: '$(build.artifactstagingdirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
