@@ -24,7 +24,6 @@ steps:
     
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: '**.zip'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
