@@ -22,15 +22,10 @@ steps:
     command: 'publish'
     publishWebProjects: true
     zipAfterPublish: true
-    
-    
-- task: CopyFiles@2
-  inputs:
-    Contents: '**.zip'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
