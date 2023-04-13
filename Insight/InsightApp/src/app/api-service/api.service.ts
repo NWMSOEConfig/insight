@@ -4,7 +4,7 @@ import { getTenant } from '../tenant-singleton';
 /* Models */
 import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
-import { Commit } from '../../models/commit';
+import { Commit, QueueChange } from '../../models/commit';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
@@ -53,6 +53,13 @@ export class ApiService {
 
   public getTenant(id: number) {
     return this.httpClient.get<Tenant>(`${this.apiURL}/data/tenant?id=${id}`);
+  }
+
+  public getQueue() {
+    const context = getTenant();
+    return this.httpClient.get<QueueChange>(
+      `${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`
+    );
   }
 
   public postQueue(setting: Setting) {
