@@ -1,0 +1,42 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Confirm Changes</mat-card-title>
+  </mat-card-header>
+  <form ng-submit="login.validate()">
+    <mat-form-field appearance="outline" color="accent">
+      <mat-label>Reference ID</mat-label>
+      <input
+        matInput
+        placeholder="Max 20 characters"
+        type="number"
+        maxlength=20
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="accent">
+      <mat-label>Write a description of changes...</mat-label>
+      <textarea
+        matInput
+        placeholder="Max 250 characters"
+        type="text"
+        maxlength="250"
+      ></textarea>
+    </mat-form-field>
+
+    <!-- Publish Button -->
+    <button
+      type="submit"
+      id="publish"
+      mat-raised-button
+      color="accent"
+      (click)="onPublishClicked()"
+    >
+      Publish
+    </button>
+
+    <!-- Progress Bar -->
+    <mat-card-footer *ngIf="showProgressBar">
+      <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+    </mat-card-footer>
+  </form>
+</mat-card>
