@@ -46,6 +46,7 @@ export class PublishPageFormComponent implements OnInit {
         .subscribe((data) => {
           this.showProgressBar = false;
           this.openSnackbar('Changes have been successfully published');
+          window.location.reload();
         });
     }
   }
