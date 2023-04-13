@@ -26,8 +26,8 @@
           <div *ngFor="let change of queue.settings">
             <mat-list-item (mouseover)="selected = change">
               <span>{{ change.oldSetting.name }}</span>
-              <span>{{ change.oldSetting.parameters.at(0).value }}</span>
-              <span>{{ change.newSetting.parameters.at(0).value }}</span>
+              <span>{{ change.oldSetting.parameters![0].value }}</span>
+              <span>{{ change.newSetting.parameters![0].value }}</span>
               <button
                 mat-icon-button
                 [matMenuTriggerFor]="menu"

@@ -9,6 +9,7 @@ import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
 import { DatabaseTenant } from '../../models/databaseTenant';
+import { QueueEntry } from '../../models/queueEntry';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +58,7 @@ export class ApiService {
 
   public getQueue() {
     const context = getTenant();
-    return this.httpClient.get<QueueChange>(
+    return this.httpClient.get<QueueEntry>(
       `${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`
     );
   }

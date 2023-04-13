@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
 import { getTenant } from '../tenant-singleton';
+import { QueueEntry } from 'src/models/queueEntry';
 
 @Component({
   selector: 'app-publish-page',
@@ -11,7 +12,7 @@ export class PublishPageComponent implements OnInit {
   selected: any;
   showProgressBar = false;
   tenant = getTenant();
-  queue!: any;
+  queue!: QueueEntry;
 
   constructor(private apiService: ApiService) {}
 
