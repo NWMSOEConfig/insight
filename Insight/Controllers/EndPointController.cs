@@ -202,26 +202,35 @@ public class DataController : ControllerBase
     /// <returns>the current setting queue</returns>
     [HttpGet]
     [Route("queue")]
-    public async Task<IEnumerable<NewWorldSetting>> GetQueue([FromQuery] string tenantName, [FromQuery] string environmentName)
+    public async Task<QueuedChange> GetQueue([FromQuery] string tenantName, [FromQuery] string environmentName)
     {
         var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
         var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
+        
+        if (dbQueue is null) {
+            return new QueuedChange {};
+        } 
 
-        if (dbQueue is null)
-        {
-            return new NewWorldSetting[] { };
-        }
-        else
-        {
-            List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
+        return dbQueue;
 
-            foreach(var setting in dbQueue.Settings) {
-                updatedSettings.Add(new NewWorldSetting(setting.newSetting.Name) {
-                    Parameters = setting.newSetting.Parameters?.ToList(),
-                });
-            }
-            return updatedSettings;
-        }
+        // if (dbQueue is null)
+        // {
+        //     Console.WriteLine("dbqueue is null");
+        //     return new NewWorldSetting[] { };
+        // }
+        // else
+        // {
+        //     List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
+
+        //     foreach (var setting in dbQueue.Settings)
+        //     {
+        //         updatedSettings.Add(new NewWorldSetting(setting.newSetting.Name)
+        //         {
+        //             Parameters = setting.newSetting.Parameters?.ToList(),
+        //         });
+        //     }
+        //     return updatedSettings;
+        // }
     }
 
     /// <summary>
@@ -245,8 +254,10 @@ public class DataController : ControllerBase
 
         var settings = dbQueue.Settings;
         success = settings.RemoveAll(setting => setting.newSetting.Name == settingName) > 0;
-        for(int i = 0; i < settings.Count; i++) {
-            if(settings[i].newSetting.Name == settingName) {
+        for (int i = 0; i < settings.Count; i++)
+        {
+            if (settings[i].newSetting.Name == settingName)
+            {
                 settings[i] = new ChangedSetting { };
                 success = true;
             }
