@@ -92,8 +92,8 @@ public class DataServer
             {
                 // Update setting
                 dbSetting.Parameters = setting.Parameters?.ToArray();
-                
-                if(dbSetting.Environments is null)
+
+                if (dbSetting.Environments is null)
                 {
                     dbSetting.Environments = new DatabaseEnvironment[]
                     {
@@ -228,8 +228,9 @@ public class DataServer
         return lastPulled.Value;
     }
 
-    
-    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName, string commitMessage, int ReferenceId) {
+
+    public async Task<Commit?> CreateCommitFromQueue(string user, string tenantName, string environmentName, string commitMessage, int ReferenceId)
+    {
         Commit myCommit = new Commit();
         QueuedChange? queuedChange = await _queuedChangeService.GetAsync(user, tenantName, environmentName);
         if (queuedChange != null)
@@ -332,7 +333,8 @@ public class DataServer
                     break;
                 }
             }
-            settings.Add(new ChangedSetting {
+            settings.Add(new ChangedSetting
+            {
                 oldSetting = originalSetting,
                 newSetting = newSetting,
             });
@@ -346,7 +348,8 @@ public class DataServer
                     break;
                 }
             }
-            settings.Add(new ChangedSetting {
+            settings.Add(new ChangedSetting
+            {
                 oldSetting = originalSetting,
                 newSetting = newSetting,
             });
@@ -360,15 +363,23 @@ public class DataServer
     public Task<QueuedChange?> GetQueue(string userName, string tenantName, string environmentName)
         => _queuedChangeService.GetAsync(userName, tenantName, environmentName);
 
-    public async Task<string?> GetUrlFromTenant(string tenantName, string environmentName){
+
+    public Task DeleteQueue(string queueId)
+        => _queuedChangeService.RemoveAsync(queueId);
+
+    public async Task<string?> GetUrlFromTenant(string tenantName, string environmentName)
+    {
         DatabaseTenant? tenant = await _tenantService.GetByNameAsync(tenantName);
 
-        if(tenant==null){
+        if (tenant == null)
+        {
             throw new ArgumentException("No such tenant exists");
         }
 
-        foreach (DatabaseEnvironment e in tenant.Environments){
-            if(e.Name == environmentName){
+        foreach (DatabaseEnvironment e in tenant.Environments)
+        {
+            if (e.Name == environmentName)
+            {
                 return e.Url;
             }
         }

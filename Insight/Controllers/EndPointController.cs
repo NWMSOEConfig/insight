@@ -141,6 +141,14 @@ public class DataController : ControllerBase
             Console.WriteLine("Queue not found");
         }
         commit = await _dbController.CreateCommitFromQueue(userName, tenant, environment, commitMessage, referenceId);
+        if (commit != null)
+        {
+            await _dbController.DeleteQueue(change.Id);
+        }
+        else
+        {
+            Console.WriteLine("Error creating commit");
+        }
         return commit;
 
     }
