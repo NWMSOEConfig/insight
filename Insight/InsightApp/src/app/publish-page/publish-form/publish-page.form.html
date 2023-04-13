@@ -2,14 +2,16 @@
   <mat-card-header>
     <mat-card-title>Confirm Changes</mat-card-title>
   </mat-card-header>
-  <form ng-submit="login.validate()">
+  <form>
     <mat-form-field appearance="outline" color="accent">
       <mat-label>Reference ID</mat-label>
       <input
         matInput
+        #inputRefId
         placeholder="Max 20 characters"
         type="number"
-        maxlength=20
+        maxlength="20"
+        (selectionchange)="this.referencedId = this.inputRefId.value; disableProgressBar = false;"
       />
     </mat-form-field>
 
@@ -17,9 +19,11 @@
       <mat-label>Write a description of changes...</mat-label>
       <textarea
         matInput
+        #inputDescription
         placeholder="Max 250 characters"
         type="text"
         maxlength="250"
+        (selectionchange)="this.referencedId = this.inputRefId.value; disableProgressBar = false;"
       ></textarea>
     </mat-form-field>
 
@@ -30,6 +34,7 @@
       mat-raised-button
       color="accent"
       (click)="onPublishClicked()"
+      [disabled]="this.disableProgressBar"
     >
       Publish
     </button>

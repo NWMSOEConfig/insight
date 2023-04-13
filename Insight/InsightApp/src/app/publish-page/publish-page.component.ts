@@ -22,7 +22,6 @@ export class PublishPageComponent implements OnInit {
   ngOnInit(): void {
     this.apiService.getQueue().subscribe((data) => {
       this.queue = data;
-      console.log(this.queue);
     });
   }
 }

@@ -1,9 +1,12 @@
-/* Text Area*/
 .mat-form-field {
   width: 100%;
 }
 
-/* */
 .mat-card {
   margin-top: 5px;
+}
+
+button#publish {
+  width: 100%;
+  align-self: center;
 }
