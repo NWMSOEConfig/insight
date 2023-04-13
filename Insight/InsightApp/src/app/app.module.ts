@@ -23,6 +23,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfigurationPageComponent } from './configuration-page/configuration-page.component';
 import { PublishPageComponent } from './publish-page/publish-page.component';
+import { PublishPageFormComponent} from './publish-page/publish-form/publish-page.form';
 import { HistoryPageComponent } from './history-page/history-page.component';
 import { HistoryCardComponent } from './history-card/history-card.component';
 import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
@@ -57,6 +58,7 @@ import { HttpClientModule } from '@angular/common/http';
     CategoryListComponent,
     ConfigurationPageComponent,
     PublishPageComponent,
+    PublishPageFormComponent,
     HistoryPageComponent,
     HistoryCardComponent,
     TenantSelectorComponent,
