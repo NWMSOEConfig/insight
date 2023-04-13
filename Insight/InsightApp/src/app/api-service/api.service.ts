@@ -73,6 +73,14 @@ export class ApiService {
     );
   }
 
+  public postPublish(commitMessage: string, referenceId: number) {
+    const context = getTenant();
+    return this.httpClient.post(
+      `${this.apiURL}/data/publish?tenant=${context.site}&environment=${context.environment}&commitMessage=${commitMessage}&referenceId=${referenceId}`,
+      {}
+    );
+  }
+
   public postPopulate(url: string, tenant: string, environment: string) {
     return this.httpClient.post(
       `${this.apiURL}/data/populate?tenant=${tenant}&environment=${environment}`,

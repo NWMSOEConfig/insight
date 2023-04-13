@@ -126,11 +126,12 @@ public class DataController : ControllerBase
 
     [HttpPost]
     [Route("publish")]
-    public async Task<Commit?> PublishSettingsAsync([FromQuery] string user, [FromQuery] string tenant, [FromQuery] string environment, [FromQuery] string commitMessage, [FromQuery] int referenceId)
+    public async Task<Commit?> PublishSettingsAsync([FromQuery] string tenant, [FromQuery] string environment, [FromQuery] string commitMessage, [FromQuery] int referenceId)
     {
         string url = "https://pauat.newworldnow.com/v7/api/updatesetting/";
+        var userName = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
         Commit? commit;
-        QueuedChange? change = await _dbController.GetQueue(user, tenant, environment);
+        QueuedChange? change = await _dbController.GetQueue(userName, tenant, environment);
         if (change != null)
         {
             httpController.MakePostRequest(change, url);
@@ -139,7 +140,7 @@ public class DataController : ControllerBase
         {
             Console.WriteLine("Queue not found");
         }
-        commit = await _dbController.CreateCommitFromQueue(user, tenant, environment, commitMessage, referenceId);
+        commit = await _dbController.CreateCommitFromQueue(userName, tenant, environment, commitMessage, referenceId);
         return commit;
 
     }
@@ -206,31 +207,13 @@ public class DataController : ControllerBase
     {
         var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
         var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
-        
-        if (dbQueue is null) {
-            return new QueuedChange {};
-        } 
+
+        if (dbQueue is null)
+        {
+            return new QueuedChange { };
+        }
 
         return dbQueue;
-
-        // if (dbQueue is null)
-        // {
-        //     Console.WriteLine("dbqueue is null");
-        //     return new NewWorldSetting[] { };
-        // }
-        // else
-        // {
-        //     List<NewWorldSetting> updatedSettings = new List<NewWorldSetting>();
-
-        //     foreach (var setting in dbQueue.Settings)
-        //     {
-        //         updatedSettings.Add(new NewWorldSetting(setting.newSetting.Name)
-        //         {
-        //             Parameters = setting.newSetting.Parameters?.ToList(),
-        //         });
-        //     }
-        //     return updatedSettings;
-        // }
     }
 
     /// <summary>
