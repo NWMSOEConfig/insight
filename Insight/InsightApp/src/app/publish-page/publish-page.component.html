@@ -55,6 +55,6 @@
     </ng-container>
   </mat-card>
   <ng-container *ngIf="queue.settings">
-    <app-publish-page-form></app-publish-page-form>
+    <app-publish-page-form [queueRender]="this"></app-publish-page-form>
   </ng-container>
 </div>
