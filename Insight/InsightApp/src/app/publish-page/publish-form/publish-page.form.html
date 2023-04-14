@@ -12,6 +12,7 @@
         type="number"
         maxlength="20"
         (selectionchange)="this.referencedId = this.inputRefId.value; disableProgressBar = false;"
+        (change)="this.referencedId = this.inputRefId.value; disableProgressBar = false;"
       />
     </mat-form-field>
 
@@ -24,6 +25,7 @@
         type="text"
         maxlength="250"
         (selectionchange)="this.commitDescription = this.inputDescription.value; disableProgressBar = false;"
+        (change)="this.commitDescription = this.inputDescription.value; disableProgressBar = false;"
       ></textarea>
     </mat-form-field>
 
