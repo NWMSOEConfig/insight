@@ -5,10 +5,14 @@
       {{ breadcrumb.Name }}
     </button>
   </span>
-  <form *ngIf="!settingClicked">
+  <form *ngIf="!settingClicked" (ngSubmit)="searchSettings()">
     <mat-form-field>
-      <input matInput type="text" placeholder="Search for settings..." />
+      <input matInput type="text" placeholder="Setting" name="setting" [(ngModel)]="searchSetting" />
     </mat-form-field>
+    <button id="action" mat-raised-button type="submit" color="primary">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
   </form>
   <mat-action-list *ngIf="!settingClicked">
     <mat-progress-spinner
