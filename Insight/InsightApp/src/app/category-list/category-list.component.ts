@@ -10,6 +10,7 @@ enum DbObjects {
   Category,
   Setting,
   Parameter,
+  Search,
 }
 
 @Component({
@@ -25,6 +26,7 @@ export class CategoryListComponent implements OnInit {
   parent: any;
   breadcrumbs: any;
   settings!: DatabaseSetting[];
+  searchSetting = '';
 
   constructor(private apiService: ApiService) {
     this.settingName = JSON.parse(localStorage.getItem('settingName')!);
@@ -39,6 +41,8 @@ export class CategoryListComponent implements OnInit {
     this.breadcrumbs = JSON.parse(
       localStorage.getItem('breadcrumbs') || noCrumbs
     );
+
+    this.searchSetting = JSON.parse(localStorage.getItem('searchSetting') || '""');
   }
 
   /** API request call to parent and its children
@@ -79,6 +83,14 @@ export class CategoryListComponent implements OnInit {
       categorySettings.forEach((categorySetting: any) =>
         this.children.push({ Name: categorySetting.Name })
       );
+    } else if (target == DbObjects.Search) {
+      const filteredSettings = this.settings.filter((setting: any) =>
+        setting.Name.toLowerCase().includes(this.searchSetting.toLowerCase())
+      );
+
+      filteredSettings.forEach((setting: any) =>
+        this.children.push({ Name: setting.Name })
+      );
     } else {
       this.settingClicked = true;
     }
@@ -98,11 +110,27 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
+  searchSettings() {
+    // To prevent user confusion, only keep a link back to the root
+    this.breadcrumbs = [{ Name: 'Root', level: DbObjects.Tenant }];
+    this.parent = this.breadcrumbs[0];
+
+    if (this.searchSetting === '') {
+      // Empty search string -> reset to showing everything
+      this.requestDbTarget(DbObjects.Tenant);
+    } else {
+      this.requestDbTarget(DbObjects.Search);
+    }
+  }
+
   clickChild(child: any) {
     this.parent = child;
     this.settingName = this.parent.Name;
     this.level++;
     this.breadcrumbs.push({ Name: this.parent.Name, level: this.level });
+
+    this.searchSetting = '';
+
     this.requestDbTarget(this.level);
   }
 
@@ -117,6 +145,9 @@ export class CategoryListComponent implements OnInit {
     this.breadcrumbs.length = index + 1;
     this.settingClicked = false;
     this.parent = this.breadcrumbs[index];
+
+    this.searchSetting = '';
+
     this.requestDbTarget(breadcrumb.level);
   }
 
@@ -125,5 +156,6 @@ export class CategoryListComponent implements OnInit {
     localStorage.setItem('parent', JSON.stringify(this.parent));
     localStorage.setItem('level', String(this.level));
     localStorage.setItem('breadcrumbs', JSON.stringify(this.breadcrumbs));
+    localStorage.setItem('searchSetting', JSON.stringify(this.searchSetting));
   }
 }
