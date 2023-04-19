@@ -4,11 +4,12 @@ import { getTenant } from '../tenant-singleton';
 /* Models */
 import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
-import { Commit } from '../../models/commit';
+import { Commit, QueueChange } from '../../models/commit';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
 import { DatabaseTenant } from '../../models/databaseTenant';
+import { QueueEntry } from '../../models/queueEntry';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +56,13 @@ export class ApiService {
     return this.httpClient.get<Tenant>(`${this.apiURL}/data/tenant?id=${id}`);
   }
 
+  public getQueue() {
+    const context = getTenant();
+    return this.httpClient.get<QueueEntry>(
+      `${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}`
+    );
+  }
+
   public postQueue(setting: Setting) {
     const context = getTenant();
     return this.httpClient.post(
@@ -63,6 +71,14 @@ export class ApiService {
       {
         responseType: 'text',
       }
+    );
+  }
+
+  public postPublish(commitMessage: string, referenceId: number) {
+    const context = getTenant();
+    return this.httpClient.post(
+      `${this.apiURL}/data/publish?tenant=${context.site}&environment=${context.environment}&commitMessage=${commitMessage}&referenceId=${referenceId}`,
+      {}
     );
   }
 
