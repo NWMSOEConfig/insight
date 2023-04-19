@@ -1,74 +1,60 @@
 <div class="publish-page">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Publish</mat-card-title>
-      <mat-card-subtitle>
-        <div>
-          <span id="settingsCount">{{ settings.length }}</span>
-          {{ settings.length === 1 ? "setting was" : "settings were" }} modified
-        </div>
+      <mat-card-title>Queued Changes</mat-card-title>
+      <mat-card-subtitle *ngIf="queue.settings">
+        The following settings have been changed:
       </mat-card-subtitle>
     </mat-card-header>
-    <!-- Table -->
-    <mat-card-content>
-      <!-- List -->
-      <mat-action-list disableRipple="true">
-        <mat-divider></mat-divider>
-        <i *ngIf="settings.length === 0" id="noQueue"
-          >No queued changes could be found.</i
-        >
-        <mat-list-item
-          id="yesQueue"
-          *ngIf="settings.length !== 0"
-          class="header"
-          color="primary"
-          (mouseover)="selected = null"
-        >
-          <span>Setting Name</span>
-          <span>Current Value</span>
-          <span>New Value</span>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <div *ngFor="let setting of settings">
-          <mat-list-item id="settingEntry" (mouseover)="selected = setting">
-            <span id="settingName">{{ setting.name }}</span>
-            <span id="oldValue">{{ setting.oldvalue }}</span>
-            <span id="newValue">{{ setting.newvalue }}</span>
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="menu"
-              *ngIf="selected == setting"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>
-                <mat-icon color="warn">delete</mat-icon>
-                <span>Delete</span>
-              </button>
-            </mat-menu>
+    <ng-container *ngIf="queue.settings">
+      <!-- Table -->
+      <mat-card-content>
+        <!-- List -->
+        <mat-action-list disableRipple="true">
+          <mat-divider></mat-divider>
+          <mat-list-item
+            class="header"
+            color="primary"
+            (mouseover)="selected = null"
+          >
+            <span>Setting Name</span>
+            <span>Current Value</span>
+            <span>New Value</span>
           </mat-list-item>
           <mat-divider></mat-divider>
-        </div>
-      </mat-action-list>
-    </mat-card-content>
-    <!-- Description Text Area -->
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label>Write description of changes...</mat-label>
-      <textarea matInput></textarea>
-    </mat-form-field>
-    <!-- Publish Button -->
-    <button
-      id="publish"
-      mat-raised-button
-      color="accent"
-      (click)="canPublish = !canPublish"
-    >
-      Publish
-    </button>
-    <!-- Progress Bar -->
-    <mat-card-footer *ngIf="!canPublish">
-      <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
-    </mat-card-footer>
+
+          <div *ngFor="let change of queue.settings">
+            <mat-list-item (mouseover)="selected = change">
+              <span>{{ change.oldSetting.name }}</span>
+              <span>{{ change.oldSetting.parameters![0].value }}</span>
+              <span>{{ change.newSetting.parameters![0].value }}</span>
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                *ngIf="selected == change"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onDeleteClicked()">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-action-list>
+      </mat-card-content>
+    </ng-container>
+
+    <!-- Display message when there are no queued changes -->
+    <ng-container *ngIf="!queue.settings">
+      <mat-label>No changes have been queued.</mat-label>
+    </ng-container>
   </mat-card>
+  <ng-container *ngIf="queue.settings">
+    <app-publish-page-form [queueRender]="this"></app-publish-page-form>
+  </ng-container>
 </div>
