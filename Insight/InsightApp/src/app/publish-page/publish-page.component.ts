@@ -40,7 +40,7 @@ export class PublishPageComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   onDeleteClicked(settingName: String) {
-    // this.apiService.
+    this.apiService.deleteSettingFromQueue(settingName);
     console.log('Undo TODO');
   }
 
