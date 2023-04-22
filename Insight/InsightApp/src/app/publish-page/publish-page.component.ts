@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api-service/api.service';
+import { getTenant } from '../tenant-singleton';
+import { QueueEntry } from 'src/models/queueEntry';
 
 @Component({
   selector: 'app-publish-page',
@@ -31,21 +33,14 @@ export class PublishPageComponent implements OnInit {
     },
   ];
   selected: any;
+  showProgressBar = false;
+  tenant = getTenant();
+  queue!: QueueEntry;
 
-  constructor(private apiService: ApiService) {
-  }
-
-  onPublishClicked() {
-    this.canPublish = false;
-  }
-
-  onEditClicked() {
-    this.canEdit = true;
-    console.log('Edit TODO');
-  }
+  constructor(private apiService: ApiService) {}
 
   onDeleteClicked(settingName: String) {
-    // this.apiService call
+    // this.apiService.
     console.log('Undo TODO');
   }
 
@@ -64,6 +59,8 @@ export class PublishPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.GetSettings();
+    this.apiService.getQueue().subscribe((data) => {
+      this.queue = data;
+    });
   }
 }

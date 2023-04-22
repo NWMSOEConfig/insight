@@ -1,12 +1,9 @@
 <div class="publish-page">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Publish</mat-card-title>
-      <mat-card-subtitle>
-        <div>
-          <span id="settingsCount">{{ settings.length }}</span>
-          {{ settings.length === 1 ? "setting was" : "settings were" }} modified
-        </div>
+      <mat-card-title>Queued Changes</mat-card-title>
+      <mat-card-subtitle *ngIf="queue.settings">
+        The following settings have been changed:
       </mat-card-subtitle>
     </mat-card-header>
     <!-- Table -->
@@ -74,4 +71,7 @@
       <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
     </mat-card-footer>
   </mat-card>
+  <ng-container *ngIf="queue.settings">
+    <app-publish-page-form [queueRender]="this"></app-publish-page-form>
+  </ng-container>
 </div>
