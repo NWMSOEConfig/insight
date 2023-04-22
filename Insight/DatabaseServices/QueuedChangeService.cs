@@ -50,4 +50,9 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
     public async Task DeleteAllAsync() {
         await collection.DeleteManyAsync(_ => true);
     }
+
+    public async Task DeleteOneAsync(String id)
+    {
+        await collection.DeleteOneAsync(x => x.Id == id);
+    }
 }

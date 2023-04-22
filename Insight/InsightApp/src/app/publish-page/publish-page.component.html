@@ -42,10 +42,13 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item
+                (click)="onDeleteClicked(setting.name)" 
+              >
                 <mat-icon color="warn">delete</mat-icon>
                 <span>Delete</span>
               </button>
+              <!--Add delete button here-->
             </mat-menu>
           </mat-list-item>
           <mat-divider></mat-divider>

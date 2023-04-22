@@ -255,6 +255,7 @@ public class DataController : ControllerBase
         dbQueue.Settings = settings;
 
         await _dbController.CreateOrUpdateQueue(dbQueue);
+        // await _dbController.DeleteSingleQueuedChange(); update to remove from database correctly
 
         return success ? NoContent() : NotFound();
     }

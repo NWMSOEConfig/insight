@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from '../api-service/api.service';
 
 @Component({
   selector: 'app-publish-page',
@@ -11,6 +12,7 @@ export class PublishPageComponent implements OnInit {
   commitMessage: string | undefined;
   canPublish = true;
   canEdit = false;
+
   settings: any[] = [
     {
       name: 'setting one',
@@ -30,7 +32,8 @@ export class PublishPageComponent implements OnInit {
   ];
   selected: any;
 
-  constructor() {}
+  constructor(private apiService: ApiService) {
+  }
 
   onPublishClicked() {
     this.canPublish = false;
@@ -41,7 +44,8 @@ export class PublishPageComponent implements OnInit {
     console.log('Edit TODO');
   }
 
-  onDeleteClicked() {
+  onDeleteClicked(settingName: String) {
+    // this.apiService call
     console.log('Undo TODO');
   }
 
