@@ -92,3 +92,4 @@ Ankh.NoLoad
 #Other
 .svn
 /Insight/.vs
+/Insight/Properties/ServiceDependencies/InsightConfigurationApp - Web Deploy/profile.arm.json
