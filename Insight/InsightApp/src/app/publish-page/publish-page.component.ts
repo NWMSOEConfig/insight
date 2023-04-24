@@ -16,7 +16,8 @@ export class PublishPageComponent implements OnInit {
 
   constructor(private apiService: ApiService) {}
 
-  onDeleteClicked() {
+  onDeleteClicked(settingName: string) {
+    this.apiService.deleteSettingFromQueue(settingName);
     console.log('Delete');
   }
 
