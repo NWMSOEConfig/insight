@@ -38,6 +38,7 @@ public class Startup
         app.UseAuthorization();
 
         app.UseEndpoints(x => x.MapControllers());
+        app.UseStaticFiles();
 
         // app.MapControllers();
 
