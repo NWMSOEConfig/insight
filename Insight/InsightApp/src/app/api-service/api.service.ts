@@ -94,6 +94,14 @@ export class ApiService {
     );
   }
 
+  public deleteSettingFromQueue(settingName: String) {
+    // write similar to above to call deleteSettingFromQueue
+    const context = getTenant();
+    return this.httpClient.delete(
+      `${this.apiURL}/data/queue?tenantName=${context.site}&environmentName=${context.environment}&settingName=${settingName}`
+    );
+  }
+
   public getAllCommits() {
     const context = getTenant();
     return this.httpClient.get<Commit[]>(
