@@ -70,7 +70,8 @@
               "browserTarget": "Insight:build:production"
             },
             "development": {
-              "browserTarget": "Insight:build:development"
+              "browserTarget": "Insight:build:development",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"

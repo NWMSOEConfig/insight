@@ -4,7 +4,7 @@ import { getTenant } from '../tenant-singleton';
 /* Models */
 import { Setting } from '../../models/setting';
 import { Category } from '../../models/category';
-import { Commit, QueueChange } from '../../models/commit';
+import { Commit } from '../../models/commit';
 import { Subcategory } from '../../models/subcategory';
 import { Tenant } from '../../models/tenant';
 import { DatabaseSetting } from '../../models/databaseSetting';
@@ -15,7 +15,7 @@ import { QueueEntry } from '../../models/queueEntry';
   providedIn: 'root',
 })
 export class ApiService {
-  public readonly apiURL = 'https://localhost:8000/api';
+  public readonly apiURL = 'https://localhost:8000/api'; // TODO: fix this - set to './api' for publishing
 
   constructor(private httpClient: HttpClient) {}
 
