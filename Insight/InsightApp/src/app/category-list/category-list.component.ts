@@ -28,6 +28,11 @@ export class CategoryListComponent implements OnInit {
   settings!: DatabaseSetting[];
   searchSetting = '';
 
+  get dbTargetSet(): boolean {
+    return localStorage.getItem('tenant') != null;
+  }
+
+
   constructor(private apiService: ApiService) {
     this.settingName = JSON.parse(localStorage.getItem('settingName')!);
 
@@ -55,6 +60,7 @@ export class CategoryListComponent implements OnInit {
     this.level = target; // Update our current level
 
     if (target == DbObjects.Tenant) {
+
       this.parent = this.settings;
 
       // Get distinct categories
@@ -94,7 +100,7 @@ export class CategoryListComponent implements OnInit {
     } else {
       this.settingClicked = true;
     }
-
+    
     this.updateLocalStorage();
   }
 

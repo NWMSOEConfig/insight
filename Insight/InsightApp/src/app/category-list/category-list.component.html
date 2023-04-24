@@ -14,11 +14,13 @@
       Search
     </button>
   </form>
+
   <mat-action-list *ngIf="!settingClicked">
-    <mat-progress-spinner
-      *ngIf="children.length == 0"
-      mode="indeterminate"
-    ></mat-progress-spinner>
+    <mat-card *ngIf="!dbTargetSet">
+      <mat-card-header><mat-card-title>Select a Tenant/Environment Above to Continue</mat-card-title></mat-card-header>
+    </mat-card>
+    <mat-progress-spinner *ngIf="children.length == 0 && dbTargetSet"
+                          mode="indeterminate"></mat-progress-spinner>
     <mat-divider></mat-divider>
     <div *ngFor="let child of children">
       <a href="/#top">
@@ -29,9 +31,7 @@
       <mat-divider></mat-divider>
     </div>
   </mat-action-list>
-  <app-setting-editor
-    *ngIf="settingClicked"
-    [settingName]="settingName"
-    (cancel)="cancel()"
-  ></app-setting-editor>
+  <app-setting-editor *ngIf="settingClicked"
+                      [settingName]="settingName"
+                      (cancel)="cancel()"></app-setting-editor>
 </div>
