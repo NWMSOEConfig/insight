@@ -235,6 +235,8 @@ public class DataController : ControllerBase
     [Route("queue")]
     public async Task<IActionResult> DeleteQueuedSetting([FromQuery] string tenantName, [FromQuery] string environmentName, [FromQuery] string settingName)
     {
+        Console.WriteLine("Called method");
+
         var userName = Request.HttpContext.Connection.RemoteIpAddress.ToString();
         var dbQueue = await _dbController.GetQueue(userName, tenantName, environmentName);
 
@@ -257,6 +259,7 @@ public class DataController : ControllerBase
         dbQueue.Settings = settings;
 
         await _dbController.CreateOrUpdateQueue(dbQueue);
+        await _dbController.DeleteSettingFromQueue(settingName);
 
         return success ? NoContent() : NotFound();
     }
