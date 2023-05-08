@@ -36,7 +36,6 @@ class HttpController
 
             if (settings != null)
             {
-                Console.WriteLine(settings.First().Name);
                 return settings;
             }
             else

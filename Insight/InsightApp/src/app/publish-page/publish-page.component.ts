@@ -14,16 +14,18 @@ export class PublishPageComponent implements OnInit {
   tenant = getTenant();
   queue!: QueueEntry;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   onDeleteClicked(settingName: string) {
-    this.apiService.deleteSettingFromQueue(settingName).subscribe((settingName) => {
-
+    this.apiService.deleteSettingFromQueue(settingName).subscribe(() => {
+      this.delay(500);
+      this.ngOnInit();
     });
-    this.apiService.getQueue().subscribe((data) => {
-      this.queue = data;
-    })
-    console.log('Delete');
+  }
+
+  delay(ms: number)
+  {
+    return new Promise ( resolve => setTimeout(resolve, ms));
   }
 
   ngOnInit(): void {
