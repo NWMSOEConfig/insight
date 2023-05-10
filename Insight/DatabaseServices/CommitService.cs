@@ -28,6 +28,10 @@ public class DatabaseCommitService : ServiceParent<Commit>
     public async Task RemoveAsync(string id) =>
         await collection.DeleteOneAsync(x => x.Id == id);
 
+    public new async Task CreateAsync(Commit newItem) {
+        newItem.CommitId = (await GetAsync()).Capacity + 1;
+        await collection.InsertOneAsync(newItem);
+    }
     public async Task<List<Commit>> GetCommitsAsync(string tenantName, string environmentName)
     {
         List<Commit> commits = new List<Commit>();
