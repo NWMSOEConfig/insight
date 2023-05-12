@@ -58,6 +58,10 @@ public class DataServer
     public async Task DeleteAllQueuedChangesAsync() =>
         await _queuedChangeService.DeleteAllAsync();
 
+    public async Task DeleteSettingFromQueue(string settingName) =>
+        await _queuedChangeService.DeleteSingleSetting(settingName);
+
+
     /// <summary>
     /// Populate Hierarchy takes a list of settings with a given tenant and environment and adds them to the database.
     /// If a setting already exists, all relevant data is copied before updating.

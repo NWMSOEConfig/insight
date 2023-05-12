@@ -50,4 +50,9 @@ public class DatabaseQueuedChangeService : ServiceParent<QueuedChange>
     public async Task DeleteAllAsync() {
         await collection.DeleteManyAsync(_ => true);
     }
+
+    public async Task DeleteSingleSetting(string settingName)
+    {
+        await collection.DeleteOneAsync(x => x.Settings[0].newSetting.Name == settingName);
+    }
 }
