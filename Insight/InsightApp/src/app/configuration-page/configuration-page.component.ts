@@ -16,6 +16,9 @@ export class ConfigurationPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('tenant') == null) {
+      this.disabled = true;
+    }
   }
 
   clickRefresh(): void {

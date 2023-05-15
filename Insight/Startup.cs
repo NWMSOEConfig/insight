@@ -1,9 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Insight.Models;
-using Microsoft.EntityFrameworkCore;
 
 public class Startup
 {
@@ -39,8 +33,6 @@ public class Startup
 
         app.UseEndpoints(x => x.MapControllers());
         app.UseStaticFiles();
-
-        // app.MapControllers();
 
     }
 }
