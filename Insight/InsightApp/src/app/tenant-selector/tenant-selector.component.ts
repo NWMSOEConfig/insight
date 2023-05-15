@@ -9,15 +9,19 @@ import { getTenant, setTenant, Tenant } from '../tenant-singleton';
   styleUrls: ['./tenant-selector.component.css'],
 })
 export class TenantSelectorComponent implements OnInit {
-  tenants!: DatabaseTenant[];
+  tenants: DatabaseTenant[] = [];
   selectedTenant: any = {};
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.apiService.getAllTenants().subscribe((tenants) => {
-      // Sort and set tenants alphabetically
-      this.tenants = tenants.sort((a: any, b: any) =>
+      tenants.forEach((tenant) => {
+        if (tenant.Name != null) {
+          this.tenants.push(tenant);
+        }
+      })
+      this.tenants = this.tenants.sort((a: any, b: any) =>
         a.Name.localeCompare(b.Name)
       );
     });
