@@ -395,4 +395,7 @@ public class DataServer
 
     public async Task<Commit> GetCommit(string tenantName, string environmentName, int id)
         => await _commitService.GetCommitAsync(tenantName, environmentName, id);
+
+    public async Task<List<Commit>> GetCommitsBySetting(string tenantName, string environmentName, string settingName)
+        => await _commitService.GetCommitsBySettingAsync(tenantName, environmentName, settingName);
 }

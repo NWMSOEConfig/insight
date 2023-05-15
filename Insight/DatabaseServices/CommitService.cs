@@ -45,6 +45,40 @@ public class DatabaseCommitService : ServiceParent<Commit>
                 if (queuedChange.Tenant.Name == tenantName && queuedChange.Tenant.Environments.Any(env => env.Name == environmentName))
                     matchedCommits.Add(commit);
             }
+
+        });
+
+        matchedCommits.OrderBy(commit => commit.CommitId).ToList();
+        return matchedCommits;
+    }
+
+    public async Task<List<Commit>> GetCommitsBySettingAsync(string tenantName, string environmentName, string settingName)
+    {
+        List<Commit> commits = new List<Commit>();
+        List<Commit> matchedCommits = new List<Commit>();
+
+        // get all commits
+        commits = await GetAsync();
+
+        commits.ForEach(commit =>
+        {
+            if (commit.QueueChange != null)
+            {
+                QueuedChange queuedChange = commit.QueueChange;
+
+                commit.QueueChange.Settings.ForEach((setting) =>
+                {
+                    if (setting.oldSetting.Name == settingName &&
+                        queuedChange.Tenant.Name == tenantName &&
+                        queuedChange.Tenant.Environments.Any(env => env.Name == environmentName))
+                    {
+                        matchedCommits.Add(commit);
+                    }
+
+                });
+
+            }
+
         });
 
         matchedCommits.OrderBy(commit => commit.CommitId).ToList();

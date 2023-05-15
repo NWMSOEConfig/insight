@@ -115,4 +115,11 @@ export class ApiService {
       `${this.apiURL}/data/commit?tenantName=${context.site}&environmentName=${context.environment}&id=${id}`
     );
   }
+
+  public getCommitsBySetting(settingName: string) {
+    const context = getTenant();
+    return this.httpClient.get<Commit[]>(
+      `${this.apiURL}/data/commits/setting?tenantName=${context.site}&environmentName=${context.environment}&settingName=${settingName}`
+    );
+  }
 }
