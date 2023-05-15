@@ -41,12 +41,10 @@
     modified
   </div>
   <mat-list id="commitDescription">
-    <mat-list-item
-      *ngFor="
+    <mat-list-item *ngFor="
         let change of getFirstFewFromBatch(commit.QueueChange.Settings);
         index as i
-      "
-    >
+      ">
       <mat-icon>keyboard_arrow_right</mat-icon>
       {{ change.oldSetting.Name }}
       changed from
@@ -55,9 +53,7 @@
       {{ change.newSetting.Parameters.at(0).Value }}
     </mat-list-item>
 
-    <mat-list-item
-      *ngIf="getRemainingBatchCount(commit.QueueChange.Settings) !== 0"
-    >
+    <mat-list-item *ngIf="getRemainingBatchCount(commit.QueueChange.Settings) !== 0">
       <a routerLink="/history/commit/{{ commit.CommitId }}" target="_blank">
         <button mat-button>
           View {{ getRemainingBatchCount(commit.QueueChange.Settings) }} more

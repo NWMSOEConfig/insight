@@ -4,3 +4,73 @@
   <button mat-button (click)="clickCancel()">Cancel</button>
   <button mat-flat-button color="primary" id="queue" (click)="queue()">Queue</button>
 </form>
+
+<mat-expansion-panel *ngFor="let commit of commits">
+  <mat-expansion-panel-header>
+    <div>
+      <mat-panel-title id="commitHeader">
+        <div class="panel-title">
+          <a routerLink="/history/commit/{{ commit.CommitId }}" target="_blank">
+            <b id="commitId">
+              {{ commit.CommitId }}
+            </b>
+          </a>
+          <span id="commitMessage">
+            {{ commit.CommitMessage }}
+          </span>
+        </div>
+      </mat-panel-title>
+      <mat-panel-description id="commitSubtitle">
+        <div>
+          <span id="commitUser">
+            {{ commit.QueueChange.User.Name }}
+          </span>
+          committed on
+          <span id="commitDate">
+            {{ getTimestamp(commit.Time) | date : "mediumDate" }}
+          </span>
+          at
+          <span id="commitTime">
+            {{ getTimestamp(commit.Time) | date : "shortTime" }}
+          </span>
+        </div>
+      </mat-panel-description>
+    </div>
+  </mat-expansion-panel-header>
+  <div>
+    {{ "Reference Id: " + commit.ReferenceId }}
+  </div>
+  <div>
+    {{ commit.QueueChange.Settings.length }}
+    {{
+      commit.QueueChange.Settings.length === 1 ? "setting was" : "settings were"
+    }}
+    modified
+  </div>
+  <mat-list id="commitDescription">
+    <mat-list-item *ngFor="
+        let change of getFirstFewFromBatch(commit.QueueChange.Settings);
+        index as i
+      ">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+      {{ change.oldSetting.Name }}
+      changed from
+      {{ change.oldSetting.Parameters.at(0).Value }}
+      to
+      {{ change.newSetting.Parameters.at(0).Value }}
+    </mat-list-item>
+
+    <mat-list-item *ngIf="getRemainingBatchCount(commit.QueueChange.Settings) !== 0">
+      <a routerLink="/history/commit/{{ commit.CommitId }}" target="_blank">
+        <button mat-button>
+          View {{ getRemainingBatchCount(commit.QueueChange.Settings) }} more
+          {{
+            getRemainingBatchCount(commit.QueueChange.Settings) === 1
+              ? "change"
+              : "changes"
+          }}
+        </button>
+      </a>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>

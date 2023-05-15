@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Commit } from '../../models/commit';
+import { ApiService } from '../api-service/api.service';
 
 @Component({
   selector: 'app-history-card',
@@ -28,4 +30,6 @@ export class HistoryCardComponent {
   getRemainingBatchCount(batch: any): any {
     return batch.length - this.getFirstFewFromBatch(batch).length;
   }
+
+  
 }

@@ -162,6 +162,14 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
+    [Route("commits/setting")]
+    public async Task<IActionResult> GetCommitsBySettingAsync(string tenantName, string environmentName, string settingName)
+    {
+
+        return Ok(JsonSerializer.Serialize((await _dbController.GetCommitsBySetting(tenantName, environmentName, settingName))));
+    }
+
+    [HttpGet]
     [Route("dbsettings")]
     public async Task<IActionResult> GetAllSettingsAsync(string tenantName, string environmentName)
     {
